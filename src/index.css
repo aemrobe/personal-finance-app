@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/PublicSans-VariableFont_wght.ttf")
+    format("truetype-variations");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/PublicSans-Italic-VariableFont_wght.ttf")
+    format("truetype-variations");
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+:root {
+  /* ### Fonts ### */
+  --font-public-sans: "Public Sans", sans-serif;
+
+  /* ### Colors  ### */
+
+  /* ## Primary Colors ## */
+  --color-beige-500: #98908b;
+  --color-beige-100: #f8f4f0;
+
+  --color-grey-900: #201f24;
+  --color-grey-500: #696868;
+  --color-grey-300: #b3b3b3;
+  --color-grey-100: #f2f2f2;
+
+  /* ## Secondary Colors ## */
+  --color-green-500: #277c78;
+  --color-yellow-500: #f2cdac;
+  --color-cyan-500: #82c9d7;
+  --color-navy-500: #626070;
+  --color-red-500: #c94736;
+  --color-red-400: #d46c5e;
+  --color-purple-500: #826cb0;
+
+  /* ## Other Colors ## */
+  --color-purple-400: #af81ba;
+  --color-turquoise-500: #597c7c;
+  --color-brown-500: #93674f;
+  --color-magenta-500: #934f6f;
+  --color-blue-500: #3f82b2;
+  --color-navygrey-500: #97a0ac;
+  --color-armygreen-500: #7f9161;
+  --color-gold-500: #cab361;
+  --color-orange-500: #be6c49;
+
+  --color-white: #fff;
+
+  /* ## Line-heights ## */
+  --line-height-200: 1.5;
+  --line-height-100: 1.2;
+
+  /* ## Letter Spacing ## */
+  --letter-spacing-none: 0em;
+}
+
+@theme {
+  /* Backgrounds */
+  --color-surface-app: var(--color-beige-100);
+  --color-surface-primary: var(--color-white);
+  --color-surface-secondary: var(--color-beige-100);
+  --color-surface-inverse: var(--color-grey-900);
+  --color-surface-destroy: var(--color-red-500);
+
+  /* Token for a button hover */
+  --color-surface-inverse-hover: var(--color-grey-500);
+  --color-surface-secondary-hover: var(--color-white);
+  --color-surface-destroy-hover: var(--color-red-400);
+
+  /* Text Colors */
+  --color-content-main: var(--color-grey-900);
+  --color-content-secondary: var(--color-grey-500);
+  --color-content-inverse: var(--color-white);
+  --color-content-placeholder: var(--color-beige-500);
+
+  /* Border Color */
+  --color-border-base: var(--color-beige-500);
+
+  /* Text selection */
+  --color-highlight-bg: var(--color-yellow-500);
+  --color-highlight-text: var(--color-grey-900);
+
+  /* Error tokens */
+  --color-content-error: var(--color-red-500);
+  --color-border-error: var(--color-red-500);
+
+  /* Other tokens */
+  --color-focus-ring: var(--color-grey-900);
+  --color-offset-color: var(--color-white);
+
+  /* Disabled tokens*/
+  --color-surface-disabled: var(--color-grey-100);
+  --color-content-disabled: var(--color-grey-500);
+  --color-border-disabled: var(--color-grey-100);
+
+  /* Navigation Specific Tokens */
+  --color-nav-content-default: var(--color-grey-300);
+  --color-nav-content-hover: var(--color-grey-100);
+  --color-nav-content-active: var(--color-grey-900);
+
+  --color-nav-icon-default: var(--color-grey-300);
+  --color-nav-icon-hover: var(--color-grey-100);
+  --color-nav-icon-active: var(--color-green-500);
+  --color-nav-marker-active: var(--color-green-500);
+  --color-nav-bg-active: var(--color-beige-100);
+
+  /* Animation */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  --animate-spin: spin 1s linear infinite;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface-app);
+    font-family: var(--font-public-sans);
+    font-weight: 400;
+    color: var(--color-content-main);
+    letter-spacing: var(--letter-spacing-none);
+    line-height: var(--line-height-200);
+  }
+
+  ::selection {
+    background-color: var(--color-highlight-bg);
+    color: var(--color-highlight-text);
+  }
+
+  input {
+    caret-color: var(--color-content-main);
+  }
+}
+
+@utility text-preset-1 {
+  font-size: 2rem;
+  font-family: var(--font-public-sans);
+  font-weight: 700;
+  line-height: var(--line-height-100);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+@utility text-preset-2 {
+  font-size: 1.25rem;
+  font-family: var(--font-public-sans);
+  font-weight: 700;
+  line-height: var(--line-height-100);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+@utility text-preset-3 {
+  font-size: 1rem;
+  font-family: var(--font-public-sans);
+  font-weight: 700;
+  line-height: var(--line-height-200);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+@utility text-preset-4 {
+  font-size: 0.875rem;
+  font-family: var(--font-public-sans);
+  font-weight: 400;
+  line-height: var(--line-height-200);
+  letter-spacing: var(--letter-spacing-none);
+
+  &::placeholder {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+@utility text-preset-4-bold {
+  @apply text-preset-4;
+  font-weight: 700;
+}
+
+@utility text-preset-5 {
+  font-size: 0.75rem;
+  font-family: var(--font-public-sans);
+  font-weight: 400;
+  line-height: var(--line-height-200);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+@utility text-preset-5-bold {
+  @apply text-preset-5;
+  font-weight: 700;
+}
+
+/* A link that redirects to other auth page */
+.auth-redirect-link::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 1px;
+  background: var(--color-surface-inverse);
+  height: 1.5px;
+  width: 100%;
+}
+
+.focusable-ring {
+  @apply transition-shadow duration-300;
+
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color,var(--color-focus-ring)) focus-visible:ring-offset-1 focus-visible:ring-offset-(--offset-color,var(--color-offset-color));
+
+  @apply focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color,var(--color-focus-ring)) focus-within:ring-offset-1 focus-within:ring-offset-(--ring-offset,var(--color-offset-color));
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fillcolor: var(--color-content-main) !important;
+
+  box-shadow: 0 0 0px 1000px transparent inset;
+}
