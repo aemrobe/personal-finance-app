@@ -5,3 +5,7 @@ export { default as NavTransactionIcon } from "./NavTransactionIcon";
 export { default as NavBudgetIcon } from "./NavBudgetIcon";
 export { default as NavPotsIcon } from "./NavPotsIcon";
 export { default as NavRecurringBillsIcon } from "./NavRecurringBillsIcon";
+export { default as EllipsisIcon } from "./EllipsisIcon";
+export { default as CloseIcon } from "./CloseIcon";
+export { default as ChevroDownIcon } from "./ChevroDownIcon";
+export { default as SelectedIcon } from "./SelectedIcon";
