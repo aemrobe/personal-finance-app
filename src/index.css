@@ -80,8 +80,13 @@
   --color-content-inverse: var(--color-white);
   --color-content-placeholder: var(--color-beige-500);
 
-  /* Border Color */
+  /* Icon Colors */
+  --color-icon-tertiary: var(--color-grey-300);
+  --color-icon-success: var(--color-green-500);
+
+  /* Border Colors */
   --color-border-base: var(--color-beige-500);
+  --color-border-subtle: var(--color-grey-100);
 
   /* Text selection */
   --color-highlight-bg: var(--color-yellow-500);
@@ -98,18 +103,25 @@
   /* Disabled tokens*/
   --color-surface-disabled: var(--color-grey-100);
   --color-content-disabled: var(--color-grey-500);
-  --color-border-disabled: var(--color-grey-100);
+  --color-border-disabled: var(--color-grey-300);
 
   /* Navigation Specific Tokens */
+  /* Navigation texts */
   --color-nav-content-default: var(--color-grey-300);
   --color-nav-content-hover: var(--color-grey-100);
   --color-nav-content-active: var(--color-grey-900);
 
+  /* Navigation Icons */
   --color-nav-icon-default: var(--color-grey-300);
   --color-nav-icon-hover: var(--color-grey-100);
   --color-nav-icon-active: var(--color-green-500);
   --color-nav-marker-active: var(--color-green-500);
   --color-nav-bg-active: var(--color-beige-100);
+
+  /* Spinner & Loaders */
+  --color-loader-indicator: var(--color-grey-900);
+
+  --shadow-3xl: 0 4px 24px rgba(0, 0, 0, 0.25);
 
   /* Animation */
   @keyframes spin {
@@ -117,6 +129,24 @@
       transform: rotate(360deg);
     }
   }
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  --animate-fade-in: fade-in 0.5s forwards;
+  --animate-fade-out: fade-out 0.5s forwards;
   --animate-spin: spin 1s linear infinite;
 }
 
@@ -198,6 +228,41 @@
   font-weight: 700;
 }
 
+@utility disabled-input {
+  @apply disabled:bg-surface-disabled
+            disabled:text-content-disabled
+            disabled:border-border-disabled
+            disabled:cursor-not-allowed;
+}
+
+@utility disabled-button {
+  @apply disabled:cursor-not-allowed disabled:opacity-80;
+}
+
+@utility spinner {
+  margin: 4.8rem auto;
+  width: 6.4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, var(--color-loader-indicator) 94%, #0000)
+      top/10px 10px no-repeat,
+    conic-gradient(#0000 30%, var(--color-loader-indicator));
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 10px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 10px), #000 0);
+  animation: spin 1.5s infinite linear;
+}
+
+@utility no-scrollbar {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* A link that redirects to other auth page */
 .auth-redirect-link::after {
   content: "";
@@ -212,7 +277,7 @@
 .focusable-ring {
   @apply transition-shadow duration-300;
 
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color,var(--color-focus-ring)) focus-visible:ring-offset-1 focus-visible:ring-offset-(--offset-color,var(--color-offset-color));
+  @apply outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color,var(--color-focus-ring)) focus-visible:ring-offset-1 focus-visible:ring-offset-(--offset-color,var(--color-offset-color));
 
   @apply focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color,var(--color-focus-ring)) focus-within:ring-offset-1 focus-within:ring-offset-(--ring-offset,var(--color-offset-color));
 }
@@ -225,4 +290,32 @@ input:-webkit-autofill:active {
   -webkit-text-fillcolor: var(--color-content-main) !important;
 
   box-shadow: 0 0 0px 1000px transparent inset;
+}
+
+/* Dropdown */
+.dropdown-menucontainer {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.dropdown-menu {
+  overflow: hidden;
+}
+
+.open {
+  display: grid;
+  animation: var(--animate-fade-in);
+}
+
+.close {
+  animation: var(--animate-fade-out);
+}
+
+/* Modal */
+.overlay {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5)
+  );
 }

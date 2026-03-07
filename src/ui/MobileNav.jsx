@@ -8,32 +8,27 @@ import {
 } from "./Icons";
 
 function MobileNav() {
-  const colorValues = {
-    navIconColor:
-      "text-nav-icon-default hover:text-nav-icon-hover transition-colors duration-200",
-  };
-
   return (
-    <nav className="bg-surface-inverse rounded-t-lg absolute inset-x-0 bottom-0 pt-2 px-4">
+    <nav className="z-30 bg-surface-inverse rounded-t-lg fixed inset-x-0 bottom-0 pt-2 px-4 ">
       <ul className="flex justify-center">
-        <NavButton path={"/overview"}>
-          <NavOverviewIcon className={colorValues["navIconColor"]} />
+        <NavButton navText={"Overview"} path={"/overview"}>
+          <NavOverviewIcon />
         </NavButton>
 
-        <NavButton path={"/transactions"}>
-          <NavTransactionIcon className={colorValues["navIconColor"]} />
+        <NavButton navText={"Transactions"} path={"/transactions"}>
+          <NavTransactionIcon />
         </NavButton>
 
-        <NavButton path={"/budgets"}>
-          <NavBudgetIcon className={colorValues["navIconColor"]} />
+        <NavButton navText={"Budgets"} path={"/budgets"}>
+          <NavBudgetIcon />
         </NavButton>
 
-        <NavButton path={"/pots"}>
-          <NavPotsIcon className={colorValues["navIconColor"]} />
+        <NavButton navText={"Pots"} path={"/pots"}>
+          <NavPotsIcon />
         </NavButton>
 
-        <NavButton path={"/recurring-bills"}>
-          <NavRecurringBillsIcon className={colorValues["navIconColor"]} />
+        <NavButton navText={"Recurring Bills"} path={"/recurring-bills"}>
+          <NavRecurringBillsIcon />
         </NavButton>
       </ul>
     </nav>
