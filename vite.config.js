@@ -17,7 +17,7 @@ export default defineConfig({
       },
       overlay: {
         initialIsOpen: false,
-        position: "tr",
+        position: "bl",
       },
     }),
   ],

@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { login as loginApi } from "../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { useToast } from "../../context/ToastContext";
 
 export function useLogin() {
   const navigate = useNavigate();
+  const { onShowToastMessage } = useToast();
 
   const {
     mutate: login,
@@ -13,14 +14,18 @@ export function useLogin() {
   } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      toast.success(`Welcome back, ${data.user.user_metadata.fullName}`);
+      onShowToastMessage({
+        text: `Welcome back, ${data.user.user_metadata.fullName}`,
+      });
 
-      navigate("/overview", { replace: true });
+      navigate("/pots", { replace: true });
     },
     onError: (error) => {
       console.error(error.message);
       if (error.message === "Failed to fetch") {
-        toast.error("Network error. Please check your connection.");
+        onShowToastMessage({
+          text: `Network error. Please check your connection.`,
+        });
       }
     },
   });

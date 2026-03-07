@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -11,17 +10,20 @@ import Overview from "./features/overview/Overview";
 import Transactions from "./features/transactions/Transactions";
 import Budgets from "./features/budgets/Budgets";
 import RecurringBills from "./features/recurring-bills/RecurringBills";
-import Pots from "./features/Pots/Pots";
+import Pots from "./pages/Pots";
 import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
 
-import { Toaster } from "react-hot-toast";
 import Signup from "./pages/Signup";
+import ErrorFallBack from "./ui/ErrorFallBack";
+import { ToastProvider } from "./context/ToastContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 0,
+      throwOnError: true,
+      retry: false,
     },
   },
 });
@@ -33,8 +35,9 @@ const router = createBrowserRouter([
         <AppLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorFallBack />,
     children: [
-      { index: true, element: <Navigate replace to="overview" /> },
+      { index: true, element: <Navigate replace to="pots" /> },
       {
         path: "overview",
         element: <Overview />,
@@ -68,38 +71,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
-      <RouterProvider router={router} />
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        gutter={12}
-        containerStyle={{
-          margin: "8px",
-        }}
-        toastOptions={{
-          duration: 3000,
-          ariaProps: {
-            role: "status",
-            "aria-live": "polite",
-            "aria-relevant": "all",
-          },
-
-          style: {
-            fontSize: "1rem",
-            maxWidth: "21.25rem",
-            width: "90%",
-            padding: "1rem 1.5rem",
-            backgroundColor: "black",
-            color: "white",
-            textAlign: "center",
-          },
-        }}
-      />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </QueryClientProvider>
   );
 }

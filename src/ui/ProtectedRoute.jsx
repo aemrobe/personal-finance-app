@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../features/authentication/useCurrentUser";
 import { useEffect } from "react";
+import SpinnerContainer from "./SpinnerContainer";
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
 
   const { isAuthenticated, isLoading } = useCurrentUser();
-
-  console.log("isAuthenticated", isAuthenticated);
 
   useEffect(
     function () {
@@ -18,7 +17,7 @@ function ProtectedRoute({ children }) {
     [isAuthenticated, isLoading, navigate],
   );
 
-  if (isLoading) return <p>Loading data...</p>;
+  if (isLoading) return <SpinnerContainer className="bg-surface-app" />;
 
   if (isAuthenticated) return <>{children}</>;
 }
