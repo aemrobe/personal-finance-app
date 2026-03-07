@@ -21,7 +21,7 @@ const Input = forwardRef(function Input(
     <div className="flex flex-col">
       {label && (
         <label
-          className="mb-1 self-start  text-preset-5-bold text-content-secondary"
+          className="capitalize mb-1 self-start  text-preset-5-bold text-content-secondary"
           htmlFor={id}
         >
           {label}
@@ -33,6 +33,7 @@ const Input = forwardRef(function Input(
       >
         {prefix && (
           <span
+            aria-hidden="true"
             className={
               "mr-3 text-preset-4 text-content-placeholder absolute left-5"
             }
@@ -49,10 +50,7 @@ const Input = forwardRef(function Input(
           disabled={isLoading}
           onChange={onChange}
           className={`min-w-0 outline-none py-3 ${prefix ? "pl-10" : "pl-5"}  ${icon ? "pr-12" : "pr-5"} text-content-main placeholder:text-content-placeholder text-preset-4 rounded-lg flex-auto
-            disabled:bg-surface-disabled
-            disabled:text-content-disabled
-            disabled:border-border-disabled
-            disabled:cursor-not-allowed
+         disabled-input
             `}
           {...props}
         />
@@ -76,7 +74,9 @@ const Input = forwardRef(function Input(
           textColor={error ? "text-content-error" : "text-content-secondary"}
         />
       ) : (
-        helperText && <Text text={helperText} />
+        helperText && (
+          <Text text={helperText} textColor={"text-content-secondary"} />
+        )
       )}
     </div>
   );

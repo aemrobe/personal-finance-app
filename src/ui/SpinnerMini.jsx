@@ -1,7 +1,7 @@
 import { BiLoaderAlt } from "react-icons/bi";
 
-function SpinnerMini() {
-  return <BiLoaderAlt className="animate-spin text-xl" />;
+function SpinnerMini({ size = "text-xl" }) {
+  return <BiLoaderAlt className={`animate-spin ${size}`} />;
 }
 
 export default SpinnerMini;

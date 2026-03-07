@@ -1,6 +1,15 @@
-import SpinnerMini from "./SpinnerMini";
+import SpinnerMiniContainer from "./SpinnerMiniContainer";
 
-function Button({ children, icon, variant, isActionButton, isLoading }) {
+function Button({
+  children,
+  icon,
+  variant,
+  isActionButton,
+  isLoading,
+  disabled,
+  className,
+  onClick,
+}) {
   const baseStyle = isActionButton
     ? "text-preset-4-bold p-4"
     : "p-0 text-preset-4";
@@ -17,15 +26,11 @@ function Button({ children, icon, variant, isActionButton, isLoading }) {
 
   return (
     <button
-      disabled={isLoading}
-      className={`cursor-pointer disabled:cursor-not-allowed focusable-ring capitalize flex justify-center items-center gap-3  rounded-lg transition-colors duration-700 ${isLoading ? "opacity-80" : ""} ease-in-out ${baseStyle} ${variants[variant]} relative`}
+      onClick={onClick}
+      disabled={isLoading || disabled}
+      className={`cursor-pointer  focusable-ring flex justify-center items-center gap-3  rounded-lg transition-colors duration-700 disabled-button ease-in-out ${baseStyle} ${variants[variant]} relative ${className}`}
     >
-      {isLoading && (
-        <div className="absolute inset-0  flex items-center justify-center">
-          <SpinnerMini />
-          <span className="sr-only">Processing request...</span>
-        </div>
-      )}
+      {isLoading && <SpinnerMiniContainer />}
 
       <div className={`${isLoading ? "opacity-0" : ""}`}>
         {children}
