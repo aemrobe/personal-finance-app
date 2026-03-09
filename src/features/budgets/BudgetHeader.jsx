@@ -2,34 +2,34 @@ import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import PageHeader from "../../ui/PageHeader";
 import PageTitle from "../../ui/PageTitle";
-import PotForm from "./PotForm";
+import BudgetForm from "./BudgetForm";
 
-function PotHeader() {
+function BudgetHeader() {
   return (
     <Modal>
       <PageHeader>
-        <PageTitle title={"Pots"} />
-        <Modal.Open modalName={"add-pot"}>
+        <PageTitle title={"Budgets"} />
+        <Modal.Open modalName={"add-budget"}>
           <Button
             onClick={(e) => e.stopPropagation()}
             isActionButton={true}
             variant={"primary"}
           >
-            + Add New Pot
+            + Add New Budget
           </Button>
         </Modal.Open>
 
         <Modal.Window
-          titleId={"add-pot-title"}
-          contentId={"add-pot-content"}
-          potId={"pot"}
-          modalName={"add-pot"}
+          titleId={"add-budget-title"}
+          contentId={"add-budget-content"}
+          potId={"budget"}
+          modalName={"add-budget"}
         >
-          <PotForm potModalType={`add-pot`} />
+          <BudgetForm potModalType={`add-budget`} />
         </Modal.Window>
       </PageHeader>
     </Modal>
   );
 }
 
-export default PotHeader;
+export default BudgetHeader;

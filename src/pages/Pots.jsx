@@ -3,10 +3,10 @@ import PotHeader from "../features/pots/PotHeader";
 
 function Pots() {
   return (
-    <div>
+    <>
       <PotHeader />
       <PotBody />
-    </div>
+    </>
   );
 }
 

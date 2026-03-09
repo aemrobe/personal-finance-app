@@ -1,6 +1,6 @@
 # Frontend Mentor - Personal finance app solution
 
-This is a solution to the [Personal finance app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/personal-finance-app-JfjtZgyMt1). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
+This is a solution to the [Personal finance app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/personal-finance-app-JfjtZgyMt1). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
 ## Table of contents
 
@@ -46,7 +46,7 @@ Users should be able to:
 
 Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
 
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
+Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it.
 
 Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
 
@@ -64,43 +64,59 @@ Then crop/optimize/edit your image however you like, add it to your project, and
 - Semantic HTML5 markup
 - CSS custom properties
 - Flexbox
-- CSS Grid
 - Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
-- [Next.js](https://nextjs.org/) - React framework
-- [Styled Components](https://styled-components.com/) - For styles
-
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
+- [Tailwind css](https://tailwindcss.com/) - For styles
+- [TanStack Query](https://tanstack.com/query/latest) - For data fetching and state management
+- [Supabase](https://supabase.com/) - Backend & Database
 
 ### What I learned
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
+During this project, I focused on building a scalable architecture and a highly accessible user experience.
 
-To see how you can add code snippets, see below:
+#### 🚀 Navigation & Layout
 
-```html
-<h1>Some HTML code I'm proud of</h1>
+- **Responsive Navigation:** Engineered a bottom-nav system for mobile that uses **React Router's `NavLink`** for automatic route tracking and active state styling.
+- **Smart NavButtons:** Created dynamic components that handle SVG rendering and utilize **CSS variables** for seamless theme synchronization.
+- **Accessibility First:** Integrated `aria-label` attributes and high-visibility `focusable-ring` indicators to ensure full keyboard navigability.
+
+#### 🏗️ Architecture & UI Patterns
+
+- **Compound Component Pattern:** Implemented a flexible Menu and Modal system, allowing for decoupled but synchronized sub-components (e.g., `Menu.Toggle`, `Menu.List`).
+- **Advanced Focus Management:** Developed custom **focus traps** and **focus restoration** logic to meet WCAG accessibility standards for modal interfaces.
+- **SVG Icon Library:** Built an optimized, accessible SVG library wrapped in a `NavIconWrapper` for consistent scaling and color inheritance.
+
+```jsx
+//Example of how I implemented the Compound Component Pattern for the Menu and Modal
+   <Menus.Toggle id={id} name={name} />
+
+       <Menus.List id={id}>
+          <Modal.Open
+            modalName={`edit-pot-${id}`}
+            returnToSelector={`#menu-trigger-${id}`}
+          >
+            <Menus.Button color={"text-contain-main"}>Edit pot</Menus.Button>
+          </Modal.Open>
+        </Menus.List>
+
+        <Modal.Window
+          titleId={`edit-pot-title-${id}`}
+          contentId={`edit-pot-desc-${id}`}
+          modalName={`edit-pot-${id}`}
+        >
+          <PotForm potModalType={`edit-pot-${id}`} potToEdit={pot} />
+        </Modal.Window>
 ```
-```css
-.proud-of-this-css {
-  color: papayawhip;
-}
-```
-```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
-```
 
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
+#### 💰 Financial Logic & State
 
-**Note: Delete this note and the content within this section and replace with your own learnings.**
+- **TanStack Query Integration:** Managed complex CRUD operations with real-time **Balance Synchronization**. Adding or withdrawing from a pot automatically triggers a re-validation of the global balance.
+- **Constraint-Based Validation:** Leveraged **React Hook Form** to enforce business rules, such as preventing withdrawals that exceed a pot's current total or ensuring unique color-tag selection.
 
-### Continued development
+#### 🛡️ Feedback & Safety
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
-
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
+- **Global Toast System:** Designed a context-based notification system to provide immediate user feedback on asynchronous database mutations.
+- **Resilient UI:** Implemented `ErrorFallback` components to handle API failures gracefully without crashing the entire application.
 
 ### Useful resources
 

@@ -32,10 +32,9 @@ function Button({
     >
       {isLoading && <SpinnerMiniContainer />}
 
-      <div className={`${isLoading ? "opacity-0" : ""}`}>
-        {children}
-        {icon && icon}
-      </div>
+      <div className={`${isLoading ? "opacity-0" : ""}`}>{children}</div>
+
+      <span className={`${isLoading ? "opacity-0" : ""}`}> {icon && icon}</span>
     </button>
   );
 }

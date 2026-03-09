@@ -8,7 +8,6 @@ import {
 import AppLayout from "./ui/AppLayout";
 import Overview from "./features/overview/Overview";
 import Transactions from "./features/transactions/Transactions";
-import Budgets from "./features/budgets/Budgets";
 import RecurringBills from "./features/recurring-bills/RecurringBills";
 import Pots from "./pages/Pots";
 import Login from "./pages/Login";
@@ -17,6 +16,7 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import Signup from "./pages/Signup";
 import ErrorFallBack from "./ui/ErrorFallBack";
 import { ToastProvider } from "./context/ToastContext";
+import Budgets from "./pages/Budgets";
 
 const queryClient = new QueryClient({
   defaultOptions: {

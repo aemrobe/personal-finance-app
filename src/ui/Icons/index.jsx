@@ -9,3 +9,4 @@ export { default as EllipsisIcon } from "./EllipsisIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as ChevroDownIcon } from "./ChevroDownIcon";
 export { default as SelectedIcon } from "./SelectedIcon";
+export { default as CaretRightIcon } from "./CaretRightIcon";
