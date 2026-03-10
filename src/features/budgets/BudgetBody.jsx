@@ -1,21 +1,21 @@
 import Menus from "../../ui/Menus";
-import BugetCard from "./BugetCard";
+import SpinnerContainer from "../../ui/SpinnerContainer";
+import BudgetCard from "./BudgetCard";
 import { useBudgets } from "./useBudgets";
 
 function BudgetBody() {
   const { data: budgets, isLoading } = useBudgets();
 
+  if (isLoading) return <SpinnerContainer />;
+
   return (
     <Menus>
       <div className="flex flex-col gap-6">
-        <BugetCard
-          budget={{
-            id: 15,
-            category: "Entertainment",
-            maximum: 50,
-            theme: "green",
-          }}
-        />
+        {budgets
+          .filter((budget) => budget.maximum)
+          .map((budget) => (
+            <BudgetCard key={budget.id} budget={budget} />
+          ))}
       </div>
     </Menus>
   );

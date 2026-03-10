@@ -87,6 +87,7 @@
   /* Border Colors */
   --color-border-base: var(--color-beige-500);
   --color-border-subtle: var(--color-grey-100);
+  --color-border-divider: var(--color-grey-500);
 
   /* Text selection */
   --color-highlight-bg: var(--color-yellow-500);

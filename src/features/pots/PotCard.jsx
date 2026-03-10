@@ -38,7 +38,7 @@ function PotCard({ pot }) {
             style={{
               backgroundColor: theme,
             }}
-            className="inline-block w-4 h-4 bg-green-500 rounded-full"
+            className="inline-block w-4 h-4 rounded-full"
           ></span>
           <h2 className="capitalize text-preset-2">{name}</h2>
         </div>

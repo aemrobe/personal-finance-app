@@ -7,7 +7,6 @@ import { FIELD_REQUIRED_MESSAGE } from "../../utils/constants";
 import { useUpdatePot } from "./useUpdatePot";
 import { useUpdateBalance } from "../Balance/useUpdateBalance";
 import { useBalance } from "../Balance/useBalance";
-import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import ModalTitle from "../../ui/ModalTitle";
 import ModalText from "../../ui/ModalText";
 import { useToast } from "../../context/ToastContext";
@@ -90,13 +89,6 @@ function PotBalanceForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {isLoading && (
-        <SpinnerMiniContainer
-          backgroundColor={"bg-surface-primary"}
-          size={"text-3xl"}
-        />
-      )}
-
       <ModalTitle
         titleId={titleId}
         title={`${isAdd ? "Add to" : "Withdraw from"} ‘${name}’`}
