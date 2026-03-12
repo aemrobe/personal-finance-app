@@ -87,7 +87,7 @@ function Window({ children, modalName, titleId, contentId }) {
     const modalElement = modalRef.current;
 
     const focusableSelector =
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      'button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -123,7 +123,7 @@ function Window({ children, modalName, titleId, contentId }) {
       // 2. Look for the first input, select, or button inside the modal
       // We exclude the Close button (usually at the top) to focus the form instead
       const firstInput = modalRef.current.querySelector(
-        'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([aria-label="Close Modal"])',
+        'input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([aria-label="Close Modal"])',
       );
 
       const initialFocus =

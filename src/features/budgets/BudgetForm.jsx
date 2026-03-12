@@ -1,20 +1,17 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCreatePot } from "../pots/useCreatePot";
 import { useUpdatePot } from "../pots/useUpdatePot";
-import {
-  ANIMATION_DURATION,
-  FIELD_REQUIRED_MESSAGE,
-} from "../../utils/constants";
-import { useOutsideClicks } from "../../hooks/useOutsideClicks";
+import { FIELD_REQUIRED_MESSAGE } from "../../utils/constants";
 import { useForm } from "react-hook-form";
 import ModalTitle from "../../ui/ModalTitle";
 import ModalText from "../../ui/ModalText";
 import Input from "../../ui/Input";
-import { ChevroDownIcon, SelectedIcon } from "../../ui/Icons";
 import Button from "../../ui/Button";
 import { useBudgets } from "./useBudgets";
+import CustomSelectBox from "../../ui/CustomSelectBox";
+import SelectOption from "../../ui/selectOption";
 
 function BudgetForm({
   titleId,
@@ -34,6 +31,24 @@ function BudgetForm({
   const { user } = useCurrentUser();
 
   const { onShowToastMessage } = useToast();
+
+  //Raw Datas
+  const budgetCategories = budgets.map((budget) => {
+    return {
+      category: budget.category,
+    };
+  });
+
+  const availableBudgetCategories = budgetCategories.filter((category) => {
+    const isUsed = budgets?.some(
+      (budget) =>
+        budget.category.toLowerCase() === category.category.toLowerCase() &&
+        budget.maximum &&
+        budget.id !== budgetToEdit.id,
+    );
+
+    return !isUsed;
+  });
 
   const themes = [
     {
@@ -56,9 +71,7 @@ function BudgetForm({
     { name: "orange", color: "#be6c49" },
   ];
 
-  // Custom Select box
-  const [isOpen, setIsOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
+  // selectedTheme
   const [selectedTheme, setSelectedTheme] = useState(() => {
     if (isEditSession) {
       return (
@@ -80,52 +93,41 @@ function BudgetForm({
     );
   });
 
-  const customSelectBoxButtonRef = useRef(null);
-
-  const toggleDropdown = function () {
-    if (isOpen) {
-      setTimeout(() => {
-        setIsOpen(false);
-      }, ANIMATION_DURATION);
-      setVisible(false);
-    } else {
-      setIsOpen(true);
-      setVisible(true);
+  // Custom Select box2
+  const [selectCategory, setSelectedCategory] = useState(() => {
+    if (isEditSession) {
+      return (
+        budgetCategories.find(
+          (budget) =>
+            budget.category.toLowerCase() ===
+            budgetToEdit.category.toLowerCase(),
+        ) || budgetCategories[0]
+      );
     }
-  };
 
-  const handleSelect = function (theme) {
-    setVisible(false);
-    setTimeout(() => {
-      setIsOpen(false);
-      customSelectBoxButtonRef.current.focus();
-    }, ANIMATION_DURATION);
-    setSelectedTheme(theme);
-    setValue("theme", theme?.color);
-  };
-
-  const closeOutsideClickRef = useOutsideClicks(() => {
-    setIsOpen(false);
+    return (
+      budgetCategories.find(
+        (budget) =>
+          budget.category ===
+          budgets?.find((budget) => !budget.maximum).category,
+      ) || budgetCategories[0]
+    );
   });
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    watch,
     setValue,
   } = useForm({
     defaultValues: isEditSession
       ? budgetToEdit
       : {
-          name: "",
+          category: selectCategory.category,
           maximum: "",
           theme: selectedTheme.color,
         },
   });
-
-  // Max character for potname
-  const potName = watch("name", "");
 
   const onSubmit = function (data) {
     if (isEditSession) {
@@ -190,10 +192,43 @@ function BudgetForm({
       />
 
       <div className="flex flex-col space-y-4">
+        <input
+          type="hidden"
+          {...register("category", {
+            required: "Please select a category",
+          })}
+        />
+
+        {/* Custom Select box 2 */}
+        <CustomSelectBox
+          inputFieldName={"category"}
+          labelName={"Budget Category"}
+          budgetModalType={`${budgetModalType}-category`}
+          selectedTheme={selectCategory}
+          setSelectedTheme={setSelectedCategory}
+          isWorking={isWorking}
+          rawData={availableBudgetCategories}
+          setValue={setValue}
+          errors={errors}
+          optionProperty1="category"
+          optionProperty2="color"
+          OptionComponent={SelectOption}
+          getOptionMeta={(rawBudget, selectedTheme) => {
+            const isSelected =
+              selectedTheme.category.toLowerCase() ===
+              rawBudget.category.toLowerCase();
+
+            return {
+              isSelected,
+            };
+          }}
+        />
+
         <Input
           label="Maximum Spend"
           isLoading={isWorking}
           type={"number"}
+          placeholder={"e.g. 2000"}
           prefix={true}
           error={errors.maximum?.message}
           errorId={`maximumError-${budgetModalType}`}
@@ -216,107 +251,36 @@ function BudgetForm({
         />
 
         {/* Custom Select box */}
-        <div ref={closeOutsideClickRef} className="relative">
-          <span
-            id={`label-${budgetModalType}`}
-            className="capitalize text-preset-5-bold text-content-secondary mb-1 inline-block"
-          >
-            color tag
-          </span>
+        <CustomSelectBox
+          isColor={true}
+          inputFieldName={"theme"}
+          labelName={"Color Tag"}
+          budgetModalType={`${budgetModalType}-color`}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          isWorking={isWorking}
+          rawData={themes}
+          setValue={setValue}
+          errors={errors}
+          optionProperty1="name"
+          optionProperty2="color"
+          OptionComponent={SelectOption}
+          getOptionMeta={(theme, selectedTheme) => {
+            const isUsed = budgets?.some(
+              (budget) =>
+                budget.theme.toLowerCase() === theme.color.toLowerCase() &&
+                budget.id !== budgetToEdit.id,
+            );
 
-          <button
-            id={`color-tag-${budgetModalType}`}
-            ref={customSelectBoxButtonRef}
-            type="button"
-            disabled={isWorking}
-            aria-labelledby={`label-${budgetModalType} color-tag-${budgetModalType}`}
-            aria-haspopup="listbox"
-            aria-controls={`listbox-${budgetModalType}`}
-            aria-expanded={isOpen}
-            onClick={toggleDropdown}
-            className="focusable-ring flex w-full items-center border border-border-base rounded-lg py-3 px-5 disabled-input"
-          >
-            <span
-              aria-hidden="true"
-              style={{
-                backgroundColor: selectedTheme.color,
-              }}
-              className="inline-block h-4 w-4 rounded-full"
-            />
+            const isSelected =
+              selectedTheme.color.toLowerCase() === theme.color.toLowerCase();
 
-            <span className="ml-3 mr-4 text-preset-4 capitalize">
-              {selectedTheme.name}
-            </span>
-
-            <ChevroDownIcon
-              className={`ml-auto text-content-main transition-transform origin-center  duration-200 ${isOpen ? "-rotate-180" : "rotate-0"}`}
-            />
-          </button>
-
-          {errors.theme && (
-            <p className="text-preset-5 text-content-error mt-1  text-right">
-              {errors.theme.message}
-            </p>
-          )}
-
-          {isOpen && (
-            <ul
-              id={`listbox-${budgetModalType}`}
-              role="listbox"
-              className={` z-20 no-scrollbar h-75 overflow-y-scroll bg-surface-primary shadow-3xl px-5 rounded-lg absolute inset-x-0 top-full mt-4 divide-y divide-border-subtle  duration-1000 transition-opacity ${visible ? "open" : "close"}`}
-            >
-              {themes.map((theme) => {
-                const isUsed = budgets?.some(
-                  (budget) =>
-                    budget.theme.toLowerCase() === theme.color.toLowerCase() &&
-                    budget.id !== budgetToEdit.id,
-                );
-                const isSelected =
-                  selectedTheme.name.toLowerCase() === theme.name.toLowerCase();
-
-                return (
-                  <li className="py-1" key={theme.name} role="none">
-                    <button
-                      onClick={() => {
-                        if (!isUsed) handleSelect(theme);
-                      }}
-                      type="button"
-                      role="option"
-                      aria-selected={isSelected}
-                      disabled={isUsed}
-                      className={`focusable-ring rounded-lg py-2 flex items-center w-full ${isUsed ? "disabled:cursor-not-allowed" : "cursor-pointer"}`}
-                    >
-                      <span
-                        aria-hidden="true"
-                        style={{ backgroundColor: theme.color }}
-                        className={`inline-block w-4 h-4 rounded-full ${isUsed ? "opacity-10" : "opacity-100"}`}
-                      ></span>
-
-                      <span
-                        className={`ml-3 text-preset-4 capitalize ${isUsed ? "text-content-secondary" : "text-content-main"}`}
-                      >
-                        {theme.name}
-                      </span>
-
-                      <span className="ml-auto text-preset-5 text-content-secondary">
-                        {isUsed ? "Already used" : ""}
-                      </span>
-
-                      {isSelected && !isUsed && (
-                        <span className="p-[0.0937rem]">
-                          <SelectedIcon
-                            className={"text-icon-success w-3.5 h-3.5"}
-                          />
-                          <span className="sr-only">selected</span>
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
+            return {
+              isUsed,
+              isSelected,
+            };
+          }}
+        />
       </div>
 
       <Button
