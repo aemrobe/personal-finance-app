@@ -138,6 +138,27 @@
       opacity: 1;
     }
   }
+
+  @keyframes size-in {
+    0% {
+      grid-template-rows: 0fr;
+    }
+
+    100% {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  @keyframes size-out {
+    0% {
+      grid-template-rows: 1fr;
+    }
+
+    100% {
+      grid-template-rows: 0fr;
+    }
+  }
+
   @keyframes fade-out {
     0% {
       opacity: 1;
@@ -146,8 +167,10 @@
       opacity: 0;
     }
   }
-  --animate-fade-in: fade-in 0.5s forwards;
-  --animate-fade-out: fade-out 0.5s forwards;
+  --animate-fade-in: fade-in 0.2s forwards;
+  --animate-fade-out: fade-out 0.2s forwards;
+  --animate-size-in: size-in 0.3s forwards;
+  --animate-size-out: size-out 0.3s forwards;
   --animate-spin: spin 1s linear infinite;
 }
 
@@ -310,6 +333,14 @@ input:-webkit-autofill:active {
 
 .close {
   animation: var(--animate-fade-out);
+}
+
+.open-menu {
+  animation: var(--animate-size-in);
+}
+
+.close-menu {
+  animation: var(--animate-size-out);
 }
 
 /* Modal */

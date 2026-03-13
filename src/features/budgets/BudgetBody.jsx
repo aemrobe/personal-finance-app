@@ -12,7 +12,7 @@ function BudgetBody() {
     <Menus>
       <div className="flex flex-col gap-6">
         {budgets
-          .filter((budget) => budget.maximum)
+          ?.filter((budget) => budget.maximum)
           .map((budget) => (
             <BudgetCard key={budget.id} budget={budget} />
           ))}

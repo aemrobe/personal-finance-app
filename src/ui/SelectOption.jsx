@@ -41,15 +41,11 @@ function SelectOption({
           </span>
         )}
 
-        {isColor && isSelected && !isUsed && (
-          <span className="p-[0.0937rem]">
+        {isSelected && !isUsed && (
+          <span className={`${!isColor ? "ml-auto" : ""} p-[0.0937rem]`}>
             <SelectedIcon className={"text-icon-success w-3.5 h-3.5"} />
             <span className="sr-only">selected</span>
           </span>
-        )}
-
-        {!isColor && isSelected && !isUsed && (
-          <span className="sr-only">selected</span>
         )}
       </button>
     </li>

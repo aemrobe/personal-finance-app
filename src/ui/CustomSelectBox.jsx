@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ANIMATION_DURATION } from "../utils/constants";
+import { ANIMATION_DURATION_SELECT_MENU } from "../utils/constants";
 import { useOutsideClicks } from "../hooks/useOutsideClicks";
 import { ChevroDownIcon } from "./Icons";
 
@@ -11,8 +11,8 @@ function CustomSelectBox({
   isColor = false,
   setValue,
   errors,
-  selectedTheme,
-  setSelectedTheme,
+  selectedOption,
+  setSelectedOption,
   rawData,
   OptionComponent,
   optionProperty1,
@@ -28,7 +28,7 @@ function CustomSelectBox({
     if (isOpen) {
       setTimeout(() => {
         setIsOpen(false);
-      }, ANIMATION_DURATION);
+      }, ANIMATION_DURATION_SELECT_MENU);
       setVisible(false);
     } else {
       setIsOpen(true);
@@ -41,17 +41,18 @@ function CustomSelectBox({
     setTimeout(() => {
       setIsOpen(false);
       customSelectBoxButtonRef.current?.focus();
-    }, ANIMATION_DURATION);
-    setSelectedTheme(theme);
+    }, ANIMATION_DURATION_SELECT_MENU);
+    setSelectedOption(theme);
     setValue(inputFieldName, theme?.color);
   };
 
   const closeOutsideClickRef = useOutsideClicks(() => {
-    setIsOpen(false);
+    setVisible(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, ANIMATION_DURATION_SELECT_MENU);
   });
-  {
-    /* Custom Select box */
-  }
+
   return (
     <div ref={closeOutsideClickRef} className="relative">
       <span
@@ -77,7 +78,7 @@ function CustomSelectBox({
           <span
             aria-hidden="true"
             style={{
-              backgroundColor: selectedTheme[optionProperty2],
+              backgroundColor: selectedOption[optionProperty2],
             }}
             className="inline-block h-4 w-4 rounded-full"
           />
@@ -86,14 +87,13 @@ function CustomSelectBox({
         <span
           className={`${isColor ? "ml-3" : ""} mr-4 text-preset-4 capitalize`}
         >
-          {selectedTheme[optionProperty1]}
+          {selectedOption[optionProperty1]}
         </span>
 
         <ChevroDownIcon
           className={`ml-auto text-content-main transition-transform origin-center  duration-200 ${isOpen ? "-rotate-180" : "rotate-0"}`}
         />
       </button>
-
       {errors[inputFieldName] && (
         <p className="text-preset-5 text-content-error mt-1  text-right">
           {errors[inputFieldName].message}
@@ -101,27 +101,31 @@ function CustomSelectBox({
       )}
 
       {isOpen && (
-        <ul
-          id={`listbox-${budgetModalType}`}
-          role="listbox"
-          className={` z-20 no-scrollbar h-75 overflow-y-scroll bg-surface-primary shadow-3xl px-5 rounded-lg absolute inset-x-0 top-full mt-4 divide-y divide-border-subtle  duration-1000 transition-opacity ${visible ? "open" : "close"}`}
+        <div
+          className={`grid overflow-hidden bg-surface-primary shadow-3xl  rounded-lg absolute inset-x-0 top-full mt-4  duration-1000 transition-opacity   ${visible ? "open-menu" : "close-menu"} z-20`}
         >
-          {rawData.map((option) => {
-            const meta = getOptionMeta(option, selectedTheme);
+          <ul
+            id={`listbox-${budgetModalType}`}
+            role="listbox"
+            className={`no-scrollbar px-5 overflow-y-scroll divide-y divide-border-subtle max-h-75 `}
+          >
+            {rawData.map((option) => {
+              const meta = getOptionMeta(option, selectedOption);
 
-            return (
-              <OptionComponent
-                key={option[optionProperty1]}
-                option={option}
-                optionProperty1={optionProperty1}
-                optionProperty2={optionProperty2}
-                isColor={isColor}
-                handleSelect={handleSelect}
-                {...meta}
-              />
-            );
-          })}
-        </ul>
+              return (
+                <OptionComponent
+                  key={option[optionProperty1]}
+                  option={option}
+                  optionProperty1={optionProperty1}
+                  optionProperty2={optionProperty2}
+                  isColor={isColor}
+                  handleSelect={handleSelect}
+                  {...meta}
+                />
+              );
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );

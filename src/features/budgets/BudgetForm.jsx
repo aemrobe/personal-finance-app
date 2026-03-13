@@ -3,7 +3,7 @@ import { useToast } from "../../context/ToastContext";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCreatePot } from "../pots/useCreatePot";
 import { useUpdatePot } from "../pots/useUpdatePot";
-import { FIELD_REQUIRED_MESSAGE } from "../../utils/constants";
+import { FIELD_REQUIRED_MESSAGE, THEMES } from "../../utils/constants";
 import { useForm } from "react-hook-form";
 import ModalTitle from "../../ui/ModalTitle";
 import ModalText from "../../ui/ModalText";
@@ -33,13 +33,13 @@ function BudgetForm({
   const { onShowToastMessage } = useToast();
 
   //Raw Datas
-  const budgetCategories = budgets.map((budget) => {
-    return {
-      category: budget.category,
-    };
+  const budgetCategories = [
+    ...new Set(budgets?.map((budget) => budget.category)),
+  ].map((category) => {
+    return { category };
   });
 
-  const availableBudgetCategories = budgetCategories.filter((category) => {
+  const availableBudgetCategories = budgetCategories?.filter((category) => {
     const isUsed = budgets?.some(
       (budget) =>
         budget.category.toLowerCase() === category.category.toLowerCase() &&
@@ -50,66 +50,43 @@ function BudgetForm({
     return !isUsed;
   });
 
-  const themes = [
-    {
-      name: "green",
-      color: "#277c78",
-    },
-    { name: "yellow", color: "#f2cdac" },
-    { name: "cyan", color: "#82c9d7" },
-    { name: "navy", color: "#626070" },
-    { name: "red", color: "#c94736" },
-    { name: "purple", color: "#826cb0" },
-    { name: "turquoise", color: "#597c7c" },
-    { name: "brown", color: "#93674f" },
-    { name: "magenta", color: "#934f6f" },
-    { name: "blue", color: "#3f82b2" },
-    { name: "navy grey", color: "#97a0ac" },
-    { name: "army green", color: "#7f9161" },
-    { name: "pink", color: "#af81ba" },
-    { name: "gold", color: "#cab361" },
-    { name: "orange", color: "#be6c49" },
-  ];
-
-  // selectedTheme
+  // themes selectBox
   const [selectedTheme, setSelectedTheme] = useState(() => {
     if (isEditSession) {
       return (
-        themes.find(
+        THEMES.find(
           (theme) =>
             theme.color.toLowerCase() === budgetToEdit.theme.toLowerCase(),
-        ) || themes[0]
+        ) || THEMES[0]
       );
     }
 
     return (
-      themes.find(
+      THEMES.find(
         (theme) =>
           !budgets?.some(
             (budget) =>
               budget.theme.toLowerCase() === theme.color.toLowerCase(),
           ),
-      ) || themes[0]
+      ) || THEMES[0]
     );
   });
 
-  // Custom Select box2
+  // category selectBox
   const [selectCategory, setSelectedCategory] = useState(() => {
     if (isEditSession) {
       return (
         budgetCategories.find(
-          (budget) =>
-            budget.category.toLowerCase() ===
+          (catObj) =>
+            catObj.category.toLowerCase() ===
             budgetToEdit.category.toLowerCase(),
-        ) || budgetCategories[0]
+        ) || availableBudgetCategories[0]
       );
     }
 
     return (
       budgetCategories.find(
-        (budget) =>
-          budget.category ===
-          budgets?.find((budget) => !budget.maximum).category,
+        (b) => b.category === budgets?.find((bud) => !bud.maximum)?.category,
       ) || budgetCategories[0]
     );
   });
@@ -130,47 +107,48 @@ function BudgetForm({
   });
 
   const onSubmit = function (data) {
-    if (isEditSession) {
-      const { id, created_at, total, ...editableFields } = data;
-      updatePot(
-        {
-          updatedData: editableFields,
-          id,
-        },
-        {
-          onSuccess: () => {
-            onCloseModal();
-            restoreFocus();
-            onShowToastMessage({
-              text: `Pot updated successfully!`,
-            });
-          },
-          onError: (error) => {
-            onShowToastMessage({
-              text: `Failed to update a pot: ${error.message}`,
-            });
-          },
-        },
-      );
-    } else {
-      createPot(
-        { ...data, user_id: user.id },
-        {
-          onSuccess: () => {
-            onCloseModal();
-            restoreFocus();
-            onShowToastMessage({
-              text: `Pot ${data.name} successfully created`,
-            });
-          },
-          onError: (error) => {
-            onShowToastMessage({
-              text: `Failed to create a pot: ${error.message}`,
-            });
-          },
-        },
-      );
-    }
+    console.log("data", data);
+    // if (isEditSession) {
+    //   const { id, created_at, total, ...editableFields } = data;
+    //   updatePot(
+    //     {
+    //       updatedData: editableFields,
+    //       id,
+    //     },
+    //     {
+    //       onSuccess: () => {
+    //         onCloseModal();
+    //         restoreFocus();
+    //         onShowToastMessage({
+    //           text: `Pot updated successfully!`,
+    //         });
+    //       },
+    //       onError: (error) => {
+    //         onShowToastMessage({
+    //           text: `Failed to update a pot: ${error.message}`,
+    //         });
+    //       },
+    //     },
+    //   );
+    // } else {
+    //   createPot(
+    //     { ...data, user_id: user.id },
+    //     {
+    //       onSuccess: () => {
+    //         onCloseModal();
+    //         restoreFocus();
+    //         onShowToastMessage({
+    //           text: `Pot ${data.name} successfully created`,
+    //         });
+    //       },
+    //       onError: (error) => {
+    //         onShowToastMessage({
+    //           text: `Failed to create a pot: ${error.message}`,
+    //         });
+    //       },
+    //     },
+    //   );
+    // }
   };
 
   return (
@@ -199,13 +177,13 @@ function BudgetForm({
           })}
         />
 
-        {/* Custom Select box 2 */}
+        {/* Custom Select box 1 */}
         <CustomSelectBox
           inputFieldName={"category"}
           labelName={"Budget Category"}
           budgetModalType={`${budgetModalType}-category`}
-          selectedTheme={selectCategory}
-          setSelectedTheme={setSelectedCategory}
+          selectedOption={selectCategory}
+          setSelectedOption={setSelectedCategory}
           isWorking={isWorking}
           rawData={availableBudgetCategories}
           setValue={setValue}
@@ -250,16 +228,16 @@ function BudgetForm({
           })}
         />
 
-        {/* Custom Select box */}
+        {/* Custom Select box 2 */}
         <CustomSelectBox
           isColor={true}
           inputFieldName={"theme"}
           labelName={"Color Tag"}
           budgetModalType={`${budgetModalType}-color`}
-          selectedTheme={selectedTheme}
-          setSelectedTheme={setSelectedTheme}
+          selectedOption={selectedTheme}
+          setSelectedOption={setSelectedTheme}
           isWorking={isWorking}
-          rawData={themes}
+          rawData={THEMES}
           setValue={setValue}
           errors={errors}
           optionProperty1="name"
