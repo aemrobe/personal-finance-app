@@ -1,4 +1,9 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createBrowserRouter,
@@ -17,13 +22,31 @@ import Signup from "./pages/Signup";
 import ErrorFallBack from "./ui/ErrorFallBack";
 import { ToastProvider } from "./context/ToastContext";
 import Budgets from "./pages/Budgets";
+import { NETWORKERROREVENT } from "./utils/constants";
 
 const queryClient = new QueryClient({
+  mutationCache: new MutationCache({
+    onError: (error) => {
+      if (error.message === "Failed to fetch" || !window.navigator.onLine) {
+        window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
+      }
+    },
+  }),
+  queryCache: new QueryCache({
+    onError: (error) => {
+      if (error.message === "Failed to fetch") {
+        window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
+      }
+    },
+  }),
   defaultOptions: {
     queries: {
       staleTime: 0,
-      throwOnError: true,
-      retry: false,
+      retry: 1,
+    },
+    mutations: {
+      retry: 0,
+      networkMode: "always",
     },
   },
 });
@@ -73,7 +96,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       <ToastProvider>
         <RouterProvider router={router} />
       </ToastProvider>

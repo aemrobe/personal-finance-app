@@ -7,7 +7,10 @@ import {
   useState,
 } from "react";
 import ToastMessage from "../ui/ToastMessage";
-import { PAGE_TITLE_FOCUS_AFTER_TOAST_DURATION } from "../utils/constants";
+import {
+  NETWORKERROREVENT,
+  PAGE_TITLE_FOCUS_AFTER_TOAST_DURATION,
+} from "../utils/constants";
 
 const generateUniqueId = () => Date.now() + Math.random();
 
@@ -32,6 +35,22 @@ function ToastProvider({ children }) {
       return prevToasts.filter((toast) => toast.id !== id);
     });
   }, []);
+
+  useEffect(
+    function () {
+      const handleNetworkError = () => {
+        handleShowToastMessage({
+          text: "Network error. Please check your connection. ",
+        });
+      };
+
+      window.addEventListener(NETWORKERROREVENT, handleNetworkError);
+
+      return () =>
+        window.removeEventListener(NETWORKERROREVENT, handleNetworkError);
+    },
+    [handleShowToastMessage],
+  );
 
   useEffect(
     function () {

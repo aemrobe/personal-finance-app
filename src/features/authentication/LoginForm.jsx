@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLogin } from "./useLogin";
 import Input from "../../ui/Input";
 import { ShowPasswordIcon, HidePasswordIcon } from "../../ui/Icons";
@@ -25,32 +25,32 @@ function LoginForm() {
     },
   });
 
-  const { login, isLoading, serverError } = useLogin();
+  const { login, isLoading } = useLogin();
 
   const handleLogin = function ({ email, password }) {
-    login({
-      email,
-      password,
-    });
+    login(
+      {
+        email,
+        password,
+      },
+      {
+        onError: (err) => {
+          if (err.message !== "Failed to fetch") {
+            setError(
+              "password",
+              {
+                type: "manual",
+                message: `${err.message}`,
+              },
+              {
+                shouldFocus: true,
+              },
+            );
+          }
+        },
+      },
+    );
   };
-
-  useEffect(
-    function () {
-      if (serverError) {
-        setError(
-          "password",
-          {
-            type: "manual",
-            message: `${serverError}`,
-          },
-          {
-            shouldFocus: true,
-          },
-        );
-      }
-    },
-    [serverError, setError],
-  );
 
   return (
     <AuthForm

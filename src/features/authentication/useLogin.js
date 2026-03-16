@@ -9,11 +9,7 @@ export function useLogin() {
 
   const queryClient = useQueryClient();
 
-  const {
-    mutate: login,
-    isPending: isLoading,
-    error,
-  } = useMutation({
+  const { mutate: login, isPending: isLoading } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], data.user);
@@ -26,22 +22,11 @@ export function useLogin() {
     onError: (error) => {
       console.error(error.message);
       queryClient.removeQueries({ queryKey: ["user"] });
-      if (error.message === "Failed to fetch") {
-        onShowToastMessage({
-          text: `Network error. Please check your connection.`,
-        });
-      }
     },
   });
-
-  const isNetworkError = error?.message === "Failed to fetch";
-
-  const displayError =
-    error && !isNetworkError ? "Invalid email or password" : null;
 
   return {
     login,
     isLoading,
-    serverError: displayError,
   };
 }

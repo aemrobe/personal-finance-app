@@ -20,31 +20,4 @@ export const budgets = [
     maximum: 100.0,
     theme: "#626070",
   },
-
-  //New categories (Required for Transaction Table display)
-  {category: "General",
-   maximum: null,
-  theme: "#979797"
-  },
-    {category: "Groceries",
-   maximum: null,
-  theme: "#979797"
-  },
-   {category: "Transportation",
-   maximum: null,
-  theme: "#979797"
-  },
-   {category: "Lifestyle",
-   maximum: null,
-  theme: "#979797"
-  },
-   {category: "Shopping",
-   maximum: null,
-  theme: "#979797"
-  },
-   {category: "Education",
-   maximum: null,
-  theme: "#979797"
-  }
-
 ];

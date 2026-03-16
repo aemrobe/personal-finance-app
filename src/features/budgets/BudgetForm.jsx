@@ -3,7 +3,11 @@ import { useToast } from "../../context/ToastContext";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCreatePot } from "../pots/useCreatePot";
 import { useUpdatePot } from "../pots/useUpdatePot";
-import { FIELD_REQUIRED_MESSAGE, THEMES } from "../../utils/constants";
+import {
+  CATEGORIES,
+  FIELD_REQUIRED_MESSAGE,
+  THEMES,
+} from "../../utils/constants";
 import { useForm } from "react-hook-form";
 import ModalTitle from "../../ui/ModalTitle";
 import ModalText from "../../ui/ModalText";
@@ -12,6 +16,20 @@ import Button from "../../ui/Button";
 import { useBudgets } from "./useBudgets";
 import CustomSelectBox from "../../ui/CustomSelectBox";
 import SelectOption from "../../ui/selectOption";
+import { useFormSelection } from "../../hooks/useFormSelection";
+
+const findAvailableCategory = (budgets) => {
+  return budgets.find((budget) => !budget.maximum)?.category;
+};
+
+const findAvailableTheme = (budgets, THEMES) => {
+  return THEMES.find(
+    (theme) =>
+      !budgets.some(
+        (budget) => budget.theme.toLowerCase() === theme.color.toLowerCase(),
+      ),
+  )?.color;
+};
 
 function BudgetForm({
   titleId,
@@ -33,17 +51,16 @@ function BudgetForm({
   const { onShowToastMessage } = useToast();
 
   //Raw Datas
-  const budgetCategories = [
-    ...new Set(budgets?.map((budget) => budget.category)),
-  ].map((category) => {
-    return { category };
-  });
+  // const budgetCategories = [
+  //   ...new Set(budgets?.map((budget) => budget.category)),
+  // ].map((category) => {
+  //   return { category };
+  // });
 
-  const availableBudgetCategories = budgetCategories?.filter((category) => {
+  const availableBudgetCategories = CATEGORIES?.filter((category) => {
     const isUsed = budgets?.some(
       (budget) =>
         budget.category.toLowerCase() === category.category.toLowerCase() &&
-        budget.maximum &&
         budget.id !== budgetToEdit.id,
     );
 
@@ -51,45 +68,64 @@ function BudgetForm({
   });
 
   // themes selectBox
-  const [selectedTheme, setSelectedTheme] = useState(() => {
-    if (isEditSession) {
-      return (
-        THEMES.find(
-          (theme) =>
-            theme.color.toLowerCase() === budgetToEdit.theme.toLowerCase(),
-        ) || THEMES[0]
-      );
-    }
+  // const [selectedTheme, setSelectedTheme] = useState(() => {
+  //   if (isEditSession) {
+  //     return (
+  //       THEMES.find(
+  //         (theme) =>
+  //           theme.color.toLowerCase() === budgetToEdit.theme.toLowerCase(),
+  //       ) || THEMES[0]
+  //     );
+  //   }
 
-    return (
-      THEMES.find(
-        (theme) =>
-          !budgets?.some(
-            (budget) =>
-              budget.theme.toLowerCase() === theme.color.toLowerCase(),
-          ),
-      ) || THEMES[0]
-    );
+  //   return (
+  //     THEMES.find(
+  //       (theme) =>
+  //         !budgets?.some(
+  //           (budget) =>
+  //             budget.theme.toLowerCase() === theme.color.toLowerCase(),
+  //         ),
+  //     ) || THEMES[0]
+  //   );
+  // });
+  const [selectedTheme, setSelectedTheme] = useFormSelection({
+    isEditSession,
+    editObject: budgetToEdit,
+    allData: budgets,
+    rawData: THEMES,
+    dataKey: "theme",
+    matchKey: "color",
+    findNextAvailable: findAvailableTheme,
+  });
+
+  const [selectedCategory, setSelectedCategory] = useFormSelection({
+    isEditSession,
+    editObject: budgetToEdit,
+    allData: budgets,
+    rawData: CATEGORIES,
+    dataKey: "category",
+    matchKey: "category",
+    findNextAvailable: findAvailableCategory,
   });
 
   // category selectBox
-  const [selectCategory, setSelectedCategory] = useState(() => {
-    if (isEditSession) {
-      return (
-        budgetCategories.find(
-          (catObj) =>
-            catObj.category.toLowerCase() ===
-            budgetToEdit.category.toLowerCase(),
-        ) || availableBudgetCategories[0]
-      );
-    }
+  // const [selectedCategory, setSelectedCategory] = useState(() => {
+  //   if (isEditSession) {
+  //     return (
+  //       budgetCategories.find(
+  //         (catObj) =>
+  //           catObj.category.toLowerCase() ===
+  //           budgetToEdit.category.toLowerCase(),
+  //       ) || availableBudgetCategories[0]
+  //     );
+  //   }
 
-    return (
-      budgetCategories.find(
-        (b) => b.category === budgets?.find((bud) => !bud.maximum)?.category,
-      ) || budgetCategories[0]
-    );
-  });
+  //   return (
+  //     budgetCategories.find(
+  //       (b) => b.category === budgets?.find((bud) => !bud.maximum)?.category,
+  //     ) || budgetCategories[0]
+  //   );
+  // });
 
   const {
     register,
@@ -100,9 +136,9 @@ function BudgetForm({
     defaultValues: isEditSession
       ? budgetToEdit
       : {
-          category: selectCategory.category,
+          category: selectedCategory?.category,
           maximum: "",
-          theme: selectedTheme.color,
+          theme: selectedTheme?.color,
         },
   });
 
@@ -151,6 +187,19 @@ function BudgetForm({
     // }
   };
 
+  // If we aren't editing and we have no available options, show a message instead of a broken form
+  if (!isEditSession && (!selectedCategory || !selectedTheme)) {
+    return (
+      <div className="py-10 text-center">
+        <ModalTitle title="No Options Available" />
+        <ModalText content="You have already created budgets for all available categories or used all available color tags." />
+        <Button onClick={onCloseModal} className="mt-5">
+          Close
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ModalTitle
@@ -182,7 +231,7 @@ function BudgetForm({
           inputFieldName={"category"}
           labelName={"Budget Category"}
           budgetModalType={`${budgetModalType}-category`}
-          selectedOption={selectCategory}
+          selectedOption={selectedCategory}
           setSelectedOption={setSelectedCategory}
           isWorking={isWorking}
           rawData={availableBudgetCategories}
