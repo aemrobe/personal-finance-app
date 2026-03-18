@@ -6,6 +6,7 @@ export function useCurrentUser() {
     queryKey: ["user"],
     queryFn: getCurrentUser,
     staleTime: 0,
+    throwOnError: true,
   });
 
   return {

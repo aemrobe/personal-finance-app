@@ -6,7 +6,7 @@ import { EMPTY_BALANCE } from "../../utils/constants";
 export function useBalance() {
   const { user } = useCurrentUser();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["balance", user?.id],
     queryFn: getBalance,
   });

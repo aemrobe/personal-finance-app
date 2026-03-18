@@ -8,10 +8,11 @@ import { useTransactions } from "../transactions/useTransactions";
 
 function BudgetCard({ budget }) {
   const { id, category, maximum, theme } = budget;
+
   const { data: transactions, isLoading } = useTransactions();
 
   const spendingsForThisCategory = transactions?.filter((transaction) => {
-    return transaction.budgets.category === category;
+    return transaction.categories.category === category;
   });
 
   const spendingOfTheMonth = Math.abs(

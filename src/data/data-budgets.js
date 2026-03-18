@@ -1,14 +1,9 @@
 export const budgets = [
   //Original Budgeted Categories
   {
-    category: "Entertainment",
-    maximum: 50.0,
-    theme: "#277C78",
-  },
-  {
-    category: "Bills",
-    maximum: 750.0,
-    theme: "#82C9D7",
+    category: "Personal Care",
+    maximum: 100.0,
+    theme: "#626070",
   },
   {
     category: "Dining Out",
@@ -16,8 +11,13 @@ export const budgets = [
     theme: "#F2CDAC",
   },
   {
-    category: "Personal Care",
-    maximum: 100.0,
-    theme: "#626070",
+    category: "Bills",
+    maximum: 750.0,
+    theme: "#82C9D7",
+  },
+  {
+    category: "Entertainment",
+    maximum: 50.0,
+    theme: "#277C78",
   },
 ];

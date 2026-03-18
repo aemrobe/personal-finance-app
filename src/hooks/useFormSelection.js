@@ -19,8 +19,6 @@ export function useFormSelection({
 
     const nextAvailableValue = findNextAvailable(allData, rawData);
 
-    if (!nextAvailableValue) return null;
-
     return rawData.find(
       (d) => d[matchKey].toLowerCase() === nextAvailableValue.toLowerCase(),
     );

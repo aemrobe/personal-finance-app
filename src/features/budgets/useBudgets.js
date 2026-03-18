@@ -5,7 +5,7 @@ import { useCurrentUser } from "../authentication/useCurrentUser";
 export function useBudgets() {
   const { user } = useCurrentUser();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["budgets", user?.id],
     queryFn: getBudgets,
     enabled: !!user?.id,

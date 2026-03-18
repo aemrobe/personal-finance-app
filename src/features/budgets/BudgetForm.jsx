@@ -3,11 +3,7 @@ import { useToast } from "../../context/ToastContext";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCreatePot } from "../pots/useCreatePot";
 import { useUpdatePot } from "../pots/useUpdatePot";
-import {
-  CATEGORIES,
-  FIELD_REQUIRED_MESSAGE,
-  THEMES,
-} from "../../utils/constants";
+import { FIELD_REQUIRED_MESSAGE, THEMES } from "../../utils/constants";
 import { useForm } from "react-hook-form";
 import ModalTitle from "../../ui/ModalTitle";
 import ModalText from "../../ui/ModalText";
@@ -17,18 +13,18 @@ import { useBudgets } from "./useBudgets";
 import CustomSelectBox from "../../ui/CustomSelectBox";
 import SelectOption from "../../ui/selectOption";
 import { useFormSelection } from "../../hooks/useFormSelection";
+import { findAvailableTheme } from "../../utils/helpers";
+import { useCategories } from "../categories/useCategory";
 
-const findAvailableCategory = (budgets) => {
-  return budgets.find((budget) => !budget.maximum)?.category;
-};
-
-const findAvailableTheme = (budgets, THEMES) => {
-  return THEMES.find(
-    (theme) =>
+const findAvailableCategory = (budgets, categories) => {
+  return categories?.find(
+    (cat) =>
       !budgets.some(
-        (budget) => budget.theme.toLowerCase() === theme.color.toLowerCase(),
+        (budget) =>
+          budget.categories.category.toLowerCase() ===
+          cat.category.toLowerCase(),
       ),
-  )?.color;
+  )?.category;
 };
 
 function BudgetForm({
@@ -42,52 +38,27 @@ function BudgetForm({
   const isEditSession = Boolean(budgetToEdit.id);
 
   const { data: budgets } = useBudgets();
+  const { data: categories, isLoading } = useCategories();
   const { createPot, isCreatingPot } = useCreatePot();
   const { updatePot, isUpdatingPot } = useUpdatePot();
 
-  const isWorking = isCreatingPot || isUpdatingPot;
+  const isWorking = isLoading || isCreatingPot || isUpdatingPot;
   const { user } = useCurrentUser();
 
   const { onShowToastMessage } = useToast();
 
   //Raw Datas
-  // const budgetCategories = [
-  //   ...new Set(budgets?.map((budget) => budget.category)),
-  // ].map((category) => {
-  //   return { category };
-  // });
-
-  const availableBudgetCategories = CATEGORIES?.filter((category) => {
+  const availableBudgetCategories = categories?.filter((category) => {
     const isUsed = budgets?.some(
       (budget) =>
-        budget.category.toLowerCase() === category.category.toLowerCase() &&
-        budget.id !== budgetToEdit.id,
+        budget.categories.category.toLowerCase() ===
+          category.category.toLowerCase() && budget.id !== budgetToEdit.id,
     );
 
     return !isUsed;
   });
 
   // themes selectBox
-  // const [selectedTheme, setSelectedTheme] = useState(() => {
-  //   if (isEditSession) {
-  //     return (
-  //       THEMES.find(
-  //         (theme) =>
-  //           theme.color.toLowerCase() === budgetToEdit.theme.toLowerCase(),
-  //       ) || THEMES[0]
-  //     );
-  //   }
-
-  //   return (
-  //     THEMES.find(
-  //       (theme) =>
-  //         !budgets?.some(
-  //           (budget) =>
-  //             budget.theme.toLowerCase() === theme.color.toLowerCase(),
-  //         ),
-  //     ) || THEMES[0]
-  //   );
-  // });
   const [selectedTheme, setSelectedTheme] = useFormSelection({
     isEditSession,
     editObject: budgetToEdit,
@@ -98,34 +69,16 @@ function BudgetForm({
     findNextAvailable: findAvailableTheme,
   });
 
+  // category selectBox
   const [selectedCategory, setSelectedCategory] = useFormSelection({
     isEditSession,
     editObject: budgetToEdit,
     allData: budgets,
-    rawData: CATEGORIES,
+    rawData: categories,
     dataKey: "category",
     matchKey: "category",
     findNextAvailable: findAvailableCategory,
   });
-
-  // category selectBox
-  // const [selectedCategory, setSelectedCategory] = useState(() => {
-  //   if (isEditSession) {
-  //     return (
-  //       budgetCategories.find(
-  //         (catObj) =>
-  //           catObj.category.toLowerCase() ===
-  //           budgetToEdit.category.toLowerCase(),
-  //       ) || availableBudgetCategories[0]
-  //     );
-  //   }
-
-  //   return (
-  //     budgetCategories.find(
-  //       (b) => b.category === budgets?.find((bud) => !bud.maximum)?.category,
-  //     ) || budgetCategories[0]
-  //   );
-  // });
 
   const {
     register,
@@ -226,9 +179,10 @@ function BudgetForm({
           })}
         />
 
-        {/* Custom Select box 1 */}
+        {/* Category Select box */}
         <CustomSelectBox
           inputFieldName={"category"}
+          isColor={false}
           labelName={"Budget Category"}
           budgetModalType={`${budgetModalType}-category`}
           selectedOption={selectedCategory}
@@ -238,7 +192,7 @@ function BudgetForm({
           setValue={setValue}
           errors={errors}
           optionProperty1="category"
-          optionProperty2="color"
+          optionProperty2="category"
           OptionComponent={SelectOption}
           getOptionMeta={(rawBudget, selectedTheme) => {
             const isSelected =
@@ -277,7 +231,7 @@ function BudgetForm({
           })}
         />
 
-        {/* Custom Select box 2 */}
+        {/* Color Select Box */}
         <CustomSelectBox
           isColor={true}
           inputFieldName={"theme"}

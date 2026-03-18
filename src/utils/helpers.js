@@ -16,3 +16,12 @@ export const formatDate = (dateString) => {
     year: "numeric",
   }).format(newDate);
 };
+
+export const findAvailableTheme = (budgets, THEMES) => {
+  return THEMES.find(
+    (theme) =>
+      !budgets.some(
+        (budget) => budget.theme.toLowerCase() === theme.color.toLowerCase(),
+      ),
+  )?.color;
+};

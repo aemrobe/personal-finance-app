@@ -9,18 +9,6 @@ export const TOAST_DURATION_MS = 4000;
 export const PAGE_TITLE_FOCUS_AFTER_TOAST_DURATION = 5;
 export const MODAL_FOCUS_DURATION = 20;
 export const NETWORKERROREVENT = "network-error";
-export const CATEGORIES = [
-  "Entertainment",
-  "Bills",
-  "Groceries",
-  "Dining Out",
-  "Transportation",
-  "Personal Care",
-  "Education",
-  "Lifestyle",
-  "Shopping",
-  "General",
-].map((cat) => ({ category: cat }));
 
 export const THEMES = [
   {

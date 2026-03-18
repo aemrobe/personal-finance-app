@@ -43,7 +43,7 @@ function CustomSelectBox({
       customSelectBoxButtonRef.current?.focus();
     }, ANIMATION_DURATION_SELECT_MENU);
     setSelectedOption(theme);
-    setValue(inputFieldName, theme?.color);
+    setValue(inputFieldName, theme?.[optionProperty2]);
   };
 
   const closeOutsideClickRef = useOutsideClicks(() => {
@@ -94,6 +94,7 @@ function CustomSelectBox({
           className={`ml-auto text-content-main transition-transform origin-center  duration-200 ${isOpen ? "-rotate-180" : "rotate-0"}`}
         />
       </button>
+
       {errors[inputFieldName] && (
         <p className="text-preset-5 text-content-error mt-1  text-right">
           {errors[inputFieldName].message}

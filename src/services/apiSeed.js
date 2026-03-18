@@ -1,29 +1,30 @@
-import { budgets } from "../data/data-budgets";
 import { transactions } from "../data/data-transactions";
 import { pots } from "../data/data-pots";
 import { balance } from "../data/data-balance";
 import supabase from "./supabase";
+import { categories } from "../data/data-categories";
+import { budgets } from "../data/data-budgets";
 
 export async function seedNewUserData(userId) {
   try {
     //we need to create a budget data first
-    const budgetsToInsert = budgets.map((budget) => {
+    const categoriesToInsert = categories.map((cat) => {
       return {
-        ...budget,
+        ...cat,
         user_id: userId,
       };
     });
 
-    const { data: createdBudgets, error: budgetError } = await supabase
-      .from("budgets")
-      .insert(budgetsToInsert)
-      .select(); //.select() because we want to use the createdBudget data on the next line
+    const { data: createdCategories, error: categoriesError } = await supabase
+      .from("categories")
+      .insert(categoriesToInsert)
+      .select(); //.select() because we want to use the createdCategories data on the next line
 
-    if (budgetError) throw new Error(budgetError.message);
+    if (categoriesError) throw new Error(categoriesError.message);
 
     const transactionsToInsert = transactions.map((transaction) => {
-      const budget = createdBudgets.find(
-        (budget) => transaction.category === budget.category,
+      const cat = createdCategories.find(
+        (cat) => transaction.category === cat.category,
       );
 
       return {
@@ -32,7 +33,20 @@ export async function seedNewUserData(userId) {
         date: transaction.date,
         amount: transaction.amount,
         recurring: transaction.recurring,
-        budgetId: budget ? budget.id : null,
+        category_id: cat ? cat.id : null,
+        user_id: userId,
+      };
+    });
+
+    const budgetsToInsert = budgets.map((bud) => {
+      const cat = createdCategories.find(
+        (cat) => bud.category === cat.category,
+      );
+
+      return {
+        maximum: bud.maximum,
+        theme: bud.theme,
+        category_id: cat ? cat.id : null,
         user_id: userId,
       };
     });
@@ -40,8 +54,12 @@ export async function seedNewUserData(userId) {
     const { error: transactionError } = await supabase
       .from("transactions")
       .insert(transactionsToInsert);
+    const { error: budgetsError } = await supabase
+      .from("budgets")
+      .insert(budgetsToInsert);
 
     if (transactionError) throw new Error(transactionError.message);
+    if (budgetsError) throw new Error(budgetsError.message);
 
     const potsToInsert = pots.map((pot) => {
       return { ...pot, user_id: userId };
