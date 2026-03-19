@@ -15,7 +15,10 @@ export async function updateBalance({ updatedData, id }) {
 export async function getBalance() {
   let { data, error } = await supabase.from("balance").select("*");
 
-  if (error) throw Error(`Error loading a balance ${error.message}`);
+  if (error) {
+    console.error(error.message);
+    throw Error(`Error loading a balance ${error.message}`);
+  }
 
   return data;
 }

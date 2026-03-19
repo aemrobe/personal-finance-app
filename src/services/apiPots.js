@@ -18,7 +18,11 @@ export async function createPot(newData) {
     .select()
     .single();
 
-  if (error) throw Error(`Failed to create pot: ${error.message}`);
+  if (error) {
+    console.error(error.message);
+
+    throw Error(`Failed to create pot: ${error.message}`);
+  }
 
   return data;
 }

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCreatePot } from "../pots/useCreatePot";

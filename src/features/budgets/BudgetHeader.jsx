@@ -25,7 +25,7 @@ function BudgetHeader() {
           potId={"budget"}
           modalName={"add-budget"}
         >
-          <BudgetForm potModalType={`add-budget`} />
+          <BudgetForm budgetModalType={`add-budget`} />
         </Modal.Window>
       </PageHeader>
     </Modal>

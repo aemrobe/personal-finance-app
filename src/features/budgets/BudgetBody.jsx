@@ -1,14 +1,64 @@
+import EmptyMessage from "../../ui/EmptyMessage";
+import ErrorDisplay from "../../ui/ErrorDisplay";
+import ErrorWrapper from "../../ui/ErrorWrapper";
 import Menus from "../../ui/Menus";
 import SpinnerContainer from "../../ui/SpinnerContainer";
 import { useCategories } from "../categories/useCategory";
 import BudgetCard from "./BudgetCard";
+import BudgetForm from "./BudgetForm";
 import { useBudgets } from "./useBudgets";
 
 function BudgetBody() {
-  const { data: budgets, isLoading } = useBudgets();
-  const { isLoading: isLoadingCategories } = useCategories();
+  const {
+    //   data: budgets,
+    isLoading: isLoadingBudgets,
+    error: budgetError,
+    isFetching: isFetchingBudgets,
+    refetch: refetchBudgets,
+  } = useBudgets();
 
-  if (isLoading || isLoadingCategories) return <SpinnerContainer />;
+  const budgets = [];
+
+  const {
+    isLoading: isLoadingCategories,
+    error: categoriesError,
+    isFetching: isFetchingCategories,
+    refetch: refetchCategories,
+  } = useCategories();
+
+  if (isLoadingBudgets || isLoadingCategories) return <SpinnerContainer />;
+
+  if (budgetError || categoriesError)
+    return (
+      <ErrorWrapper>
+        <ErrorDisplay
+          error={budgetError || categoriesError}
+          isLoading={isFetchingBudgets || isFetchingCategories}
+          onRetry={() => {
+            refetchBudgets();
+            refetchCategories();
+          }}
+        />
+      </ErrorWrapper>
+    );
+
+  if (budgets.length === 0)
+    return (
+      <EmptyMessage
+        title={"No budgets created"}
+        text={
+          "It looks like you don't have any budgets setup. Create a budget to keep your spending on track."
+        }
+        icon={"💰"}
+        action={BudgetForm}
+        actionText={"+ Add New Budget"}
+        modalName={"add-budget-2"}
+        titleId={"add-budget-title-2"}
+        contentId={"add-budget-content-2"}
+        as="h2"
+        budgetModalType={"add-budget-2"}
+      />
+    );
 
   return (
     <Menus>

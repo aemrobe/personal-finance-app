@@ -9,6 +9,7 @@ function Button({
   disabled,
   className,
   onClick,
+  ...props
 }) {
   const baseStyle = isActionButton
     ? "text-preset-4-bold p-4"
@@ -29,6 +30,7 @@ function Button({
       onClick={onClick}
       disabled={isLoading || disabled}
       className={`cursor-pointer  focusable-ring flex justify-center items-center gap-3  rounded-lg transition-colors duration-700 disabled-button ease-in-out ${baseStyle} ${variants[variant]} relative ${className}`}
+      {...props}
     >
       {isLoading && <SpinnerMiniContainer />}
 

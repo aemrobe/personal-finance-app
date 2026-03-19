@@ -8,12 +8,11 @@ import PotBalanceForm from "./PotBalanceForm";
 import ConfirmDeleteModal from "../../ui/ConfirmDeleteModal";
 import { useDeletePot } from "./useDeletePot";
 import { useUpdateBalance } from "../Balance/useUpdateBalance";
-import { useBalance } from "../Balance/useBalance";
 
-function PotCard({ pot }) {
+function PotCard({ pot, balance }) {
   const { name, target, theme, total, id } = pot;
   const { deletePot, isDeletingPot } = useDeletePot();
-  const { isLoading, balance } = useBalance();
+
   const { updateBalance, isUpdatingBalance } = useUpdateBalance();
 
   const { current: currentBalance, id: balanceId } = balance;
@@ -28,7 +27,7 @@ function PotCard({ pot }) {
     percentage: percentageSavedMoney,
   };
 
-  const isWorking = isLoading || isUpdatingBalance || isDeletingPot;
+  const isWorking = isUpdatingBalance || isDeletingPot;
 
   return (
     <div className="bg-surface-primary pt-6 pb-9.5 px-5 rounded-xl">

@@ -6,7 +6,10 @@ export async function getBudgets() {
     .select("*,categories(category)")
     .order("id", { ascending: false });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 
   return data;
 }

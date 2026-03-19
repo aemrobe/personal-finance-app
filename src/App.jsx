@@ -29,6 +29,8 @@ const queryClient = new QueryClient({
     onError: (error) => {
       if (error.message === "Failed to fetch" || !window.navigator.onLine) {
         window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
+
+        return;
       }
     },
   }),
@@ -96,7 +98,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
       <ToastProvider>
         <RouterProvider router={router} />
       </ToastProvider>

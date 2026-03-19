@@ -1,20 +1,69 @@
+import EmptyMessage from "../../ui/EmptyMessage";
+import ErrorDisplay from "../../ui/ErrorDisplay";
+import ErrorWrapper from "../../ui/ErrorWrapper";
 import Menus from "../../ui/Menus";
 import Modal from "../../ui/Modal";
 import SpinnerContainer from "../../ui/SpinnerContainer";
+import { useBalance } from "../Balance/useBalance";
 import PotCard from "./PotCard";
+import PotForm from "./PotForm";
 import { usePots } from "./usePots";
 
 function PotBody() {
-  const { data: pots, isLoading } = usePots();
+  const {
+    data: pots,
+    isLoading: isLoadingPots,
+    isFetching: isFetchingPots,
+    error: potsError,
+    refetch: refetchPots,
+  } = usePots();
 
-  if (isLoading) return <SpinnerContainer />;
+  const {
+    isLoading: isLoadingBalance,
+    balance,
+    error: balanceError,
+    isFetching: isFetchingBalance,
+    refetch: refetchBalance,
+  } = useBalance();
+
+  if (isLoadingPots || isLoadingBalance) return <SpinnerContainer />;
+
+  if (potsError || balanceError)
+    return (
+      <ErrorWrapper>
+        <ErrorDisplay
+          error={potsError || balanceError}
+          isLoading={isFetchingPots || isFetchingBalance}
+          onRetry={() => {
+            refetchPots();
+            refetchBalance();
+          }}
+        />
+      </ErrorWrapper>
+    );
+
+  if (pots.length === 0)
+    return (
+      <EmptyMessage
+        title={"No pots found"}
+        text={"Start your saving journey by creating your first pot!"}
+        icon={"🐖"}
+        action={PotForm}
+        actionText={"+ Add New Pot"}
+        modalName={"add-pot-2"}
+        titleId={"add-pot-title-2"}
+        contentId={"add-pot-content-2"}
+        as="h2"
+        potModalType={"add-pot-2"}
+      />
+    );
 
   return (
     <Menus>
       <Modal>
         <div className="flex flex-col gap-6">
           {pots.map((pot) => (
-            <PotCard key={pot.id} pot={pot} />
+            <PotCard key={pot.id} pot={pot} balance={balance} />
           ))}
         </div>
       </Modal>

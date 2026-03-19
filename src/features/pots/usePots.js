@@ -5,7 +5,7 @@ import { useCurrentUser } from "../authentication/useCurrentUser";
 export function usePots() {
   const { user } = useCurrentUser();
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch, isFetching } = useQuery({
     queryKey: ["pots", user?.id],
     queryFn: getPots,
     enabled: !!user?.id,
@@ -15,5 +15,7 @@ export function usePots() {
     data,
     error,
     isLoading,
+    refetch,
+    isFetching,
   };
 }
