@@ -6,7 +6,10 @@ export async function getPots() {
     .select("*")
     .order("id", { ascending: false });
 
-  if (error) throw Error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw Error(error.message);
+  }
 
   return data;
 }

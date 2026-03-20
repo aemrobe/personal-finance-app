@@ -8,7 +8,6 @@ function ErrorDisplay({
   isLoading = false,
 }) {
   const pageTitle = useRef(null);
-  const errorMessage = error?.message || "An unknown error occurred";
 
   useEffect(function () {
     pageTitle.current.focus();
@@ -32,7 +31,7 @@ function ErrorDisplay({
         id="error-text"
         className="text-preset-4 mb-8 text-center text-content-secondary break-all leading-relaxed"
       >
-        {errorMessage}
+        {error}
       </p>
 
       <Button

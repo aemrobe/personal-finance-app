@@ -78,7 +78,7 @@ function CustomSelectBox({
           <span
             aria-hidden="true"
             style={{
-              backgroundColor: selectedOption[optionProperty2],
+              backgroundColor: selectedOption?.[optionProperty2],
             }}
             className="inline-block h-4 w-4 rounded-full"
           />
@@ -87,7 +87,7 @@ function CustomSelectBox({
         <span
           className={`${isColor ? "ml-3" : ""} mr-4 text-preset-4 capitalize`}
         >
-          {selectedOption[optionProperty1]}
+          {selectedOption?.[optionProperty1]}
         </span>
 
         <ChevroDownIcon

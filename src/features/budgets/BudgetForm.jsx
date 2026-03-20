@@ -14,6 +14,7 @@ import SelectOption from "../../ui/selectOption";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import { findAvailableTheme } from "../../utils/helpers";
 import { useCategories } from "../categories/useCategory";
+import EmptyMessage from "../../ui/EmptyMessage";
 
 const findAvailableCategory = (budgets, categories) => {
   return categories?.find(
@@ -94,6 +95,17 @@ function BudgetForm({
         },
   });
 
+  if (availableBudgetCategories.length === 0 && isEditSession)
+    return (
+      <EmptyMessage
+        title="All categories assigned"
+        text="You've already created a budget for every available category. Try editing or deleting an existing budget to make space."
+        icon="✅"
+        // We pass a smaller height so it looks good inside the modal
+        className="py-10"
+      />
+    );
+
   const onSubmit = function (data) {
     console.log("data", data);
     // if (isEditSession) {
@@ -138,19 +150,6 @@ function BudgetForm({
     //   );
     // }
   };
-
-  // If we aren't editing and we have no available options, show a message instead of a broken form
-  if (!isEditSession && (!selectedCategory || !selectedTheme)) {
-    return (
-      <div className="py-10 text-center">
-        <ModalTitle title="No Options Available" />
-        <ModalText content="You have already created budgets for all available categories or used all available color tags." />
-        <Button onClick={onCloseModal} className="mt-5">
-          Close
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

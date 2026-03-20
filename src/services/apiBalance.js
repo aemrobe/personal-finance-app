@@ -17,7 +17,7 @@ export async function getBalance() {
 
   if (error) {
     console.error(error.message);
-    throw Error(`Error loading a balance ${error.message}`);
+    throw Error(`${error.message}`);
   }
 
   return data;

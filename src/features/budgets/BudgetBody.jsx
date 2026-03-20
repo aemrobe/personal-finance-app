@@ -32,7 +32,7 @@ function BudgetBody() {
     return (
       <ErrorWrapper>
         <ErrorDisplay
-          error={budgetError || categoriesError}
+          error={budgetError.message || categoriesError.message}
           isLoading={isFetchingBudgets || isFetchingCategories}
           onRetry={() => {
             refetchBudgets();
@@ -42,7 +42,7 @@ function BudgetBody() {
       </ErrorWrapper>
     );
 
-  if (budgets.length === 0)
+  if (budgets?.length === 0)
     return (
       <EmptyMessage
         title={"No budgets created"}

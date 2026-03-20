@@ -13,6 +13,7 @@ import CustomSelectBox from "../../ui/CustomSelectBox";
 import SelectOption from "../../ui/selectOption";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import { findAvailableTheme } from "../../utils/helpers";
+import EmptyMessage from "../../ui/EmptyMessage";
 
 function PotForm({
   titleId,
@@ -27,6 +28,11 @@ function PotForm({
   const { data: pots } = usePots();
   const { createPot, isCreatingPot } = useCreatePot();
   const { updatePot, isUpdatingPot } = useUpdatePot();
+
+  const usedThemes = pots.map((pot) => pot.theme);
+  const availableThemes = THEMES.filter(
+    (theme) => !usedThemes.includes(theme.color),
+  );
 
   const isWorking = isCreatingPot || isUpdatingPot;
   const { user } = useCurrentUser();
@@ -56,9 +62,20 @@ function PotForm({
       : {
           name: "",
           target: "",
-          theme: selectedTheme.color,
+          theme: selectedTheme?.color,
         },
   });
+
+  if (availableThemes.length === 0 && !isEditSession)
+    return (
+      <EmptyMessage
+        title="All themes in use"
+        text="You've used every available theme color for your current pots. To create a new saving goal, please delete or edit an existing pot to free up a color."
+        icon="🌈"
+        shadowOfTheBox=""
+        className="py-10" // Keeps it compact for the modal
+      />
+    );
 
   // Max character for potname
   const maxCharacterCount = 30;

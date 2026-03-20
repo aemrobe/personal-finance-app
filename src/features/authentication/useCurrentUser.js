@@ -6,7 +6,12 @@ export function useCurrentUser() {
     queryKey: ["user"],
     queryFn: getCurrentUser,
     staleTime: 0,
-    throwOnError: true,
+    throwOnError: (error) => {
+      const isNetworkError =
+        error.message === "Failed to fetch" || !window.navigator.onLine;
+
+      return !isNetworkError;
+    },
   });
 
   return {

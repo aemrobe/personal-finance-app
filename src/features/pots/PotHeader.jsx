@@ -6,29 +6,27 @@ import PotForm from "./PotForm";
 
 function PotHeader() {
   return (
-    <Modal>
-      <PageHeader>
-        <PageTitle title={"Pots"} />
-        <Modal.Open modalName={"add-pot"}>
-          <Button
-            onClick={(e) => e.stopPropagation()}
-            isActionButton={true}
-            variant={"primary"}
-          >
-            + Add New Pot
-          </Button>
-        </Modal.Open>
-
-        <Modal.Window
-          titleId={"add-pot-title"}
-          contentId={"add-pot-content"}
-          potId={"pot"}
-          modalName={"add-pot"}
+    <PageHeader>
+      <PageTitle title={"Pots"} />
+      <Modal.Open modalName={"add-pot"}>
+        <Button
+          onClick={(e) => e.stopPropagation()}
+          isActionButton={true}
+          variant={"primary"}
         >
-          <PotForm potModalType={`add-pot`} />
-        </Modal.Window>
-      </PageHeader>
-    </Modal>
+          + Add New Pot
+        </Button>
+      </Modal.Open>
+
+      <Modal.Window
+        titleId={"add-pot-title"}
+        contentId={"add-pot-content"}
+        potId={"pot"}
+        modalName={"add-pot"}
+      >
+        <PotForm potModalType={`add-pot`} />
+      </Modal.Window>
+    </PageHeader>
   );
 }
 

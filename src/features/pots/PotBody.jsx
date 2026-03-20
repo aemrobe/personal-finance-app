@@ -2,7 +2,6 @@ import EmptyMessage from "../../ui/EmptyMessage";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import Menus from "../../ui/Menus";
-import Modal from "../../ui/Modal";
 import SpinnerContainer from "../../ui/SpinnerContainer";
 import { useBalance } from "../Balance/useBalance";
 import PotCard from "./PotCard";
@@ -32,7 +31,7 @@ function PotBody() {
     return (
       <ErrorWrapper>
         <ErrorDisplay
-          error={potsError || balanceError}
+          error={potsError?.message || balanceError?.message}
           isLoading={isFetchingPots || isFetchingBalance}
           onRetry={() => {
             refetchPots();
@@ -42,7 +41,7 @@ function PotBody() {
       </ErrorWrapper>
     );
 
-  if (pots.length === 0)
+  if (pots?.length === 0)
     return (
       <EmptyMessage
         title={"No pots found"}
@@ -60,13 +59,11 @@ function PotBody() {
 
   return (
     <Menus>
-      <Modal>
-        <div className="flex flex-col gap-6">
-          {pots.map((pot) => (
-            <PotCard key={pot.id} pot={pot} balance={balance} />
-          ))}
-        </div>
-      </Modal>
+      <div className="flex flex-col gap-6">
+        {pots.map((pot) => (
+          <PotCard key={pot.id} pot={pot} balance={balance} />
+        ))}
+      </div>
     </Menus>
   );
 }

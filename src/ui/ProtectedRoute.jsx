@@ -8,18 +8,36 @@ function ProtectedRoute({ children }) {
 
   const { isAuthenticated, isLoading } = useCurrentUser();
 
+  const supabaseKey = Object.keys(localStorage).find((key) =>
+    key.endsWith("-auth-token"),
+  );
+
+  const localSession = JSON.parse(localStorage.getItem(supabaseKey));
+  const hasLocalSession = localSession?.user?.role === "authenticated";
+
+  console.log("localSession", hasLocalSession);
+
   useEffect(
     function () {
-      if (!isAuthenticated && !isLoading) {
+      const isOffline = !window.navigator.onLine;
+
+      if (!isOffline && !isAuthenticated && !isLoading) {
+        navigate("/login");
+      }
+
+      if (isOffline && !hasLocalSession && !isLoading) {
         navigate("/login");
       }
     },
-    [isAuthenticated, isLoading, navigate],
+    [isAuthenticated, isLoading, navigate, hasLocalSession],
   );
+
+  if (isAuthenticated || (!window.navigator.onLine && hasLocalSession))
+    return <>{children}</>;
 
   if (isLoading) return <SpinnerContainer className="bg-surface-app" />;
 
-  if (isAuthenticated) return <>{children}</>;
+  return null;
 }
 
 export default ProtectedRoute;

@@ -38,13 +38,15 @@ const queryClient = new QueryClient({
     onError: (error) => {
       if (error.message === "Failed to fetch") {
         window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
+        return;
       }
     },
   }),
   defaultOptions: {
     queries: {
       staleTime: 0,
-      retry: 1,
+      retry: 0,
+      networkMode: "always",
     },
     mutations: {
       retry: 0,

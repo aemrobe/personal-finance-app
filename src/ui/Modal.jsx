@@ -158,7 +158,7 @@ function Window({ children, modalName, titleId, contentId }) {
             restoreFocus();
           }}
           aria-label="Close Modal"
-          className="focusable-ring text-content-secondary  rounded-full w-8 h-8 flex items-center justify-center absolute right-5 top-6"
+          className="focusable-ring text-content-secondary  rounded-full w-8 h-8 flex items-center justify-center absolute right-5 top-6 z-51"
         >
           <CloseIcon />
         </button>

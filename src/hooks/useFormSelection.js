@@ -20,7 +20,7 @@ export function useFormSelection({
     const nextAvailableValue = findNextAvailable(allData, rawData);
 
     return rawData.find(
-      (d) => d[matchKey].toLowerCase() === nextAvailableValue.toLowerCase(),
+      (d) => d[matchKey].toLowerCase() === nextAvailableValue?.toLowerCase(),
     );
   });
 
