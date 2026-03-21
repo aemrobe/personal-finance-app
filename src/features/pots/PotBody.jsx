@@ -49,10 +49,10 @@ function PotBody() {
         icon={"🐖"}
         action={PotForm}
         actionText={"+ Add New Pot"}
-        modalName={"add-pot-2"}
-        titleId={"add-pot-title-2"}
-        contentId={"add-pot-content-2"}
-        as="h2"
+        modalName={"add-pot"}
+        returnToSelector={"pots-title-id"}
+        titleId={"add-pot-title"}
+        contentId={"add-pot-content"}
         potModalType={"add-pot-2"}
       />
     );

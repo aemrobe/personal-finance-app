@@ -8,7 +8,7 @@ import Modal from "../../ui/Modal";
 function BudgetHeader() {
   return (
     <PageHeader>
-      <PageTitle title={"Budgets"} />
+      <PageTitle title={"Budgets"} headingId="budgets-title-id" />
       <Modal.Open modalName={"add-budget"}>
         <Button
           onClick={(e) => e.stopPropagation()}

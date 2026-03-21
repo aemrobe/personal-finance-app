@@ -7,7 +7,7 @@ import PotForm from "./PotForm";
 function PotHeader() {
   return (
     <PageHeader>
-      <PageTitle title={"Pots"} />
+      <PageTitle title={"Pots"} headingId="pots-title-id" />
       <Modal.Open modalName={"add-pot"}>
         <Button
           onClick={(e) => e.stopPropagation()}

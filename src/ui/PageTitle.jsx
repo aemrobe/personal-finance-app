@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function PageTitle({ title }) {
+function PageTitle({ title, headingId }) {
   const pageTitle = useRef(null);
 
   useEffect(function () {
@@ -11,6 +11,7 @@ function PageTitle({ title }) {
     <h1
       ref={pageTitle}
       tabIndex="-1"
+      id={headingId}
       className="outline-none text-preset-1 text-content-main capitalize"
     >
       {title}

@@ -1,8 +1,11 @@
 import {
   cloneElement,
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
+  useRef,
   useState,
 } from "react";
 import ModalOverlay from "./ModalOverlay";
@@ -17,11 +20,11 @@ function Modal({ children }) {
   const [openName, setOpenName] = useState("");
   const [lastFocusableElement, setLastFocusableElement] = useState(null);
 
-  const close = () => {
+  const close = useCallback(() => {
     setOpenName("");
-  };
+  }, []);
 
-  const restoreFocus = function () {
+  const restoreFocus = useCallback(() => {
     const returnTarget =
       typeof lastFocusableElement === "string"
         ? document.querySelector(lastFocusableElement)
@@ -30,12 +33,12 @@ function Modal({ children }) {
     if (returnTarget) {
       setTimeout(() => returnTarget.focus(), MODAL_FOCUS_DURATION);
     }
-  };
+  }, [lastFocusableElement]);
 
-  const open = (name, returnSelector) => {
+  const open = useCallback((name, returnSelector) => {
     setOpenName(name);
     setLastFocusableElement(returnSelector || document.activeElement);
-  };
+  }, []);
 
   useEffect(
     function () {
@@ -46,17 +49,18 @@ function Modal({ children }) {
     [openName],
   );
 
+  const value = useMemo(
+    () => ({
+      openName,
+      open,
+      close,
+      restoreFocus,
+    }),
+    [close, open, openName, restoreFocus],
+  );
+
   return (
-    <ModalContext.Provider
-      value={{
-        openName,
-        open,
-        close,
-        restoreFocus,
-      }}
-    >
-      {children}
-    </ModalContext.Provider>
+    <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
   );
 }
 
@@ -81,10 +85,19 @@ function Window({ children, modalName, titleId, contentId }) {
     restoreFocus();
   });
 
+  const hasFocussedRef = useRef(false);
+
   useEffect(() => {
-    if (modalName !== openName && !modalRef.current) return;
+    if (modalName !== openName) {
+      hasFocussedRef.current = false;
+      return;
+    }
+
+    if (hasFocussedRef.current) return;
 
     const modalElement = modalRef.current;
+
+    if (!modalElement) return;
 
     const focusableSelector =
       'button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -129,7 +142,10 @@ function Window({ children, modalName, titleId, contentId }) {
       const initialFocus =
         firstInput || modalElement.querySelectorAll(focusableSelector)[0];
 
-      if (initialFocus) initialFocus.focus();
+      if (initialFocus) {
+        hasFocussedRef.current = true;
+        initialFocus.focus();
+      }
     }, 50);
 
     window.addEventListener("keydown", handleKeyDown);
@@ -138,7 +154,7 @@ function Window({ children, modalName, titleId, contentId }) {
       window.removeEventListener("keydown", handleKeyDown);
       clearTimeout(timer);
     };
-  }, [modalName, openName, close]);
+  }, [modalName, openName, close, modalRef, restoreFocus]);
 
   if (modalName !== openName) return;
 

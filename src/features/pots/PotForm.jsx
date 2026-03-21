@@ -69,11 +69,13 @@ function PotForm({
   if (availableThemes.length === 0 && !isEditSession)
     return (
       <EmptyMessage
+        titleId={titleId}
+        contentId={contentId}
         title="All themes in use"
         text="You've used every available theme color for your current pots. To create a new saving goal, please delete or edit an existing pot to free up a color."
         icon="🌈"
         shadowOfTheBox=""
-        className="py-10" // Keeps it compact for the modal
+        className="py-10"
       />
     );
 

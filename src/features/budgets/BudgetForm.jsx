@@ -95,13 +95,15 @@ function BudgetForm({
         },
   });
 
-  if (availableBudgetCategories.length === 0 && isEditSession)
+  if (availableBudgetCategories.length === 0 && !isEditSession)
     return (
       <EmptyMessage
+        titleId={titleId}
+        contentId={contentId}
         title="All categories assigned"
         text="You've already created a budget for every available category. Try editing or deleting an existing budget to make space."
         icon="✅"
-        // We pass a smaller height so it looks good inside the modal
+        shadowOfTheBox=""
         className="py-10"
       />
     );

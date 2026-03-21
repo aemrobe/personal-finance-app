@@ -5,16 +5,19 @@ function EmptyMessage({
   icon,
   title,
   text,
+  titleId = "",
+  contentId = "",
   action: Action,
   actionText,
   modalName,
-  titleId,
-  contentId,
+  returnToSelector,
   className = "min-h-100 h-[60vh]",
   shadowOfTheBox = "shadow-md",
   as: Heading = "h2",
-  ...props
 }) {
+  const headingUniqueId = Action ? "empty-title" : titleId;
+  const contentUniqueId = Action ? "empty-text" : contentId;
+
   return (
     <div
       className={`flex items-center justify-center animate-fade-in ${className}`}
@@ -29,7 +32,7 @@ function EmptyMessage({
         )}
 
         <Heading
-          id="empty-title"
+          id={headingUniqueId}
           tabIndex={"-1"}
           className="text-preset-2 mb-3 text-center text-content-main outline-none"
         >
@@ -37,7 +40,7 @@ function EmptyMessage({
         </Heading>
 
         <p
-          id="empty-text"
+          id={contentUniqueId}
           className="text-preset-4 mb-8 text-center text-content-secondary break-all leading-relaxed"
         >
           {text}
@@ -45,10 +48,13 @@ function EmptyMessage({
 
         {Action && (
           <>
-            <Modal.Open modalName={modalName}>
+            <Modal.Open
+              modalName={modalName}
+              returnToSelector={returnToSelector}
+            >
               <Button
                 variant={"primary"}
-                aria-describedby="empty-title empty-text"
+                aria-describedby={`${headingUniqueId} ${contentUniqueId}`}
                 isActionButton={true}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -57,14 +63,6 @@ function EmptyMessage({
                 {actionText}
               </Button>
             </Modal.Open>
-
-            <Modal.Window
-              titleId={titleId}
-              contentId={contentId}
-              modalName={modalName}
-            >
-              <Action {...props} />
-            </Modal.Window>
           </>
         )}
       </section>

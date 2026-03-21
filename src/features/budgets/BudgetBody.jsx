@@ -10,14 +10,12 @@ import { useBudgets } from "./useBudgets";
 
 function BudgetBody() {
   const {
-    //   data: budgets,
+    data: budgets,
     isLoading: isLoadingBudgets,
     error: budgetError,
     isFetching: isFetchingBudgets,
     refetch: refetchBudgets,
   } = useBudgets();
-
-  const budgets = [];
 
   const {
     isLoading: isLoadingCategories,
@@ -52,11 +50,10 @@ function BudgetBody() {
         icon={"💰"}
         action={BudgetForm}
         actionText={"+ Add New Budget"}
-        modalName={"add-budget-2"}
-        titleId={"add-budget-title-2"}
-        contentId={"add-budget-content-2"}
-        as="h2"
-        budgetModalType={"add-budget-2"}
+        modalName={"add-budget"}
+        titleId={"add-budget-title"}
+        returnToSelector={"budgets-title-id"}
+        contentId={"add-budget-content"}
       />
     );
 
