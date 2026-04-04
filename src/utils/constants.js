@@ -6,7 +6,7 @@ export const ANIMATION_DURATION = 200;
 export const ANIMATION_DURATION_MENU = 200;
 export const ANIMATION_DURATION_SELECT_MENU = 300;
 export const TOAST_DURATION_MS = 4000;
-export const PAGE_TITLE_FOCUS_AFTER_TOAST_DURATION = 5;
+export const PAGE_TITLE_FOCUS_AFTER_TOAST_DURATION = 1;
 export const MODAL_FOCUS_DURATION = 20;
 export const NETWORKERROREVENT = "network-error";
 

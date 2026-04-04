@@ -133,20 +133,20 @@ function Window({ children, modalName, titleId, contentId }) {
 
     // 1. Give the browser a tiny moment to paint the modal
     const timer = setTimeout(() => {
-      // 2. Look for the first input, select, or button inside the modal
-      // We exclude the Close button (usually at the top) to focus the form instead
-      const firstInput = modalRef.current.querySelector(
-        'input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([aria-label="Close Modal"])',
-      );
+      const firstFocusable = modalElement.querySelector(focusableSelector);
 
-      const initialFocus =
-        firstInput || modalElement.querySelectorAll(focusableSelector)[0];
+      const isInput =
+        firstFocusable?.tagName === "INPUT" ||
+        firstFocusable?.tagName === "SELECT" ||
+        firstFocusable?.tagName === "TEXTAREA";
 
-      if (initialFocus) {
-        hasFocussedRef.current = true;
-        initialFocus.focus();
+      //it will check if first focusasble element is input and focus on it if it is otherwise allow automatic screen reader announcement of the modal.
+      if (firstFocusable && isInput) {
+        firstFocusable.focus();
       }
-    }, 50);
+
+      hasFocussedRef.current = true;
+    }, 10);
 
     window.addEventListener("keydown", handleKeyDown);
 
@@ -163,11 +163,21 @@ function Window({ children, modalName, titleId, contentId }) {
       <div
         ref={modalRef}
         role="dialog"
+        aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={contentId}
         tabIndex={"-1"}
         className={`outline-none z-50 px-5 py-6 bg-surface-primary w-[89.3%] fixed top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 rounded-xl`}
       >
+        {cloneElement(children, {
+          onCloseModal: () => {
+            close();
+          },
+          restoreFocus,
+          titleId,
+          contentId,
+        })}
+
         <button
           onClick={() => {
             close();
@@ -178,15 +188,6 @@ function Window({ children, modalName, titleId, contentId }) {
         >
           <CloseIcon />
         </button>
-
-        {cloneElement(children, {
-          onCloseModal: () => {
-            close();
-          },
-          restoreFocus,
-          titleId,
-          contentId,
-        })}
       </div>
     </ModalOverlay>,
     document.body,

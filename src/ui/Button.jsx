@@ -28,6 +28,7 @@ function Button({
   return (
     <button
       onClick={onClick}
+      data-variant={variant}
       disabled={isLoading || disabled}
       className={`cursor-pointer  focusable-ring flex justify-center items-center gap-3  rounded-lg transition-colors duration-700 disabled-button ease-in-out ${baseStyle} ${variants[variant]} relative ${className}`}
       {...props}

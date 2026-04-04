@@ -36,7 +36,7 @@ const queryClient = new QueryClient({
   }),
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error.message === "Failed to fetch") {
+      if (error.message === "Failed to fetch" || !window.navigator.onLine) {
         window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
         return;
       }
