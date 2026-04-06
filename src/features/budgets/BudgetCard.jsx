@@ -1,10 +1,12 @@
 import Button from "../../ui/Button";
 import { CaretRightIcon } from "../../ui/Icons";
 import Menus from "../../ui/Menus";
+import Modal from "../../ui/Modal";
 import ProgressBar from "../../ui/ProgressBar";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import { formatCurrency, formatDate } from "../../utils/helpers";
 import { useTransactions } from "../transactions/useTransactions";
+import BudgetForm from "./BudgetForm";
 
 function BudgetCard({ budget }) {
   const { id, category, maximum, theme } = budget;
@@ -12,7 +14,9 @@ function BudgetCard({ budget }) {
   const { data: transactions, isLoading } = useTransactions();
 
   const spendingsForThisCategory = transactions?.filter((transaction) => {
-    return transaction.categories.category === category;
+    return (
+      transaction.categories.category === category && transaction.amount < 0
+    );
   });
 
   const spendingOfTheMonth = Math.abs(
@@ -35,7 +39,7 @@ function BudgetCard({ budget }) {
 
   const remainingAmount = Math.max(maximum - spendingOfTheMonth, 0);
 
-  const latestSpendings = spendingsForThisCategory
+  const latestSpendings = [...(spendingsForThisCategory || [])]
     ?.sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 3);
 
@@ -64,12 +68,33 @@ function BudgetCard({ budget }) {
         <Menus.Toggle id={id} name={category} />
 
         <Menus.List id={id}>
-          <Menus.Button color={"text-contain-main"}>Edit Budget</Menus.Button>
+          <Modal.Open
+            modalName={`edit-budget-${id}`}
+            returnToSelector={`#menu-trigger-${id}`}
+          >
+            <Menus.Button color={"text-contain-main"}>Edit Budget</Menus.Button>
+          </Modal.Open>
 
-          <Menus.Button color={"text-content-error"}>
-            Delete Budget
-          </Menus.Button>
+          <Modal.Open
+            modalName={`delete-budget-${id}`}
+            returnToSelector={`#menu-trigger-${id}`}
+          >
+            <Menus.Button color={"text-content-error"}>
+              Delete Budget
+            </Menus.Button>
+          </Modal.Open>
         </Menus.List>
+
+        <Modal.Window
+          titleId={`edit-budget-title-${id}`}
+          contentId={`edit-budget-desc-${id}`}
+          modalName={`edit-budget-${id}`}
+        >
+          <BudgetForm
+            budgetModalType={`edit-budget-${id}`}
+            budgetToEdit={budget}
+          />
+        </Modal.Window>
       </div>
 
       <p className="text-preset-4 text-content-secondary mb-4">

@@ -24,6 +24,7 @@ function PotForm({
   restoreFocus,
 }) {
   const isEditSession = Boolean(potToEdit.id);
+  const id = potToEdit.id;
 
   const { data: pots } = usePots();
   const { createPot, isCreatingPot } = useCreatePot();
@@ -58,7 +59,11 @@ function PotForm({
     setValue,
   } = useForm({
     defaultValues: isEditSession
-      ? potToEdit
+      ? {
+          name: potToEdit.name,
+          target: potToEdit.target,
+          theme: selectedTheme?.color,
+        }
       : {
           name: "",
           target: "",
@@ -86,10 +91,9 @@ function PotForm({
 
   const onSubmit = function (data) {
     if (isEditSession) {
-      const { id, created_at, total, ...editableFields } = data;
       updatePot(
         {
-          updatedData: editableFields,
+          updatedData: { ...data },
           id,
         },
         {

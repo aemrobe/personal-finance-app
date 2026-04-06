@@ -15,6 +15,8 @@ import { useFormSelection } from "../../hooks/useFormSelection";
 import { findAvailableTheme } from "../../utils/helpers";
 import { useCategories } from "../categories/useCategory";
 import EmptyMessage from "../../ui/EmptyMessage";
+import { useCreateBudget } from "./useCreateBudget";
+import { useUpdateBudget } from "./useUpdateBudget";
 
 const findAvailableCategory = (budgets, categories) => {
   return categories?.find(
@@ -36,13 +38,15 @@ function BudgetForm({
   restoreFocus,
 }) {
   const isEditSession = Boolean(budgetToEdit.id);
+  const id = budgetToEdit.id;
 
   const { data: budgets } = useBudgets();
   const { data: categories, isLoading } = useCategories();
-  const { createPot, isCreatingPot } = useCreatePot();
-  const { updatePot, isUpdatingPot } = useUpdatePot();
+  const { createBudget, isCreatingBudget } = useCreateBudget();
+  const { updateBudget, isUpdatingBudget } = useUpdateBudget();
 
-  const isWorking = isLoading || isCreatingPot || isUpdatingPot;
+  const isWorking = isLoading || isCreatingBudget || isUpdatingBudget;
+
   const { user } = useCurrentUser();
 
   const { onShowToastMessage } = useToast();
@@ -87,7 +91,11 @@ function BudgetForm({
     setValue,
   } = useForm({
     defaultValues: isEditSession
-      ? budgetToEdit
+      ? {
+          category: selectedCategory?.category,
+          maximum: budgetToEdit.maximum,
+          theme: selectedTheme?.color,
+        }
       : {
           category: selectedCategory?.category,
           maximum: "",
@@ -109,48 +117,59 @@ function BudgetForm({
     );
 
   const onSubmit = function (data) {
-    console.log("data", data);
-    // if (isEditSession) {
-    //   const { id, created_at, total, ...editableFields } = data;
-    //   updatePot(
-    //     {
-    //       updatedData: editableFields,
-    //       id,
-    //     },
-    //     {
-    //       onSuccess: () => {
-    //         onCloseModal();
-    //         restoreFocus();
-    //         onShowToastMessage({
-    //           text: `Pot updated successfully!`,
-    //         });
-    //       },
-    //       onError: (error) => {
-    //         onShowToastMessage({
-    //           text: `Failed to update a pot: ${error.message}`,
-    //         });
-    //       },
-    //     },
-    //   );
-    // } else {
-    //   createPot(
-    //     { ...data, user_id: user.id },
-    //     {
-    //       onSuccess: () => {
-    //         onCloseModal();
-    //         restoreFocus();
-    //         onShowToastMessage({
-    //           text: `Pot ${data.name} successfully created`,
-    //         });
-    //       },
-    //       onError: (error) => {
-    //         onShowToastMessage({
-    //           text: `Failed to create a pot: ${error.message}`,
-    //         });
-    //       },
-    //     },
-    //   );
-    // }
+    const { category, ...restOfData } = data;
+
+    const selectedCategoryObj = categories.find(
+      (cat) => cat.category.toLowerCase() === category.toLowerCase(),
+    );
+
+    const categoryId = selectedCategoryObj?.id;
+
+    if (isEditSession) {
+      updateBudget(
+        {
+          updatedData: { ...restOfData, category_id: categoryId },
+          id,
+        },
+        {
+          onSuccess: () => {
+            onCloseModal();
+            restoreFocus();
+            onShowToastMessage({
+              text: `Budget updated successfully!`,
+            });
+          },
+          onError: (error) => {
+            console.error(error.message);
+            onShowToastMessage({
+              text: `Failed to update a budget: ${error.message}`,
+            });
+          },
+        },
+      );
+    } else {
+      createBudget(
+        {
+          ...restOfData,
+          category_id: categoryId,
+          user_id: user.id,
+        },
+        {
+          onSuccess: () => {
+            onCloseModal();
+            restoreFocus();
+            onShowToastMessage({
+              text: `Budget for ${category} successfully created`,
+            });
+          },
+          onError: (error) => {
+            onShowToastMessage({
+              text: `Failed to create a budget: ${error.message}`,
+            });
+          },
+        },
+      );
+    }
   };
 
   return (

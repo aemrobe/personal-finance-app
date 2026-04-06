@@ -7,7 +7,7 @@ export async function updateBalance({ updatedData, id }) {
     .eq("id", id)
     .select();
 
-  if (error) throw Error(`Error updating a balance ${error.message}`);
+  if (error) throw new Error(`Error updating a balance ${error.message}`);
 
   return data;
 }
@@ -17,7 +17,7 @@ export async function getBalance() {
 
   if (error) {
     console.error(error.message);
-    throw Error(`${error.message}`);
+    throw new Error(`${error.message}`);
   }
 
   return data;

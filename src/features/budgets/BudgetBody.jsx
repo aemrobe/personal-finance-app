@@ -60,7 +60,7 @@ function BudgetBody() {
   return (
     <Menus>
       <div className="flex flex-col gap-6">
-        {budgets.map((budget) => (
+        {budgets?.map((budget) => (
           <BudgetCard
             key={budget.id}
             budget={{ ...budget, category: budget.categories?.category }}

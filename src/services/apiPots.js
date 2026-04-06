@@ -24,7 +24,7 @@ export async function createPot(newData) {
   if (error) {
     console.error(error.message);
 
-    throw Error(`Failed to create pot: ${error.message}`);
+    throw new Error(`Failed to create pot: ${error.message}`);
   }
 
   return data;
@@ -37,7 +37,7 @@ export async function updatePot({ updatedData, id }) {
     .eq("id", id)
     .select();
 
-  if (error) throw Error(`Failed to update pot: ${error.message}`);
+  if (error) throw new Error(`Failed to update pot: ${error.message}`);
 
   return data;
 }
@@ -45,5 +45,5 @@ export async function updatePot({ updatedData, id }) {
 export async function deletePot(id) {
   const { error } = await supabase.from("pots").delete().eq("id", id);
 
-  if (error) throw Error(`Failed to delete pot: ${error.message}`);
+  if (error) throw new Error(`Failed to delete pot: ${error.message}`);
 }
