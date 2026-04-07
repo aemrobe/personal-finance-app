@@ -1,4 +1,5 @@
 import Button from "../../ui/Button";
+import ConfirmDeleteModal from "../../ui/ConfirmDeleteModal";
 import { CaretRightIcon } from "../../ui/Icons";
 import Menus from "../../ui/Menus";
 import Modal from "../../ui/Modal";
@@ -7,8 +8,10 @@ import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import { formatCurrency, formatDate } from "../../utils/helpers";
 import { useTransactions } from "../transactions/useTransactions";
 import BudgetForm from "./BudgetForm";
+import { useDeleteBudget } from "./useDeleteBudget";
 
 function BudgetCard({ budget }) {
+  const { deleteBudget, isDeletingBudget } = useDeleteBudget();
   const { id, category, maximum, theme } = budget;
 
   const { data: transactions, isLoading } = useTransactions();
@@ -93,6 +96,29 @@ function BudgetCard({ budget }) {
           <BudgetForm
             budgetModalType={`edit-budget-${id}`}
             budgetToEdit={budget}
+          />
+        </Modal.Window>
+
+        <Modal.Window
+          titleId={`delete-budget-title-${id}`}
+          contentId={`delete-budget-desc-${id}`}
+          modalName={`delete-budget-${id}`}
+        >
+          <ConfirmDeleteModal
+            titleId={`delete-budget-title-${id}`}
+            contentId={`delete-budget-desc-${id}`}
+            title={category}
+            content={
+              "Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+            }
+            onConfirm={(closeModal) => {
+              deleteBudget(id, {
+                onSuccess: () => {
+                  closeModal();
+                },
+              });
+            }}
+            isDeleting={isDeletingBudget}
           />
         </Modal.Window>
       </div>

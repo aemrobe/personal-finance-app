@@ -96,7 +96,7 @@ function PotCard({ pot, balance }) {
                 },
               );
             }}
-            title={name}
+            title={`${name}`}
             content={
               "Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
             }

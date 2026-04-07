@@ -3,6 +3,7 @@ import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import Menus from "../../ui/Menus";
 import SpinnerContainer from "../../ui/SpinnerContainer";
+import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCategories } from "../categories/useCategory";
 import BudgetCard from "./BudgetCard";
 import BudgetForm from "./BudgetForm";
@@ -18,23 +19,38 @@ function BudgetBody() {
   } = useBudgets();
 
   const {
+    isLoading: isLoadingUser,
+    error: userError,
+    isFetching: isFetchingUser,
+    refetch: refetchUser,
+  } = useCurrentUser();
+
+  const {
     isLoading: isLoadingCategories,
     error: categoriesError,
     isFetching: isFetchingCategories,
     refetch: refetchCategories,
   } = useCategories();
 
-  if (isLoadingBudgets || isLoadingCategories) return <SpinnerContainer />;
+  if (isLoadingUser || isLoadingBudgets || isLoadingCategories)
+    return <SpinnerContainer />;
 
-  if (budgetError || categoriesError)
+  if (userError || budgetError || categoriesError)
     return (
       <ErrorWrapper>
         <ErrorDisplay
-          error={budgetError.message || categoriesError.message}
-          isLoading={isFetchingBudgets || isFetchingCategories}
+          error={
+            userError?.message ||
+            budgetError?.message ||
+            categoriesError?.message
+          }
+          isLoading={
+            isFetchingUser || isFetchingBudgets || isFetchingCategories
+          }
           onRetry={() => {
             refetchBudgets();
             refetchCategories();
+            refetchUser();
           }}
         />
       </ErrorWrapper>
@@ -58,16 +74,23 @@ function BudgetBody() {
     );
 
   return (
-    <Menus>
-      <div className="flex flex-col gap-6">
-        {budgets?.map((budget) => (
-          <BudgetCard
-            key={budget.id}
-            budget={{ ...budget, category: budget.categories?.category }}
-          />
-        ))}
+    <div className="flex flex-col gap-6">
+      <div className="bg-surface-primary pt-6 px-5 pb-4 rounded-xl">
+        <div>pieChart</div>
+        <div>spending summary</div>
       </div>
-    </Menus>
+
+      <Menus>
+        <div className="flex flex-col gap-6">
+          {budgets?.map((budget) => (
+            <BudgetCard
+              key={budget.id}
+              budget={{ ...budget, category: budget.categories?.category }}
+            />
+          ))}
+        </div>
+      </Menus>
+    </div>
   );
 }
 

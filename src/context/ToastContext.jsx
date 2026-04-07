@@ -22,12 +22,18 @@ function ToastProvider({ children }) {
   const prevToast = useRef(toasts.length);
   const shouldFocusRef = useRef(false);
 
-  const handleShowToastMessage = useCallback(function (content) {
-    const id = generateUniqueId();
+  const handleShowToastMessage = useCallback(function (content, customId) {
+    const id = customId || generateUniqueId();
 
-    shouldFocusRef.current = content.focusHeaderOnClose || false;
+    setToasts((prevToasts) => {
+      const toastExsists = prevToasts.some((toast) => toast.id === id);
 
-    setToasts((prevToasts) => [{ id, ...content }, ...prevToasts]);
+      if (toastExsists) return prevToasts;
+
+      shouldFocusRef.current = content.focusHeaderOnClose || false;
+
+      return [{ id, ...content }, ...prevToasts];
+    });
   }, []);
 
   const handleCloseToastMessage = useCallback(function (id) {
@@ -39,9 +45,12 @@ function ToastProvider({ children }) {
   useEffect(
     function () {
       const handleNetworkError = () => {
-        handleShowToastMessage({
-          text: "Network error. Please check your connection. ",
-        });
+        handleShowToastMessage(
+          {
+            text: "Network error. Please check your connection. ",
+          },
+          "network-error",
+        );
       };
 
       window.addEventListener(NETWORKERROREVENT, handleNetworkError);

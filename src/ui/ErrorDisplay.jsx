@@ -10,7 +10,7 @@ function ErrorDisplay({
   const pageTitle = useRef(null);
 
   useEffect(function () {
-    pageTitle.current.focus();
+    pageTitle.current?.focus();
   }, []);
 
   return (

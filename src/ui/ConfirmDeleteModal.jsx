@@ -16,7 +16,7 @@ function ConfirmDeleteModal({
     <>
       <ModalTitle
         titleId={titleId}
-        title={`Delete ‘${title}’`}
+        title={`Delete ‘${title}’?`}
         className={"mt-1 mb-6 capitalize"}
       />
 
