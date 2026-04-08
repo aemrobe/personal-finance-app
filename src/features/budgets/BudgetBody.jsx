@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import EmptyMessage from "../../ui/EmptyMessage";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
@@ -5,11 +6,21 @@ import Menus from "../../ui/Menus";
 import SpinnerContainer from "../../ui/SpinnerContainer";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useCategories } from "../categories/useCategory";
+import { useTransactions } from "../transactions/useTransactions";
 import BudgetCard from "./BudgetCard";
 import BudgetForm from "./BudgetForm";
 import { useBudgets } from "./useBudgets";
+import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import {
+  filterSpendingTransactionForCategory,
+  formatCurrency,
+} from "../../utils/helpers";
+import { AUGUSTMONTH, YEAR2024 } from "../../utils/constants";
 
 function BudgetBody() {
+  const { data: transactions, isLoading: isLoadingTransactions } =
+    useTransactions();
+
   const {
     data: budgets,
     isLoading: isLoadingBudgets,
@@ -32,7 +43,73 @@ function BudgetBody() {
     refetch: refetchCategories,
   } = useCategories();
 
-  if (isLoadingUser || isLoadingBudgets || isLoadingCategories)
+  const chartData = useMemo(
+    () =>
+      budgets?.map((budget) => {
+        const {
+          categories: { category: budgetCategory },
+          theme,
+          maximum,
+          id,
+        } = budget;
+
+        const totalSpent = Math.abs(
+          filterSpendingTransactionForCategory(transactions, budgetCategory)
+            ?.filter((transaction) => {
+              const { date } = transaction;
+
+              const transactionDate = new Date(date);
+
+              return (
+                transactionDate.getMonth() === AUGUSTMONTH &&
+                transactionDate.getFullYear() === YEAR2024
+              );
+            })
+            .reduce((sum, cur) => sum + cur.amount, 0),
+        );
+
+        const remainingAmount = Math.max(maximum - totalSpent, 0);
+        const percentageOfSpent = Math.min((totalSpent / maximum) * 100, 100);
+
+        const latestTransactions = [
+          ...(filterSpendingTransactionForCategory(
+            transactions,
+            budgetCategory,
+          ) || []),
+        ]
+          ?.sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 3);
+
+        return {
+          name: budgetCategory,
+          value: totalSpent,
+          fill: theme,
+          id,
+          maximum,
+          remainingAmount,
+          percentageOfSpent,
+          latestTransactions,
+        };
+      }),
+    [budgets, transactions],
+  );
+
+  const totalSpentForAllCategories = chartData?.reduce(
+    (sum, cur) => sum + cur.value,
+    0,
+  );
+
+  const totalMaximumForAllCategories = chartData?.reduce(
+    (sum, cur) => sum + cur.maximum,
+    0,
+  );
+
+  if (
+    isLoadingUser ||
+    isLoadingBudgets ||
+    isLoadingCategories ||
+    isLoadingTransactions
+  )
     return <SpinnerContainer />;
 
   if (userError || budgetError || categoriesError)
@@ -76,17 +153,56 @@ function BudgetBody() {
   return (
     <div className="flex flex-col gap-6">
       <div className="bg-surface-primary pt-6 px-5 pb-4 rounded-xl">
-        <div>pieChart</div>
-        <div>spending summary</div>
+        <div className="relative h-70 w-full mb-8">
+          <div className="flex flex-col absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-center">
+            <span className="text-preset-1 text-content-main">
+              {formatCurrency(totalSpentForAllCategories, false)}
+            </span>
+            <span className="text-preset-5 text-content-secondary mt-2">
+              of {formatCurrency(totalMaximumForAllCategories, false)} limit
+            </span>
+          </div>
+
+          <ResponsiveContainer height="100%" width="100%">
+            <PieChart
+              margin={{
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+              }}
+            >
+              <Pie
+                data={chartData?.filter((budget) => budget.value > 0)}
+                nameKey={"name"}
+                dataKey={"value"}
+                innerRadius={85}
+                outerRadius={120}
+                cx={"50%"}
+                cy={"50%"}
+                stroke={"none"}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div>
+          <h2 className="text-preset-2 text-content-main mb-6">
+            Spending Summary
+          </h2>
+
+          <ul className="divide-y divide-border-subtle">
+            {chartData.map((budget) => (
+              <SpendingSummaryItem key={budget.id} budget={budget} />
+            ))}
+          </ul>
+        </div>
       </div>
 
       <Menus>
         <div className="flex flex-col gap-6">
-          {budgets?.map((budget) => (
-            <BudgetCard
-              key={budget.id}
-              budget={{ ...budget, category: budget.categories?.category }}
-            />
+          {chartData?.map((budget) => (
+            <BudgetCard key={budget.id} budget={budget} />
           ))}
         </div>
       </Menus>
@@ -94,4 +210,29 @@ function BudgetBody() {
   );
 }
 
+function SpendingSummaryItem({ budget }) {
+  const { fill, name, value: totalSpent, maximum } = budget;
+
+  return (
+    <li className="flex items-center py-4 first:pt-0 last:pb-0">
+      <div className="flex items-center gap-4">
+        <span
+          style={{
+            backgroundColor: fill,
+          }}
+          className="w-1 h-5.25 inline-block rounded-lg"
+        />
+        <span className="text-preset-4 text-content-secondary">{name}</span>
+      </div>
+
+      <div className="ml-auto flex items-center gap-2">
+        <span className="text-preset-3">{formatCurrency(totalSpent)}</span>
+        <span className="text-preset-5 text-content-secondary">
+          {" "}
+          of {formatCurrency(maximum)}
+        </span>
+      </div>
+    </li>
+  );
+}
 export default BudgetBody;

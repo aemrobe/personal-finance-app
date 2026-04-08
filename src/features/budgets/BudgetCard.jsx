@@ -4,71 +4,38 @@ import { CaretRightIcon } from "../../ui/Icons";
 import Menus from "../../ui/Menus";
 import Modal from "../../ui/Modal";
 import ProgressBar from "../../ui/ProgressBar";
-import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import { formatCurrency, formatDate } from "../../utils/helpers";
-import { useTransactions } from "../transactions/useTransactions";
 import BudgetForm from "./BudgetForm";
 import { useDeleteBudget } from "./useDeleteBudget";
 
 function BudgetCard({ budget }) {
   const { deleteBudget, isDeletingBudget } = useDeleteBudget();
-  const { id, category, maximum, theme } = budget;
 
-  const { data: transactions, isLoading } = useTransactions();
-
-  const spendingsForThisCategory = transactions?.filter((transaction) => {
-    return (
-      transaction.categories.category === category && transaction.amount < 0
-    );
-  });
-
-  const spendingOfTheMonth = Math.abs(
-    spendingsForThisCategory
-      ?.filter((transaction) => {
-        const transactionDate = new Date(transaction.date);
-
-        return (
-          transactionDate.getMonth() === 7 &&
-          transactionDate.getFullYear() === 2024
-        );
-      })
-      .reduce((acc, cur) => cur.amount + acc, 0),
-  );
-
-  const percentageSpendingOftheMonth = Math.min(
-    (spendingOfTheMonth / maximum) * 100,
-    100,
-  );
-
-  const remainingAmount = Math.max(maximum - spendingOfTheMonth, 0);
-
-  const latestSpendings = [...(spendingsForThisCategory || [])]
-    ?.sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 3);
+  const {
+    id,
+    name,
+    maximum,
+    fill,
+    percentageOfSpent,
+    value: totalSpent,
+    remainingAmount,
+    latestTransactions,
+  } = budget;
 
   return (
-    <div className="rounded-xl py-6 px-5 bg-surface-primary relative">
-      {isLoading && (
-        <SpinnerMiniContainer
-          backgroundColor="bg-surface-primary"
-          size={"text-3xl"}
-        />
-      )}
-
+    <div className="rounded-xl py-6 px-5 bg-surface-primary ">
       <div className="flex items-center justify-between mb-5 relative">
         <div className="flex items-center gap-4">
           <span
             style={{
-              backgroundColor: theme,
+              backgroundColor: fill,
             }}
             className="w-4 h-4 inline-block rounded-full"
           ></span>
-          <h2 className="text-preset-2 text-content-main capitalize">
-            {category}
-          </h2>
+          <h3 className="text-preset-2 text-content-main capitalize">{name}</h3>
         </div>
 
-        <Menus.Toggle id={id} name={category} />
+        <Menus.Toggle id={id} name={name} />
 
         <Menus.List id={id}>
           <Modal.Open
@@ -107,7 +74,7 @@ function BudgetCard({ budget }) {
           <ConfirmDeleteModal
             titleId={`delete-budget-title-${id}`}
             contentId={`delete-budget-desc-${id}`}
-            title={category}
+            title={name}
             content={
               "Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
             }
@@ -128,17 +95,13 @@ function BudgetCard({ budget }) {
       </p>
 
       <ProgressBar
-        percentage={percentageSpendingOftheMonth}
-        themeColor={theme}
+        percentage={percentageOfSpent}
+        themeColor={fill}
         containerClass={"h-8 mb-4 p-1"}
       />
 
       <div className="flex mb-5">
-        <BudgetStat
-          title={"Spent"}
-          value={spendingOfTheMonth}
-          bgColor={theme}
-        />
+        <BudgetStat title={"Spent"} value={totalSpent} bgColor={fill} />
         <BudgetStat title={"Remaining"} value={remainingAmount} />
       </div>
 
@@ -158,7 +121,7 @@ function BudgetCard({ budget }) {
         </div>
 
         <ul className="divide-y divide-border-divider/15">
-          {latestSpendings?.map((transaction) => (
+          {latestTransactions?.map((transaction) => (
             <BudgetTransactionItem
               key={transaction.id}
               name={transaction.name}
