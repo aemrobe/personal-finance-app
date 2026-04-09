@@ -18,6 +18,13 @@ import {
 import { AUGUSTMONTH, YEAR2024 } from "../../utils/constants";
 
 function BudgetBody() {
+  const EMPTY_CHART_DATA = [
+    {
+      value: 1,
+      fill: `var(--color-empty-chart)`,
+    },
+  ];
+
   const { data: transactions, isLoading: isLoadingTransactions } =
     useTransactions();
 
@@ -153,7 +160,7 @@ function BudgetBody() {
   return (
     <div className="flex flex-col gap-6">
       <div className="bg-surface-primary pt-6 px-5 pb-4 rounded-xl">
-        <div className="relative h-70 w-full mb-8">
+        <div className="relative h-70 w-full mb-8" aria-hidden="true">
           <div className="flex flex-col absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-center">
             <span className="text-preset-1 text-content-main">
               {formatCurrency(totalSpentForAllCategories, false)}
@@ -173,7 +180,11 @@ function BudgetBody() {
               }}
             >
               <Pie
-                data={chartData?.filter((budget) => budget.value > 0)}
+                data={
+                  totalSpentForAllCategories === 0
+                    ? EMPTY_CHART_DATA
+                    : chartData?.filter((budget) => budget.value > 0)
+                }
                 nameKey={"name"}
                 dataKey={"value"}
                 innerRadius={85}
@@ -181,12 +192,15 @@ function BudgetBody() {
                 cx={"50%"}
                 cy={"50%"}
                 stroke={"none"}
+                isAnimationActive={totalSpentForAllCategories !== 0}
               />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
         <div>
+          <span className="sr-only">Spending distribution overview</span>
+
           <h2 className="text-preset-2 text-content-main mb-6">
             Spending Summary
           </h2>
