@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import ConfirmDeleteModal from "../../ui/ConfirmDeleteModal";
 import { CaretRightIcon } from "../../ui/Icons";
@@ -10,6 +11,7 @@ import { useDeleteBudget } from "./useDeleteBudget";
 
 function BudgetCard({ budget }) {
   const { deleteBudget, isDeletingBudget } = useDeleteBudget();
+  const navigate = useNavigate();
 
   const {
     id,
@@ -115,6 +117,9 @@ function BudgetCard({ budget }) {
             isActionButton={false}
             variant="tertiary"
             icon={<CaretRightIcon />}
+            onClick={() => {
+              navigate(`/transactions?category=${encodeURIComponent(name)}`);
+            }}
           >
             See All
           </Button>
@@ -140,7 +145,7 @@ function BudgetTransactionItem({ name, amount, date }) {
     <li
       className={"flex items-center justify-between py-3 first:pt-0 last:pb-0"}
     >
-      <h4 className="text-preset-5-bold text-content-main">{name}</h4>
+      <p className="text-preset-5-bold text-content-main">{name}</p>
 
       <div className="flex flex-col space-y-1 items-end">
         <p className="text-preset-5-bold text-content-main">

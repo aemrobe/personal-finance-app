@@ -354,6 +354,17 @@ input:-webkit-autofill:active {
   );
 }
 
-.recharts-sector:focus {
-  outline: none;
+/* Complete reset for decorative charts: removes from tab flow, accessibility tree, and focus rings */
+.recharts-wrapper,
+.recharts-wrapper * {
+  outline: none !important;
+  user-select: none;
+  pointer-events: none;
+  speak: none;
+  /* Hides internal accessibility/legend layers without hiding the whole SVG */
+  &.recharts-accessibilityLayer,
+  .recharts-legend-wrapper,
+  .recharts-tooltip-wrapper {
+    display: none !important;
+  }
 }
