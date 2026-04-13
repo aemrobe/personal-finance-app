@@ -1,7 +1,5 @@
 import { useToast } from "../../context/ToastContext";
 import { useCurrentUser } from "../authentication/useCurrentUser";
-import { useCreatePot } from "../pots/useCreatePot";
-import { useUpdatePot } from "../pots/useUpdatePot";
 import { FIELD_REQUIRED_MESSAGE, THEMES } from "../../utils/constants";
 import { useForm } from "react-hook-form";
 import ModalTitle from "../../ui/ModalTitle";
@@ -201,9 +199,8 @@ function BudgetForm({
         {/* Category Select box */}
         <CustomSelectBox
           inputFieldName={"category"}
-          isColor={false}
           labelName={"Budget Category"}
-          budgetModalType={`${budgetModalType}-category`}
+          modalType={`${budgetModalType}-category`}
           selectedOption={selectedCategory}
           setSelectedOption={setSelectedCategory}
           isWorking={isWorking}
@@ -213,9 +210,9 @@ function BudgetForm({
           optionProperty1="category"
           optionProperty2="category"
           OptionComponent={SelectOption}
-          getOptionMeta={(rawBudget, selectedTheme) => {
+          getOptionMeta={(rawBudget, selectedCategory) => {
             const isSelected =
-              selectedTheme.category.toLowerCase() ===
+              selectedCategory.category.toLowerCase() ===
               rawBudget.category.toLowerCase();
 
             return {
@@ -255,7 +252,7 @@ function BudgetForm({
           isColor={true}
           inputFieldName={"theme"}
           labelName={"Color Tag"}
-          budgetModalType={`${budgetModalType}-color`}
+          modalType={`${budgetModalType}-color`}
           selectedOption={selectedTheme}
           setSelectedOption={setSelectedTheme}
           isWorking={isWorking}

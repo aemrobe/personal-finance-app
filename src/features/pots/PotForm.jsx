@@ -200,7 +200,7 @@ function PotForm({
           isColor={true}
           inputFieldName={"theme"}
           labelName={"Color Tag"}
-          budgetModalType={`${potModalType}-color`}
+          modalType={`${potModalType}-color`}
           selectedOption={selectedTheme}
           setSelectedOption={setSelectedTheme}
           isWorking={isWorking}

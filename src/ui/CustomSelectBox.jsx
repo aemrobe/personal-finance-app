@@ -4,19 +4,22 @@ import { useOutsideClicks } from "../hooks/useOutsideClicks";
 import { ChevroDownIcon } from "./Icons";
 
 function CustomSelectBox({
-  budgetModalType,
+  modalType,
   isWorking,
   inputFieldName,
   labelName,
   isColor = false,
-  setValue,
-  errors,
+  setValue = () => {},
+  errors = {},
   selectedOption,
   setSelectedOption,
   rawData,
   OptionComponent,
   optionProperty1,
   optionProperty2,
+  isFilterType,
+  triggerIcon,
+  mobileHeaderText,
   getOptionMeta = () => {},
 }) {
   // Custom Select box
@@ -43,7 +46,7 @@ function CustomSelectBox({
       customSelectBoxButtonRef.current?.focus();
     }, ANIMATION_DURATION_SELECT_MENU);
     setSelectedOption(theme);
-    setValue(inputFieldName, theme?.[optionProperty2]);
+    setValue?.(inputFieldName, theme?.[optionProperty2]);
   };
 
   const closeOutsideClickRef = useOutsideClicks(() => {
@@ -55,24 +58,26 @@ function CustomSelectBox({
 
   return (
     <div ref={closeOutsideClickRef} className="relative">
-      <span
-        id={`label-${budgetModalType}`}
-        className="capitalize text-preset-5-bold text-content-secondary mb-1 inline-block"
-      >
-        {labelName}
-      </span>
+      {labelName && (
+        <span
+          id={`label-${modalType}`}
+          className="capitalize text-preset-5-bold text-content-secondary mb-1 inline-block"
+        >
+          {labelName}
+        </span>
+      )}
 
       <button
-        id={`color-tag-${budgetModalType}`}
+        id={`color-tag-${modalType}`}
         ref={customSelectBoxButtonRef}
         type="button"
         disabled={isWorking}
-        aria-labelledby={`label-${budgetModalType} color-tag-${budgetModalType}`}
+        aria-labelledby={`label-${modalType} color-tag-${modalType}`}
         aria-haspopup="listbox"
-        aria-controls={`listbox-${budgetModalType}`}
+        aria-controls={`listbox-${modalType}`}
         aria-expanded={isOpen}
         onClick={toggleDropdown}
-        className="focusable-ring flex w-full items-center border border-border-base rounded-lg py-3 px-5 disabled-input"
+        className={`focusable-ring flex  items-center rounded-lg  disabled-input ${isFilterType ? "w-5 md:w-44 md:h-11.25 md:py-3 md:px-5 md:border md:border-border-base" : "w-full py-3 px-5 border border-border-base"}`}
       >
         {isColor && (
           <span
@@ -84,48 +89,67 @@ function CustomSelectBox({
           />
         )}
 
-        <span
-          className={`${isColor ? "ml-3" : ""} mr-4 text-preset-4 capitalize`}
-        >
-          {selectedOption?.[optionProperty1]}
-        </span>
+        {isFilterType && triggerIcon ? (
+          <>
+            <span className="md:hidden">{triggerIcon}</span>
+            <span className="hidden md:inline-block text-preset-4 capitalize mr-4 overflow-hidden text-ellipsis whitespace-nowrap flex-1">
+              {selectedOption?.[optionProperty1]}
+            </span>
+          </>
+        ) : (
+          <span
+            className={`${isColor ? "ml-3" : ""} mr-4 text-preset-4 capitalize`}
+          >
+            {selectedOption?.[optionProperty1]}
+          </span>
+        )}
 
         <ChevroDownIcon
-          className={`ml-auto text-content-main transition-transform origin-center  duration-200 ${isOpen ? "-rotate-180" : "rotate-0"}`}
+          className={`ml-auto text-content-main transition-transform origin-center ${
+            isFilterType ? "hidden md:block" : ""
+          } duration-200 ${isOpen ? "-rotate-180" : "rotate-0"}`}
         />
       </button>
 
-      {errors[inputFieldName] && (
+      {errors?.[inputFieldName] && (
         <p className="text-preset-5 text-content-error mt-1  text-right">
-          {errors[inputFieldName].message}
+          {errors?.[inputFieldName].message}
         </p>
       )}
 
       {isOpen && (
         <div
-          className={`grid overflow-hidden bg-surface-primary shadow-3xl  rounded-lg absolute inset-x-0 top-full mt-4  duration-1000 transition-opacity   ${visible ? "open-menu" : "close-menu"} z-20`}
+          className={`grid overflow-hidden bg-surface-primary shadow-3xl  rounded-lg  absolute ${isFilterType ? "right-0 w-44.25 md:w-full" : "inset-x-0"} top-full mt-4  duration-1000 transition-opacity   ${visible ? "open-menu" : "close-menu"} z-20`}
         >
-          <ul
-            id={`listbox-${budgetModalType}`}
-            role="listbox"
-            className={`no-scrollbar px-5 overflow-y-scroll divide-y divide-border-subtle max-h-75 `}
-          >
-            {rawData.map((option) => {
-              const meta = getOptionMeta(option, selectedOption);
+          <div className="overflow-hidden">
+            {mobileHeaderText && (
+              <p className="md:hidden mx-5 py-4 text-preset-4 text-content-secondary border-b border-border-subtle">
+                {mobileHeaderText}
+              </p>
+            )}
 
-              return (
-                <OptionComponent
-                  key={option[optionProperty1]}
-                  option={option}
-                  optionProperty1={optionProperty1}
-                  optionProperty2={optionProperty2}
-                  isColor={isColor}
-                  handleSelect={handleSelect}
-                  {...meta}
-                />
-              );
-            })}
-          </ul>
+            <ul
+              id={`listbox-${modalType}`}
+              role="listbox"
+              className={`no-scrollbar px-5 overflow-y-scroll divide-y divide-border-subtle max-h-75 `}
+            >
+              {rawData.map((option) => {
+                const meta = getOptionMeta(option, selectedOption);
+
+                return (
+                  <OptionComponent
+                    key={option[optionProperty1]}
+                    option={option}
+                    optionProperty1={optionProperty1}
+                    optionProperty2={optionProperty2}
+                    isColor={isColor}
+                    handleSelect={handleSelect}
+                    {...meta}
+                  />
+                );
+              })}
+            </ul>
+          </div>
         </div>
       )}
     </div>

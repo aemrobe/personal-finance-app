@@ -10,3 +10,4 @@ export { default as CloseIcon } from "./CloseIcon";
 export { default as ChevroDownIcon } from "./ChevroDownIcon";
 export { default as SelectedIcon } from "./SelectedIcon";
 export { default as CaretRightIcon } from "./CaretRightIcon";
+export { default as FilterMobileIcon } from "./FilterMobileIcon";

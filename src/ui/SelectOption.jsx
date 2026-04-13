@@ -30,7 +30,7 @@ function SelectOption({
         )}
 
         <span
-          className={`ml-3 text-preset-4 capitalize ${isUsed ? "text-content-secondary" : "text-content-main"}`}
+          className={`${isColor ? "ml-3" : ""} text-left text-preset-4 capitalize ${isUsed ? "text-content-secondary" : "text-content-main"}`}
         >
           {option[optionProperty1]}
         </span>

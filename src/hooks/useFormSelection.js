@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export function useFormSelection({
-  isEditSession,
-  editObject,
+  isEditSession = false,
+  editObject = {},
   allData,
   rawData,
   dataKey,
   matchKey,
   findNextAvailable,
 }) {
-  const [selectOption, setSelectOption] = useState(() => {
+  const [manualSelection, setManualSelection] = useState(null);
+
+  const derivedSelection = useMemo(() => {
     if (isEditSession && editObject?.[dataKey]) {
       return rawData.find(
         (data) =>
@@ -22,7 +24,17 @@ export function useFormSelection({
     return rawData.find(
       (d) => d[matchKey].toLowerCase() === nextAvailableValue?.toLowerCase(),
     );
-  });
+  }, [
+    allData,
+    dataKey,
+    editObject,
+    findNextAvailable,
+    isEditSession,
+    matchKey,
+    rawData,
+  ]);
 
-  return [selectOption, setSelectOption];
+  const selectOption = manualSelection ?? derivedSelection;
+
+  return [selectOption, setManualSelection];
 }

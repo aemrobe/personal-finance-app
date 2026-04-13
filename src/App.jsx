@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import AppLayout from "./ui/AppLayout";
 import Overview from "./features/overview/Overview";
-import Transactions from "./features/transactions/Transactions";
+
 import RecurringBills from "./features/recurring-bills/RecurringBills";
 import Pots from "./pages/Pots";
 import Login from "./pages/Login";
@@ -23,6 +23,7 @@ import ErrorFallBack from "./ui/ErrorFallBack";
 import { ToastProvider } from "./context/ToastContext";
 import Budgets from "./pages/Budgets";
 import { NETWORKERROREVENT } from "./utils/constants";
+import Transactions from "./pages/Transactions";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
