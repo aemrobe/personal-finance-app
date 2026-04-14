@@ -4,6 +4,7 @@ function SearchIcon({ className }) {
       fill="none"
       viewBox="0 0 14 14"
       className={`${className}`}
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

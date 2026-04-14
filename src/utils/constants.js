@@ -33,6 +33,19 @@ export const THEMES = [
   { name: "orange", color: "#be6c49" },
 ];
 
+export const SORT_BY_OPTIONS = [
+  {
+    category: "Latest",
+  },
+  {
+    category: "Oldest",
+  },
+  { category: "A to Z" },
+  { category: "Z to A" },
+  { category: "Highest" },
+  { category: "Lowest" },
+];
+
 export const EMPTY_BALANCE = {
   id: null,
   current: 0,

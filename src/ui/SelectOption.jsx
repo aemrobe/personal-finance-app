@@ -7,6 +7,7 @@ function SelectOption({
   handleSelect,
   isUsed,
   isSelected,
+  isFilterType,
   isColor,
 }) {
   return (
@@ -30,7 +31,7 @@ function SelectOption({
         )}
 
         <span
-          className={`${isColor ? "ml-3" : ""} text-left text-preset-4 capitalize ${isUsed ? "text-content-secondary" : "text-content-main"}`}
+          className={`${isColor ? "ml-3" : ""} text-left ${isFilterType && isSelected ? "text-preset-4-bold" : "text-preset-4"} capitalize ${isUsed ? "text-content-secondary" : "text-content-main"}`}
         >
           {option[optionProperty1]}
         </span>
@@ -42,10 +43,15 @@ function SelectOption({
         )}
 
         {isSelected && !isUsed && (
-          <span className={`${!isColor ? "ml-auto" : ""} p-[0.0937rem]`}>
-            <SelectedIcon className={"text-icon-success w-3.5 h-3.5"} />
+          <>
+            {!isFilterType && (
+              <span className={`${!isColor ? "ml-auto" : ""} p-[0.0937rem]`}>
+                <SelectedIcon className={"text-icon-success w-3.5 h-3.5"} />
+              </span>
+            )}
+
             <span className="sr-only">selected</span>
-          </span>
+          </>
         )}
       </button>
     </li>
