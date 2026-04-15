@@ -198,6 +198,7 @@ function PotForm({
         {/* Color Select Box */}
         <CustomSelectBox
           isColor={true}
+          widthOfTriggerButton="w-full"
           inputFieldName={"theme"}
           labelName={"Color Tag"}
           modalType={`${potModalType}-color`}

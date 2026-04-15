@@ -21,7 +21,7 @@ function CustomSelectBox({
   widthOfTriggerButton = "",
   heightOfTriggerButton = "",
   widthOfTheMenuList = "",
-  heightOfTheMenuList = "max-h-75",
+  heightOfTheMenuList = "",
   triggerIcon,
   mobileHeaderText,
   getOptionMeta = () => {},
@@ -82,7 +82,7 @@ function CustomSelectBox({
         aria-controls={`listbox-${modalType}`}
         aria-expanded={isOpen}
         onClick={toggleDropdown}
-        className={`focusable-ring flex shrink-0  items-center rounded-lg  disabled-input ${isFilterType ? `${widthOfTriggerButton} ${heightOfTriggerButton} justify-center p-[2.5px] md:py-3 md:px-5 md:border md:border-border-base rounded-none md:rounded-lg` : "rounded-lg w-full py-3 px-5 border border-border-base"}`}
+        className={`focusable-ring flex shrink-0  items-center rounded-lg  disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5 md:border md:border-border-base rounded-none md:rounded-lg` : "rounded-lg py-3 px-5 border border-border-base"}`}
       >
         {isColor && (
           <span
@@ -125,10 +125,10 @@ function CustomSelectBox({
 
       {isOpen && (
         <div
-          className={`grid overflow-hidden bg-surface-primary shadow-3xl  rounded-lg  absolute ${isFilterType ? `right-0 ${widthOfTheMenuList}` : "inset-x-0"} top-full mt-4  duration-1000 transition-opacity   ${visible ? "open-menu" : "close-menu"} z-20`}
+          className={`grid overflow-hidden bg-surface-primary shadow-3xl  rounded-lg  absolute ${isFilterType ? `right-0` : "inset-x-0"} top-full mt-4  duration-1000 transition-opacity   ${visible ? "open-menu" : "close-menu"} z-20`}
         >
           <div
-            className={`overflow-y-scroll no-scrollbar ${heightOfTheMenuList} `}
+            className={`overflow-y-scroll no-scrollbar ${widthOfTheMenuList} ${heightOfTheMenuList} `}
           >
             {mobileHeaderText && (
               <p className="md:hidden mx-5 py-4 text-preset-4 text-content-secondary border-b border-border-subtle">
@@ -139,7 +139,7 @@ function CustomSelectBox({
             <ul
               id={`listbox-${modalType}`}
               role="listbox"
-              className={`no-scrollbar px-5 overflow-y-scroll divide-y divide-border-subtle  `}
+              className={`px-5 divide-y divide-border-subtle`}
             >
               {rawData.map((option) => {
                 const meta = getOptionMeta(option, selectedOption);

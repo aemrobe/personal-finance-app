@@ -199,6 +199,9 @@ function BudgetForm({
         {/* Category Select box */}
         <CustomSelectBox
           inputFieldName={"category"}
+          widthOfTriggerButton="w-full"
+          widthOfTheMenuList="w-full"
+          heightOfTheMenuList="max-h-75"
           labelName={"Budget Category"}
           modalType={`${budgetModalType}-category`}
           selectedOption={selectedCategory}
@@ -250,6 +253,9 @@ function BudgetForm({
         {/* Color Select Box */}
         <CustomSelectBox
           isColor={true}
+          widthOfTriggerButton="w-full"
+          widthOfTheMenuList="w-full"
+          heightOfTheMenuList="max-h-75"
           inputFieldName={"theme"}
           labelName={"Color Tag"}
           modalType={`${budgetModalType}-color`}

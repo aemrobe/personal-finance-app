@@ -35,15 +35,17 @@ export const THEMES = [
 
 export const SORT_BY_OPTIONS = [
   {
-    category: "Latest",
+    label: "Latest",
+    value: "date-desc",
   },
   {
-    category: "Oldest",
+    label: "Oldest",
+    value: "date-asc",
   },
-  { category: "A to Z" },
-  { category: "Z to A" },
-  { category: "Highest" },
-  { category: "Lowest" },
+  { label: "A to Z", value: "name-asc" },
+  { label: "Z to A", value: "name-desc" },
+  { label: "Highest", value: "amount-desc" },
+  { label: "Lowest", value: "amount-asc" },
 ];
 
 export const EMPTY_BALANCE = {

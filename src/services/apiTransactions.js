@@ -1,9 +1,18 @@
 import supabase from "./supabase";
 
-export async function getTransactions() {
-  let { data, error } = await supabase
+export async function getTransactions({ filter, sortBy }) {
+  let query = supabase
     .from("transactions")
-    .select("*,categories(category)");
+    .select("*,categories!inner(category)");
+
+  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
+
+  if (sortBy)
+    query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error.message);

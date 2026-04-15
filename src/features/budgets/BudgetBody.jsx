@@ -25,8 +25,13 @@ function BudgetBody() {
     },
   ];
 
-  const { data: transactions, isLoading: isLoadingTransactions } =
-    useTransactions();
+  const {
+    data: transactions,
+    isLoading: isLoadingTransactions,
+    error: transactionError,
+    isFetching: isFetchingTransactions,
+    refetch: refetchTransactions,
+  } = useTransactions();
 
   const {
     data: budgets,
@@ -119,22 +124,27 @@ function BudgetBody() {
   )
     return <SpinnerContainer />;
 
-  if (userError || budgetError || categoriesError)
+  if (userError || budgetError || transactionError || categoriesError)
     return (
       <ErrorWrapper>
         <ErrorDisplay
           error={
             userError?.message ||
             budgetError?.message ||
-            categoriesError?.message
+            categoriesError?.message ||
+            transactionError?.message
           }
           isLoading={
-            isFetchingUser || isFetchingBudgets || isFetchingCategories
+            isFetchingUser ||
+            isFetchingTransactions ||
+            isFetchingBudgets ||
+            isFetchingCategories
           }
           onRetry={() => {
             refetchBudgets();
             refetchCategories();
             refetchUser();
+            refetchTransactions();
           }}
         />
       </ErrorWrapper>
