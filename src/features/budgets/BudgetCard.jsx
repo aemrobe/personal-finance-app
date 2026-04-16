@@ -116,7 +116,7 @@ function BudgetCard({ budget }) {
           <Button
             isActionButton={false}
             variant="tertiary"
-            icon={<CaretRightIcon />}
+            icon={<CaretRightIcon className={"h-2.75"} />}
             onClick={() => {
               navigate(`/transactions?category=${encodeURIComponent(name)}`);
             }}

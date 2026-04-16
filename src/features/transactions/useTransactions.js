@@ -29,9 +29,20 @@ export function useTransactions() {
     direction,
   };
 
-  const { data, isLoading, error, isFetching, refetch } = useQuery({
-    queryKey: ["transactions", `${user?.id}`, filter, sortBy],
-    queryFn: () => getTransactions({ filter, sortBy }),
+  //PAGE
+  const pageNumber = searchParams.get("page");
+
+  const page = !pageNumber ? 1 : Number(pageNumber);
+
+  const {
+    data: { data, count } = {},
+    isLoading,
+    error,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["transactions", `${user?.id}`, filter, sortBy, page],
+    queryFn: () => getTransactions({ filter, sortBy, page }),
     enabled: !!user?.id,
   });
 
@@ -41,5 +52,6 @@ export function useTransactions() {
     error,
     isFetching,
     refetch,
+    count,
   };
 }

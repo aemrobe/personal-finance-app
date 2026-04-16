@@ -33,6 +33,8 @@ export const THEMES = [
   { name: "orange", color: "#be6c49" },
 ];
 
+export const PAGE_SIZE = 10;
+
 export const SORT_BY_OPTIONS = [
   {
     label: "Latest",

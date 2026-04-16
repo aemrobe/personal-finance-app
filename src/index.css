@@ -75,6 +75,7 @@
   --color-surface-inverse-hover: var(--color-grey-500);
   --color-surface-secondary-hover: var(--color-white);
   --color-surface-destroy-hover: var(--color-red-400);
+  --color-surface-tertiary-hover: var(--color-beige-500);
 
   /* Text Colors */
   --color-content-main: var(--color-grey-900);

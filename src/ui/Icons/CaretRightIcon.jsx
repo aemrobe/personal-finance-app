@@ -2,10 +2,8 @@ function CaretRightIcon({ className }) {
   return (
     <svg
       fill="none"
-      height="11"
       viewBox="0 0 6 11"
-      width="6"
-      className={`w-1.5 h-2.75 ${className}`}
+      className={`${className}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

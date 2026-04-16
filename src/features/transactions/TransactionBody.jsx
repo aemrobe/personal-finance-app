@@ -4,7 +4,12 @@ import CustomSelectBox from "../../ui/CustomSelectBox";
 import SearchIcon from "../../ui/Icons/SearchIcon";
 import { useCategories } from "../categories/useCategory";
 import SelectOption from "../../ui/selectOption";
-import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
+import {
+  CaretLeftIcon,
+  CaretRightIcon,
+  FilterMobileIcon,
+  SortByIcon,
+} from "../../ui/Icons";
 import { useCallback } from "react";
 import { SORT_BY_OPTIONS } from "../../utils/constants";
 import SpinnerContainer from "../../ui/SpinnerContainer";
@@ -12,6 +17,7 @@ import ErrorWrapper from "../../ui/ErrorWrapper";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import { useTransactions } from "./useTransactions";
 import TransactionDataItem from "./TransactionDataItem";
+import Pagination from "../../ui/Pagination";
 
 function TransactionBody() {
   const {
@@ -192,7 +198,6 @@ function TransactionBody() {
           }}
         />
       </div>
-
       <div>
         <ul>
           {transactions?.map((transaction) => (
@@ -206,6 +211,7 @@ function TransactionBody() {
           ))}
         </ul>
       </div>
+      <Pagination />
     </div>
   );
 }

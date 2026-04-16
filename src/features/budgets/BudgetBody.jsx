@@ -16,6 +16,7 @@ import {
   formatCurrency,
 } from "../../utils/helpers";
 import { AUGUSTMONTH, YEAR2024 } from "../../utils/constants";
+import { useAllTransactions } from "../transactions/useAllTransactions";
 
 function BudgetBody() {
   const EMPTY_CHART_DATA = [
@@ -31,7 +32,7 @@ function BudgetBody() {
     error: transactionError,
     isFetching: isFetchingTransactions,
     refetch: refetchTransactions,
-  } = useTransactions();
+  } = useAllTransactions();
 
   const {
     data: budgets,
