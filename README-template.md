@@ -72,51 +72,119 @@ Then crop/optimize/edit your image however you like, add it to your project, and
 
 ### What I learned
 
-During this project, I focused on building a scalable architecture and a highly accessible user experience.
+During the first phase of this project, I focused on building a scalable core architecture and implementing the full CRUD logic for the Savings Pots module.
 
-#### 🚀 Navigation & Layout
+#### 🏛️ Core Architecture & UI Patterns
 
-- **Responsive Navigation:** Engineered a bottom-nav system for mobile that uses **React Router's `NavLink`** for automatic route tracking and active state styling.
-- **Smart NavButtons:** Created dynamic components that handle SVG rendering and utilize **CSS variables** for seamless theme synchronization.
-- **Accessibility First:** Integrated `aria-label` attributes and high-visibility `focusable-ring` indicators to ensure full keyboard navigability.
+Before building specific pages, I established a robust foundation to ensure accessibility and code reusability across the entire app:
 
-#### 🏗️ Architecture & UI Patterns
+- **Compound Component Pattern:** I implemented a flexible Menu and Modal system. This allows for decoupled but synchronized sub-components, making the UI highly declarative.
 
-- **Compound Component Pattern:** Implemented a flexible Menu and Modal system, allowing for decoupled but synchronized sub-components (e.g., `Menu.Toggle`, `Menu.List`).
-- **Advanced Focus Management:** Developed custom **focus traps** and **focus restoration** logic to meet WCAG accessibility standards for modal interfaces.
-- **SVG Icon Library:** Built an optimized, accessible SVG library wrapped in a `NavIconWrapper` for consistent scaling and color inheritance.
+- **Advanced Focus Management:** To meet WCAG standards, I developed custom **focus traps** and **focus restoration** logic. This ensures that when a user closes a "Withdraw" or "Edit" modal, their focus returns precisely to the button that triggered it.
+
+- **Accessible Navigation:** Engineered a responsive navigation system using **React Router's `NavLink`** for automatic route tracking and a custom `NavIconWrapper` for accessible SVG rendering.
+
+#### 💰 Savings Pots Module (Feature Implementation) (Mobile View & Core Logic)
+
+The Pots page served as the primary testing ground for complex database interactions and financial logic:
+
+- **Transactional CRUD Operations:** Beyond simple data fetching, I implemented logic for adding and withdrawing funds. This required ensuring that the database and the local UI state stay perfectly in sync.
+
+- **TanStack Query & Cache Invalidation:** I utilized **Optimistic Updates** and smart cache invalidation. For example, updating a savings pot automatically triggers a background refetch of the global balance to ensure data integrity across the app.
+
+- **Business Logic Validation:** Using **React Hook Form**, I enforced strict financial rules, such as:
+  - Preventing "Withdraw" actions if the amount exceeds the current pot balance.
+  - Ensuring each pot has a unique color tag to maintain visual clarity in the UI.
 
 ```jsx
-//Example of how I implemented the Compound Component Pattern for the Menu and Modal
-   <Menus.Toggle id={id} name={name} />
-
-       <Menus.List id={id}>
-          <Modal.Open
-            modalName={`edit-pot-${id}`}
-            returnToSelector={`#menu-trigger-${id}`}
-          >
-            <Menus.Button color={"text-contain-main"}>Edit pot</Menus.Button>
-          </Modal.Open>
-        </Menus.List>
-
-        <Modal.Window
-          titleId={`edit-pot-title-${id}`}
-          contentId={`edit-pot-desc-${id}`}
-          modalName={`edit-pot-${id}`}
-        >
-          <PotForm potModalType={`edit-pot-${id}`} potToEdit={pot} />
-        </Modal.Window>
+// Example: Implementation of the Compound Component Pattern for Pots Management
+<Menus.Menu>
+  <Menus.Toggle id={id} />
+  <Menus.List id={id}>
+    <Modal.Open modalName={`edit-pot-${id}`}>
+      <Menus.Button>Edit Pot</Menus.Button>
+    </Modal.Open>
+    <Modal.Open modalName={`delete-pot-${id}`}>
+      <Menus.Button>Delete Pot</Menus.Button>
+    </Modal.Open>
+  </Menus.List>
+</Menus.Menu>
 ```
 
-#### 💰 Financial Logic & State
+#### 🛡️ Feedback & Safety Systems
 
-- **TanStack Query Integration:** Managed complex CRUD operations with real-time **Balance Synchronization**. Adding or withdrawing from a pot automatically triggers a re-validation of the global balance.
-- **Constraint-Based Validation:** Leveraged **React Hook Form** to enforce business rules, such as preventing withdrawals that exceed a pot's current total or ensuring unique color-tag selection.
+- **Global Toast Notifications:** Integrated a context-based notification system to confirm successful "Money Added" or "Pot Created" actions.
 
-#### 🛡️ Feedback & Safety
+- **Error Boundaries:** Implemented `ErrorFallback` components specifically for the data-heavy sections of the Pots page to handle potential Supabase connection issues gracefully.
 
-- **Global Toast System:** Designed a context-based notification system to provide immediate user feedback on asynchronous database mutations.
-- **Resilient UI:** Implemented `ErrorFallback` components to handle API failures gracefully without crashing the entire application.
+#### 📊 Budgets Module (Mobile View & Core Logic)
+
+The Budgets page is the analytical heart of the app, requiring complex data aggregation and visual representation.
+
+- **Interactive Data Visualization:** I integrated the **Recharts library** to create a dynamic Donut Chart. This provides a high-level visual breakdown of spending across all categories.
+
+- **Smart Spending Summary:** Developed a central summary component that calculates the total monthly limit vs. actual spent amount across all budgets. This data is dynamically updated and rendered both as a list and as a central label within the chart.
+
+- **Cross-Page Deep Linking:** Implemented a "See All" navigation feature. When a user clicks to view details for a specific budget (e.g., "Food"), the app programmatically navigates them to the Transactions page with the corresponding **URL Search Params** pre-set, automatically filtering the transaction list.
+
+- **Relational Data Mapping:** Engineered a complex join between `budgets` and `transactions` in Supabase to calculate real-time spending totals for each category.
+
+- **Automated Context:** Designed a "Latest Transactions" preview for each budget card, showing only the three most recent entries to keep the mobile interface clean yet informative.
+
+```jsx
+// Example: The logic which I used to calculate total spent in number and percentage, remaining amount , latest three transactions for each budget category
+
+const chartData = useMemo(
+  () =>
+    budgets?.map((budget) => {
+      const {
+        categories: { category: budgetCategory },
+        theme,
+        maximum,
+        id,
+      } = budget;
+
+      const totalSpent = Math.abs(
+        filterSpendingTransactionForCategory(transactions, budgetCategory)
+          ?.filter((transaction) => {
+            const { date } = transaction;
+
+            const transactionDate = new Date(date);
+
+            return (
+              transactionDate.getMonth() === AUGUSTMONTH &&
+              transactionDate.getFullYear() === YEAR2024
+            );
+          })
+          .reduce((sum, cur) => sum + cur.amount, 0),
+      );
+
+      const remainingAmount = Math.max(maximum - totalSpent, 0);
+      const percentageOfSpent = Math.min((totalSpent / maximum) * 100, 100);
+
+      const latestTransactions = [
+        ...(filterSpendingTransactionForCategory(
+          transactions,
+          budgetCategory,
+        ) || []),
+      ]
+        ?.sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 3);
+
+      return {
+        name: budgetCategory,
+        value: totalSpent,
+        fill: theme,
+        id,
+        maximum,
+        remainingAmount,
+        percentageOfSpent,
+        latestTransactions,
+      };
+    }),
+  [budgets, transactions],
+);
+```
 
 ### Useful resources
 

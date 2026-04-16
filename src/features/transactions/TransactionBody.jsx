@@ -47,7 +47,7 @@ function TransactionBody() {
 
   const findAvailableSortByOption = useCallback(
     (_, sortByOptions) => {
-      const currentFilter = searchParams.get("sortBy");
+      const currentFilter = searchParams.get("sortBy") || "date-desc";
 
       return currentFilter
         ? sortByOptions.find(

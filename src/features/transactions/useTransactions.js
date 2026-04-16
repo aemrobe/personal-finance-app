@@ -20,7 +20,7 @@ export function useTransactions() {
         };
 
   //SORTBY
-  const sortByValue = searchParams.get("sortBy") || "date-asc";
+  const sortByValue = searchParams.get("sortBy") || "date-desc";
 
   const [field, direction] = sortByValue.split("-");
 
