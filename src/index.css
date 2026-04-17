@@ -369,3 +369,8 @@ input:-webkit-autofill:active {
     display: none !important;
   }
 }
+
+.pagination-number-active {
+  background-color: var(--color-surface-inverse);
+  color: var(--color-content-inverse);
+}

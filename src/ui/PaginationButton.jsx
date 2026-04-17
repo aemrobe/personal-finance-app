@@ -1,8 +1,11 @@
 import { CaretLeftIcon, CaretRightIcon } from "./Icons";
 
-function PaginationButton({ buttonText }) {
+function PaginationButton({ buttonText, onClick }) {
   return (
-    <button className="border border-border-base text-content-main capitalize py-3 md:py-[0.593rem] px-4 text-preset-4 flex items-center gap-4 rounded-lg hover:bg-surface-tertiary-hover hover:text-content-inverse group h-10 w-12 md:w-24 transition-all duration-200 ease-in-out">
+    <button
+      className="border border-border-base cursor-pointer text-content-main capitalize py-3 md:py-[0.593rem] px-4 text-preset-4 flex items-center gap-4 rounded-lg hover:bg-surface-tertiary-hover hover:text-content-inverse group h-10 w-12 md:w-24 transition-all duration-200 ease-in-out"
+      onClick={() => onClick()}
+    >
       {buttonText === "Next" && (
         <span className="hidden md:inline-block">{buttonText}</span>
       )}

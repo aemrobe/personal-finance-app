@@ -26,6 +26,7 @@ function TransactionBody() {
     error: transactionError,
     isFetching: isFetchingTransactions,
     refetch: refetchTransactions,
+    count,
   } = useTransactions();
 
   const {
@@ -211,7 +212,8 @@ function TransactionBody() {
           ))}
         </ul>
       </div>
-      <Pagination />
+
+      <Pagination count={count} />
     </div>
   );
 }
