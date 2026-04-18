@@ -4,12 +4,7 @@ import CustomSelectBox from "../../ui/CustomSelectBox";
 import SearchIcon from "../../ui/Icons/SearchIcon";
 import { useCategories } from "../categories/useCategory";
 import SelectOption from "../../ui/selectOption";
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  FilterMobileIcon,
-  SortByIcon,
-} from "../../ui/Icons";
+import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
 import { useCallback } from "react";
 import { SORT_BY_OPTIONS } from "../../utils/constants";
 import SpinnerContainer from "../../ui/SpinnerContainer";
@@ -18,8 +13,16 @@ import ErrorDisplay from "../../ui/ErrorDisplay";
 import { useTransactions } from "./useTransactions";
 import TransactionDataItem from "./TransactionDataItem";
 import Pagination from "../../ui/Pagination";
+import { useCurrentUser } from "../authentication/useCurrentUser";
 
 function TransactionBody() {
+  const {
+    isLoading: isLoadingUser,
+    error: userError,
+    isFetching: isFetchingUser,
+    refetch: refetchUser,
+  } = useCurrentUser();
+
   const {
     data: transactions,
     isLoading: isLoadingTransactions,
@@ -104,17 +107,25 @@ function TransactionBody() {
     setSearchParams(searchParams);
   };
 
-  if (isLoadingCategories || isLoadingTransactions) return <SpinnerContainer />;
+  if (isLoadingCategories || isLoadingTransactions || isLoadingUser)
+    return <SpinnerContainer />;
 
-  if (categoriesError)
+  if (categoriesError || transactionError || userError)
     return (
       <ErrorWrapper>
         <ErrorDisplay
-          error={categoriesError?.message || transactionError?.message}
-          isLoading={isFetchingCategories || isFetchingTransactions}
+          error={
+            categoriesError?.message ||
+            transactionError?.message ||
+            userError?.message
+          }
+          isLoading={
+            isFetchingCategories || isFetchingTransactions || isFetchingUser
+          }
           onRetry={() => {
             refetchCategories();
             refetchTransactions();
+            refetchUser();
           }}
         />
       </ErrorWrapper>
@@ -123,7 +134,7 @@ function TransactionBody() {
   return (
     <div className="bg-surface-primary py-6 md:p-8 px-5 rounded-xl ">
       <div className="flex gap-6 items-center mb-6 ">
-        <div className="flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg py-3 px-5  gap-2">
+        <div className="flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg py-3 px-5  gap-2 focusable-ring-within">
           <label htmlFor="search-transaction" className="sr-only">
             Search transaction
           </label>
@@ -133,7 +144,7 @@ function TransactionBody() {
             id="search-transaction"
             name="transactions"
             placeholder="Search transaction"
-            className=" text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1"
+            className=" text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
           />
 
           <SearchIcon className={"w-3.5 h-3.5 text-content-main shrink-0"} />

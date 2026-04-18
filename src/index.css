@@ -304,9 +304,16 @@
 .focusable-ring {
   @apply transition-shadow duration-300;
 
-  @apply outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color,var(--color-focus-ring)) focus-visible:ring-offset-1 focus-visible:ring-offset-(--offset-color,var(--color-offset-color));
+  @apply outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color,var(--color-focus-ring)) focus-visible:ring-offset-1 focus-visible:ring-offset-(--offset-color,var(--color-offset-color));
+}
 
-  @apply focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color,var(--color-focus-ring)) focus-within:ring-offset-1 focus-within:ring-offset-(--ring-offset,var(--color-offset-color));
+.focusable-ring-within {
+  &:has(input:focus-visible),
+  &:has(button:focus-visible) {
+    @apply ring-2 ring-(--ring-color,var(--color-focus-ring)) ring-offset-1 ring-offset-(--ring-offset,var(--color-offset-color));
+  }
+
+  @apply focus-within:outline-none;
 }
 
 input:-webkit-autofill,
