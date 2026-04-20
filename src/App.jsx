@@ -100,7 +100,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
       <ToastProvider>
         <RouterProvider router={router} />
       </ToastProvider>

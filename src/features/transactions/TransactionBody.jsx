@@ -5,15 +5,19 @@ import SearchIcon from "../../ui/Icons/SearchIcon";
 import { useCategories } from "../categories/useCategory";
 import SelectOption from "../../ui/selectOption";
 import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
-import { useCallback } from "react";
-import { SORT_BY_OPTIONS } from "../../utils/constants";
-import SpinnerContainer from "../../ui/SpinnerContainer";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ANNOUNCEMENT_DEBOUNCE_MS,
+  PAGE_SIZE,
+  SORT_BY_OPTIONS,
+} from "../../utils/constants";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import { useTransactions } from "./useTransactions";
 import TransactionDataItem from "./TransactionDataItem";
 import Pagination from "../../ui/Pagination";
 import { useCurrentUser } from "../authentication/useCurrentUser";
+import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 
 function TransactionBody() {
   const {
@@ -95,6 +99,7 @@ function TransactionBody() {
     setSelectedCategory(categoryObj);
 
     searchParams.set("category", categoryObj.category);
+    searchParams.set("page", 1);
 
     setSearchParams(searchParams);
   };
@@ -103,12 +108,37 @@ function TransactionBody() {
     setSelectedSortByOption(sortByObj);
 
     searchParams.set("sortBy", sortByObj.value);
+    searchParams.set("page", 1);
 
     setSearchParams(searchParams);
   };
+  const pageNumber = searchParams.get("page");
 
-  if (isLoadingCategories || isLoadingTransactions || isLoadingUser)
-    return <SpinnerContainer />;
+  const currentPage = !pageNumber ? 1 : Number(pageNumber);
+
+  const pageCount = Math.ceil(count / PAGE_SIZE);
+
+  const [announcement, setAnnouncement] = useState(``);
+
+  useEffect(() => {
+    if (
+      !pageCount ||
+      !selectedCategory?.category ||
+      !selectedSortByOption?.label
+    )
+      return;
+
+    const timeout = setTimeout(() => {
+      setAnnouncement(
+        `Showing page ${currentPage} of ${pageCount} in ${selectedCategory.category} sortedBy ${selectedSortByOption.label}`,
+      );
+    }, ANNOUNCEMENT_DEBOUNCE_MS);
+
+    return () => clearTimeout(timeout);
+  }, [currentPage, pageCount, selectedCategory, selectedSortByOption]);
+
+  const isLoading =
+    isLoadingUser || isLoadingTransactions || isLoadingCategories;
 
   if (categoriesError || transactionError || userError)
     return (
@@ -132,7 +162,16 @@ function TransactionBody() {
     );
 
   return (
-    <div className="bg-surface-primary py-6 md:p-8 px-5 rounded-xl ">
+    <div className="flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl  ">
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+
       <div className="flex gap-6 items-center mb-6 ">
         <div className="flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg py-3 px-5  gap-2 focusable-ring-within">
           <label htmlFor="search-transaction" className="sr-only">
@@ -164,7 +203,7 @@ function TransactionBody() {
           mobileHeaderText={"Sort by"}
           selectedOption={selectedSortByOption}
           setSelectedOption={handleSortByOption}
-          isWorking={isLoadingCategories}
+          isWorking={isLoading}
           rawData={SORT_BY_OPTIONS}
           optionProperty1="label"
           optionProperty2="value"
@@ -194,7 +233,7 @@ function TransactionBody() {
           mobileHeaderText={"Category"}
           selectedOption={selectedCategory}
           setSelectedOption={handleCategoryChange}
-          isWorking={isLoadingCategories}
+          isWorking={isLoading}
           rawData={availableCategoryTypes}
           optionProperty1="category"
           optionProperty2="category"
@@ -210,18 +249,23 @@ function TransactionBody() {
           }}
         />
       </div>
-      <div>
-        <ul>
-          {transactions?.map((transaction) => (
-            <TransactionDataItem
-              key={transaction.id}
-              transaction={{
-                ...transaction,
-                category: transaction?.categories?.category,
-              }}
-            />
-          ))}
-        </ul>
+
+      <div className="relative flex-1">
+        {isLoading ? (
+          <SpinnerMiniContainer size="text-5xl" />
+        ) : (
+          <ul>
+            {transactions?.map((transaction) => (
+              <TransactionDataItem
+                key={transaction.id}
+                transaction={{
+                  ...transaction,
+                  category: transaction?.categories?.category,
+                }}
+              />
+            ))}
+          </ul>
+        )}
       </div>
 
       <Pagination count={count} />

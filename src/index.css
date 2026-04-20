@@ -308,9 +308,19 @@
 }
 
 .focusable-ring-within {
+  transition: box-shadow 0.3s ease;
+
+  /* 1. Only show the ring if a child has focus AND it's "visible" (keyboard intent) */
   &:has(input:focus-visible),
   &:has(button:focus-visible) {
     @apply ring-2 ring-(--ring-color,var(--color-focus-ring)) ring-offset-1 ring-offset-(--ring-offset,var(--color-offset-color));
+  }
+
+  /* 2. FORCE-DISABLE the ring if focus is triggered by mouse/touch, 
+        even if the browser thinks it should be visible */
+  &:has(input:focus:not(:focus-visible)),
+  &:has(button:focus:not(:focus-visible)) {
+    @apply ring-0;
   }
 
   @apply focus-within:outline-none;

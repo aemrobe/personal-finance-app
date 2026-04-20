@@ -17,6 +17,7 @@ import {
 } from "../../utils/helpers";
 import { AUGUSTMONTH, YEAR2024 } from "../../utils/constants";
 import { useAllTransactions } from "../transactions/useAllTransactions";
+import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 
 function BudgetBody() {
   const EMPTY_CHART_DATA = [
@@ -117,13 +118,11 @@ function BudgetBody() {
     0,
   );
 
-  if (
+  const isLoading =
     isLoadingUser ||
     isLoadingBudgets ||
     isLoadingCategories ||
-    isLoadingTransactions
-  )
-    return <SpinnerContainer />;
+    isLoadingTransactions;
 
   if (userError || budgetError || transactionError || categoriesError)
     return (
@@ -169,86 +168,92 @@ function BudgetBody() {
     );
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="bg-surface-primary pt-6 px-5 pb-4 rounded-xl">
-        <div
-          className="relative h-70 w-full mb-8"
-          aria-hidden="true"
-          style={{ pointerEvents: "none" }}
-        >
-          <div className="flex flex-col absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-center z-20">
-            <span className="text-preset-1 text-content-main">
-              {formatCurrency(totalSpentForAllCategories, false)}
-            </span>
-            <span className="text-preset-5 text-content-secondary mt-2">
-              of {formatCurrency(totalMaximumForAllCategories, false)} limit
-            </span>
+    <div className="flex-1 flex flex-col gap-6 relative">
+      {isLoading ? (
+        <SpinnerMiniContainer size="text-5xl" />
+      ) : (
+        <>
+          <div className="bg-surface-primary pt-6 px-5 pb-4 rounded-xl">
+            <div
+              className="relative h-70 w-full mb-8"
+              aria-hidden="true"
+              style={{ pointerEvents: "none" }}
+            >
+              <div className="flex flex-col absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-center z-20">
+                <span className="text-preset-1 text-content-main">
+                  {formatCurrency(totalSpentForAllCategories, false)}
+                </span>
+                <span className="text-preset-5 text-content-secondary mt-2">
+                  of {formatCurrency(totalMaximumForAllCategories, false)} limit
+                </span>
+              </div>
+
+              <ResponsiveContainer height="100%" width="100%">
+                <PieChart
+                  role="presentation"
+                  aria-hidden="true"
+                  accessibilityLayer={false}
+                  focusable={false}
+                  margin={{
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                  }}
+                  style={{
+                    pointerEvents: "none",
+                    touchAction: "none",
+                    outline: "none",
+                  }}
+                >
+                  <Pie
+                    tabIndex="-1"
+                    aria-hidden="true"
+                    role="presentation"
+                    data={
+                      totalSpentForAllCategories === 0
+                        ? EMPTY_CHART_DATA
+                        : chartData?.filter((budget) => budget.value > 0)
+                    }
+                    nameKey={"name"}
+                    dataKey={"value"}
+                    innerRadius={85}
+                    outerRadius={120}
+                    cx={"50%"}
+                    cy={"50%"}
+                    stroke={"none"}
+                    label={false}
+                    labelLine={false}
+                    isAnimationActive={totalSpentForAllCategories !== 0}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div>
+              <span className="sr-only">Spending distribution overview</span>
+
+              <h2 className="text-preset-2 text-content-main mb-6">
+                Spending Summary
+              </h2>
+
+              <ul className="divide-y divide-border-subtle">
+                {chartData.map((budget) => (
+                  <SpendingSummaryItem key={budget.id} budget={budget} />
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <ResponsiveContainer height="100%" width="100%">
-            <PieChart
-              role="presentation"
-              aria-hidden="true"
-              accessibilityLayer={false}
-              focusable={false}
-              margin={{
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-              }}
-              style={{
-                pointerEvents: "none",
-                touchAction: "none",
-                outline: "none",
-              }}
-            >
-              <Pie
-                tabIndex="-1"
-                aria-hidden="true"
-                role="presentation"
-                data={
-                  totalSpentForAllCategories === 0
-                    ? EMPTY_CHART_DATA
-                    : chartData?.filter((budget) => budget.value > 0)
-                }
-                nameKey={"name"}
-                dataKey={"value"}
-                innerRadius={85}
-                outerRadius={120}
-                cx={"50%"}
-                cy={"50%"}
-                stroke={"none"}
-                label={false}
-                labelLine={false}
-                isAnimationActive={totalSpentForAllCategories !== 0}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div>
-          <span className="sr-only">Spending distribution overview</span>
-
-          <h2 className="text-preset-2 text-content-main mb-6">
-            Spending Summary
-          </h2>
-
-          <ul className="divide-y divide-border-subtle">
-            {chartData.map((budget) => (
-              <SpendingSummaryItem key={budget.id} budget={budget} />
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <Menus>
-        <div className="flex flex-col gap-6">
-          {chartData?.map((budget) => (
-            <BudgetCard key={budget.id} budget={budget} />
-          ))}
-        </div>
-      </Menus>
+          <Menus>
+            <div className="flex flex-col gap-6">
+              {chartData?.map((budget) => (
+                <BudgetCard key={budget.id} budget={budget} />
+              ))}
+            </div>
+          </Menus>
+        </>
+      )}
     </div>
   );
 }

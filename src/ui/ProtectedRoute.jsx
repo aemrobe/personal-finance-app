@@ -15,8 +15,6 @@ function ProtectedRoute({ children }) {
   const localSession = JSON.parse(localStorage.getItem(supabaseKey));
   const hasLocalSession = localSession?.user?.role === "authenticated";
 
-  console.log("localSession", hasLocalSession);
-
   useEffect(
     function () {
       const isOffline = !window.navigator.onLine;

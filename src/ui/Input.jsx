@@ -29,7 +29,7 @@ const Input = forwardRef(function Input(
       )}
 
       <div
-        className={`relative overflow-hidden  ${error ? "[--ring-color:var(--color-border-error)]" : ""} border ${error ? "border-border-error" : "border-border-base"} rounded-lg flex items-center focus-within:border-content-main`}
+        className={`relative overflow-hidden  ${error ? "[--ring-color:var(--color-border-error)]" : ""} border ${error ? "border-border-error" : "border-border-base"} rounded-lg flex items-center focus-within:border-content-main focusable-ring-within`}
       >
         {prefix && (
           <span

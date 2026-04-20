@@ -1,10 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getTransactions } from "../../services/apiTransactions";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import { useSearchParams } from "react-router-dom";
+import { PAGE_SIZE } from "../../utils/constants";
 
 export function useTransactions() {
   const { user } = useCurrentUser();
+  const queryClient = useQueryClient();
 
   const [searchParams] = useSearchParams();
 
@@ -45,6 +47,34 @@ export function useTransactions() {
     queryFn: () => getTransactions({ filter, sortBy, page }),
     enabled: !!user?.id,
   });
+
+  const pageCount = Math.ceil(count / PAGE_SIZE);
+
+  if (page < pageCount) {
+    queryClient.prefetchQuery({
+      queryKey: ["transactions", `${user?.id}`, filter, sortBy, page + 1],
+      queryFn: () =>
+        getTransactions({
+          filter,
+          sortBy,
+          page: page + 1,
+        }),
+      enabled: !!user?.id,
+    });
+  }
+
+  if (page > 1) {
+    queryClient.prefetchQuery({
+      queryKey: ["transactions", `${user?.id}`, filter, sortBy, page - 1],
+      queryFn: () =>
+        getTransactions({
+          filter,
+          sortBy,
+          page: page - 1,
+        }),
+      enabled: !!user?.id,
+    });
+  }
 
   return {
     data,

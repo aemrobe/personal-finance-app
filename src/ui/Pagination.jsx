@@ -13,8 +13,6 @@ function Pagination({ count }) {
 
   const pageCount = Math.ceil(count / PAGE_SIZE);
 
-  const [announcement, setAnnouncement] = useState(``);
-
   const handlePageChange = function (page) {
     searchParams.set("page", page);
 
@@ -114,23 +112,10 @@ function Pagination({ count }) {
     );
   };
 
-  useEffect(() => {
-    setAnnouncement(`Showing page ${currentPage} of ${pageCount}`);
-  }, [currentPage, pageCount]);
-
   if (pageCount <= 1 || !pageCount) return null;
 
   return (
     <div className="flex justify-between pt-6 mt-6">
-      <div
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      >
-        {announcement}
-      </div>
-
       <PaginationButton
         buttonText={"Prev"}
         onClick={prevPage}

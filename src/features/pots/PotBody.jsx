@@ -2,7 +2,7 @@ import EmptyMessage from "../../ui/EmptyMessage";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import Menus from "../../ui/Menus";
-import SpinnerContainer from "../../ui/SpinnerContainer";
+import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import { useBalance } from "../Balance/useBalance";
 import PotCard from "./PotCard";
 import PotForm from "./PotForm";
@@ -25,7 +25,7 @@ function PotBody() {
     refetch: refetchBalance,
   } = useBalance();
 
-  if (isLoadingPots || isLoadingBalance) return <SpinnerContainer />;
+  const isLoading = isLoadingPots || isLoadingBalance;
 
   if (potsError || balanceError)
     return (
@@ -59,10 +59,14 @@ function PotBody() {
 
   return (
     <Menus>
-      <div className="flex flex-col gap-6">
-        {pots.map((pot) => (
-          <PotCard key={pot.id} pot={pot} balance={balance} />
-        ))}
+      <div className="relative flex-1 flex flex-col gap-6 ">
+        {isLoading ? (
+          <SpinnerMiniContainer size="text-5xl" />
+        ) : (
+          pots.map((pot) => (
+            <PotCard key={pot.id} pot={pot} balance={balance} />
+          ))
+        )}
       </div>
     </Menus>
   );
