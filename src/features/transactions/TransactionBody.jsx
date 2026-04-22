@@ -5,10 +5,11 @@ import SearchIcon from "../../ui/Icons/SearchIcon";
 import { useCategories } from "../categories/useCategory";
 import SelectOption from "../../ui/selectOption";
 import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ANNOUNCEMENT_DEBOUNCE_MS,
   PAGE_SIZE,
+  SEARCH_DEBOUNCE_MS,
   SORT_BY_OPTIONS,
 } from "../../utils/constants";
 import ErrorWrapper from "../../ui/ErrorWrapper";
@@ -18,6 +19,7 @@ import TransactionDataItem from "./TransactionDataItem";
 import Pagination from "../../ui/Pagination";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
+import EmptyMessage from "../../ui/EmptyMessage";
 
 function TransactionBody() {
   const {
@@ -44,7 +46,11 @@ function TransactionBody() {
     refetch: refetchCategories,
   } = useCategories();
 
+  const isLoading =
+    isLoadingUser || isLoadingTransactions || isLoadingCategories;
+
   const [searchParams, setSearchParams] = useSearchParams();
+  const isUserInput = useRef(false);
 
   const findAvailableCategory = useCallback(
     (_, categories) => {
@@ -112,6 +118,11 @@ function TransactionBody() {
 
     setSearchParams(searchParams);
   };
+
+  const handleSearchInput = function (e) {
+    isUserInput.current = true;
+    setSearchTerm(e.target.value);
+  };
   const pageNumber = searchParams.get("page");
 
   const currentPage = !pageNumber ? 1 : Number(pageNumber);
@@ -119,26 +130,85 @@ function TransactionBody() {
   const pageCount = Math.ceil(count / PAGE_SIZE);
 
   const [announcement, setAnnouncement] = useState(``);
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || "",
+  );
+
+  console.log("search term", searchParams.get("search"));
 
   useEffect(() => {
-    if (
-      !pageCount ||
-      !selectedCategory?.category ||
-      !selectedSortByOption?.label
-    )
-      return;
+    const handler = setTimeout(() => {
+      const searchTermToLowerCase = searchTerm?.toLowerCase();
+
+      if (searchTermToLowerCase !== searchParams.get("search")?.toLowerCase()) {
+        if (searchTermToLowerCase) {
+          searchParams.set("search", searchTerm);
+          searchParams.set("page", 1);
+        } else {
+          searchParams.delete("search");
+        }
+      }
+
+      setSearchParams(searchParams);
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm, setSearchParams, searchParams]);
+
+  useEffect(() => {
+    const currentUrlQuery = searchParams.get("search") || "";
+
+    if (searchTerm !== currentUrlQuery && !isUserInput.current) {
+      setSearchTerm(currentUrlQuery);
+    }
+
+    if (searchTerm === currentUrlQuery && isUserInput.current) {
+      isUserInput.current = false;
+    }
+  }, [searchParams, searchTerm]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const currentSearch = searchParams.get("search") || "";
+
+    const searchPart = currentSearch ? `for search ${currentSearch}` : "";
+    const sortLabel = selectedSortByOption?.label;
+    const filterCategory =
+      selectedCategory?.category === "All Transactions"
+        ? "all categories"
+        : `The ${selectedCategory?.category} category`;
 
     const timeout = setTimeout(() => {
+      if (!count || Number(count) === 0) {
+        setAnnouncement(
+          `No transactions found ${searchPart} in ${filterCategory}, sorted by ${sortLabel}`,
+        );
+        return;
+      }
+
+      if (
+        !pageCount ||
+        !selectedCategory?.category ||
+        !selectedSortByOption?.label
+      )
+        return;
+
       setAnnouncement(
-        `Showing page ${currentPage} of ${pageCount} in ${selectedCategory.category} sortedBy ${selectedSortByOption.label}`,
+        `Showing page ${currentPage} of ${pageCount} from ${filterCategory} ${searchPart}, sorted by ${selectedSortByOption.label}`,
       );
     }, ANNOUNCEMENT_DEBOUNCE_MS);
 
     return () => clearTimeout(timeout);
-  }, [currentPage, pageCount, selectedCategory, selectedSortByOption]);
-
-  const isLoading =
-    isLoadingUser || isLoadingTransactions || isLoadingCategories;
+  }, [
+    count,
+    isLoading,
+    currentPage,
+    pageCount,
+    selectedCategory,
+    selectedSortByOption,
+    searchParams,
+  ]);
 
   if (categoriesError || transactionError || userError)
     return (
@@ -161,8 +231,12 @@ function TransactionBody() {
       </ErrorWrapper>
     );
 
+  const isFiltered =
+    searchParams.get("search") ||
+    searchParams.get("category") !== "All Transactions";
+
   return (
-    <div className="flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl  ">
+    <div className="flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl relative">
       <div
         role="status"
         aria-live="polite"
@@ -173,7 +247,7 @@ function TransactionBody() {
       </div>
 
       <div className="flex gap-6 items-center mb-6 ">
-        <div className="flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg py-3 px-5  gap-2 focusable-ring-within">
+        <div className="flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg gap-2 focusable-ring-within relative">
           <label htmlFor="search-transaction" className="sr-only">
             Search transaction
           </label>
@@ -181,12 +255,19 @@ function TransactionBody() {
           <input
             type="text"
             id="search-transaction"
+            value={searchTerm}
+            disabled={isLoading}
+            onChange={handleSearchInput}
             name="transactions"
             placeholder="Search transaction"
-            className=" text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
+            className="py-3 px-5 rounded-lg disabled-input text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder disabled:cursor-not-allowed min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
           />
 
-          <SearchIcon className={"w-3.5 h-3.5 text-content-main shrink-0"} />
+          <SearchIcon
+            className={
+              "absolute right-5  w-3.5 h-3.5 text-content-main shrink-0"
+            }
+          />
         </div>
 
         <CustomSelectBox
@@ -250,7 +331,7 @@ function TransactionBody() {
         />
       </div>
 
-      <div className="relative flex-1">
+      <div className="flex-1">
         {isLoading ? (
           <SpinnerMiniContainer size="text-5xl" />
         ) : (
@@ -265,6 +346,21 @@ function TransactionBody() {
               />
             ))}
           </ul>
+        )}
+
+        {transactions?.length === 0 && !isLoading && (
+          <EmptyMessage
+            title={
+              isFiltered ? "No transactions found" : "No transaction history "
+            }
+            text={
+              isFiltered
+                ? "Try adjusting your filters or search term to find what you're looking for."
+                : "You don't have any transactions yet. Add your first transaction to get started!"
+            }
+            icon={isFiltered ? "🔍" : "💸"}
+            shadowOfTheBox={""}
+          />
         )}
       </div>
 

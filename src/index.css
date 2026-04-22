@@ -259,11 +259,12 @@
   @apply disabled:bg-surface-disabled
             disabled:text-content-disabled
             disabled:border-border-disabled
-            disabled:cursor-not-allowed;
+            disabled:cursor-not-allowed
+            disabled:pointer-events-auto;
 }
 
 @utility disabled-button {
-  @apply disabled:cursor-not-allowed disabled:opacity-80;
+  @apply disabled:cursor-not-allowed disabled:opacity-80 disabled:pointer-events-auto;
 }
 
 @utility spinner {

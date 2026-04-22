@@ -82,7 +82,7 @@ function CustomSelectBox({
         aria-controls={`listbox-${modalType}`}
         aria-expanded={isOpen}
         onClick={toggleDropdown}
-        className={`outline-none  focusable-ring flex shrink-0 md:border  items-center rounded-lg  disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5` : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base `"}`}
+        className={`outline-none focusable-ring flex shrink-0 md:border  items-center rounded-lg disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5` : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base `"}  `}
       >
         {isColor && (
           <span

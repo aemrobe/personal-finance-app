@@ -9,6 +9,7 @@ export const TOAST_DURATION_MS = 4000;
 export const PAGE_TITLE_FOCUS_AFTER_TOAST_DURATION = 1;
 export const MODAL_FOCUS_DURATION = 20;
 export const ANNOUNCEMENT_DEBOUNCE_MS = 550;
+export const SEARCH_DEBOUNCE_MS = 500;
 export const NETWORKERROREVENT = "network-error";
 export const AUGUSTMONTH = 7;
 export const YEAR2024 = 2024;

@@ -21,6 +21,9 @@ export function useTransactions() {
           value: filterValue,
         };
 
+  //SEARCH TERM
+  const searchTerm = searchParams.get("search");
+
   //SORTBY
   const sortByValue = searchParams.get("sortBy") || "date-desc";
 
@@ -43,8 +46,8 @@ export function useTransactions() {
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["transactions", `${user?.id}`, filter, sortBy, page],
-    queryFn: () => getTransactions({ filter, sortBy, page }),
+    queryKey: ["transactions", `${user?.id}`, filter, sortBy, page, searchTerm],
+    queryFn: () => getTransactions({ filter, sortBy, page, searchTerm }),
     enabled: !!user?.id,
   });
 

@@ -1,7 +1,7 @@
 import { PAGE_SIZE } from "../utils/constants";
 import supabase from "./supabase";
 
-export async function getTransactions({ filter, sortBy, page }) {
+export async function getTransactions({ filter, sortBy, page, searchTerm }) {
   let query = supabase
     .from("transactions")
     .select("*,categories!inner(category)", {
@@ -15,6 +15,8 @@ export async function getTransactions({ filter, sortBy, page }) {
       ascending: sortBy.direction === "asc",
     });
   }
+
+  if (searchTerm) query = query.ilike("name", `%${searchTerm}%`);
 
   if (page) {
     const from = (page - 1) * PAGE_SIZE;

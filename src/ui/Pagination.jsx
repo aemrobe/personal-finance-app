@@ -2,7 +2,6 @@ import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../utils/constants";
 import PaginationButton from "./PaginationButton";
 import PaginationNumber from "./PaginationNumber";
-import { useEffect, useState } from "react";
 
 function Pagination({ count }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -115,14 +114,16 @@ function Pagination({ count }) {
   if (pageCount <= 1 || !pageCount) return null;
 
   return (
-    <div className="flex justify-between pt-6 mt-6">
+    <div className="flex gap-2 flex-wrap justify-between pt-6 mt-6">
       <PaginationButton
         buttonText={"Prev"}
         onClick={prevPage}
         isDisabled={currentPage === 1}
       />
 
-      <div className="flex items-center gap-2">{renderPageNumbers()}</div>
+      <div className="flex items-center gap-2 flex-wrap">
+        {renderPageNumbers()}
+      </div>
 
       <PaginationButton
         buttonText={"Next"}
