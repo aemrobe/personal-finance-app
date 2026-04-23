@@ -13,3 +13,4 @@ export { default as CaretRightIcon } from "./CaretRightIcon";
 export { default as FilterMobileIcon } from "./FilterMobileIcon";
 export { default as SortByIcon } from "./SortByIcon";
 export { default as CaretLeftIcon } from "./CaretLeftIcon";
+export { default as RecurringBillsIcon } from "./RecurringBillsIcon";

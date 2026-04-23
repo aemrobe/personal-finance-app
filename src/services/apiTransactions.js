@@ -16,7 +16,15 @@ export async function getTransactions({ filter, sortBy, page, searchTerm }) {
     });
   }
 
-  if (searchTerm) query = query.ilike("name", `%${searchTerm}%`);
+  if (searchTerm && searchTerm.trim() !== "") {
+    const isNumber = !isNaN(searchTerm);
+
+    if (isNumber) {
+      query = query.or(`name.ilike.%${searchTerm}%,amount.eq.${searchTerm}`);
+    } else {
+      query = query.ilike("name", `%${searchTerm}%`);
+    }
+  }
 
   if (page) {
     const from = (page - 1) * PAGE_SIZE;

@@ -134,14 +134,12 @@ function TransactionBody() {
     searchParams.get("search") || "",
   );
 
-  console.log("search term", searchParams.get("search"));
-
   useEffect(() => {
     const handler = setTimeout(() => {
       const searchTermToLowerCase = searchTerm?.toLowerCase();
 
       if (searchTermToLowerCase !== searchParams.get("search")?.toLowerCase()) {
-        if (searchTermToLowerCase) {
+        if (searchTermToLowerCase.trim() !== "") {
           searchParams.set("search", searchTerm);
           searchParams.set("page", 1);
         } else {

@@ -13,7 +13,6 @@ import {
 import AppLayout from "./ui/AppLayout";
 import Overview from "./features/overview/Overview";
 
-import RecurringBills from "./features/recurring-bills/RecurringBills";
 import Pots from "./pages/Pots";
 import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
@@ -24,6 +23,7 @@ import { ToastProvider } from "./context/ToastContext";
 import Budgets from "./pages/Budgets";
 import { NETWORKERROREVENT } from "./utils/constants";
 import Transactions from "./pages/Transactions";
+import RecurringBills from "./pages/RecurringBills";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
