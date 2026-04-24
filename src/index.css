@@ -292,6 +292,7 @@
 }
 
 /* A link that redirects to other auth page */
+
 .auth-redirect-link::after {
   content: "";
   display: block;

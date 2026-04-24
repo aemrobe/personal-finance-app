@@ -14,3 +14,5 @@ export { default as FilterMobileIcon } from "./FilterMobileIcon";
 export { default as SortByIcon } from "./SortByIcon";
 export { default as CaretLeftIcon } from "./CaretLeftIcon";
 export { default as RecurringBillsIcon } from "./RecurringBillsIcon";
+export { default as SearchIcon } from "./SearchIcon";
+export { default as BillDueIcon } from "./BillDueIcon";
