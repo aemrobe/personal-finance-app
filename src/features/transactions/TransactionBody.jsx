@@ -135,6 +135,10 @@ function TransactionBody() {
     searchParams.get("search") || "",
   );
 
+  const isFiltered =
+    searchParams.get("search")?.trim() ||
+    selectedCategory?.category !== "All Transactions";
+
   useEffect(() => {
     const handler = setTimeout(() => {
       const searchTermToLowerCase = searchTerm?.toLowerCase();
@@ -181,7 +185,7 @@ function TransactionBody() {
     const timeout = setTimeout(() => {
       if (!count || Number(count) === 0) {
         setAnnouncement(
-          `No transactions found ${searchPart} in ${filterCategory}, sorted by ${sortLabel}`,
+          `No transactions found${isFiltered ? ` ${searchPart} in ${filterCategory}, sorted by ${sortLabel}. Try adjusting your filters or search term.` : ", It looks like You don't have any transactions yet."} `,
         );
         return;
       }
@@ -207,6 +211,7 @@ function TransactionBody() {
     selectedCategory,
     selectedSortByOption,
     searchParams,
+    isFiltered,
   ]);
 
   if (categoriesError || transactionError || userError)
@@ -229,10 +234,6 @@ function TransactionBody() {
         />
       </ErrorWrapper>
     );
-
-  const isFiltered =
-    searchParams.get("search") ||
-    searchParams.get("category") !== "All Transactions";
 
   return (
     <div className="flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl relative">
@@ -337,7 +338,7 @@ function TransactionBody() {
             text={
               isFiltered
                 ? "Try adjusting your filters or search term to find what you're looking for."
-                : "You don't have any transactions yet. Add your first transaction to get started!"
+                : "It looks like You don't have any transactions yet."
             }
             icon={isFiltered ? "🔍" : "💸"}
             shadowOfTheBox={""}

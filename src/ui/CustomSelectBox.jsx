@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ANIMATION_DURATION_SELECT_MENU } from "../utils/constants";
 import { useOutsideClicks } from "../hooks/useOutsideClicks";
 import { ChevroDownIcon } from "./Icons";
@@ -43,22 +43,45 @@ function CustomSelectBox({
     }
   };
 
-  const handleSelect = function (theme) {
+  const closeDropDown = function () {
     setVisible(false);
     setTimeout(() => {
       setIsOpen(false);
       customSelectBoxButtonRef.current?.focus();
     }, ANIMATION_DURATION_SELECT_MENU);
+  };
+
+  const handleSelect = function (theme) {
+    closeDropDown();
     setSelectedOption(theme);
     setValue?.(inputFieldName, theme?.[optionProperty2]);
   };
 
+  const handleKeyDown = function (e) {
+    if (e.key === "Escape") {
+      closeDropDown();
+    }
+  };
+
   const closeOutsideClickRef = useOutsideClicks(() => {
-    setVisible(false);
-    setTimeout(() => {
-      setIsOpen(false);
-    }, ANIMATION_DURATION_SELECT_MENU);
+    if (isOpen) {
+      closeDropDown();
+    }
   });
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        closeDropDown();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
 
   return (
     <div
@@ -81,6 +104,7 @@ function CustomSelectBox({
         aria-haspopup="listbox"
         aria-controls={`listbox-${modalType}`}
         aria-expanded={isOpen}
+        onKeyDown={handleKeyDown}
         onClick={toggleDropdown}
         className={`outline-none focusable-ring flex shrink-0 md:border  items-center rounded-lg disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5` : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base `"}  `}
       >

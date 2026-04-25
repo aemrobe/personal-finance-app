@@ -17,9 +17,10 @@ function SelectOption({
           handleSelect(option);
         }}
         type="button"
-        role="option"
         aria-selected={isSelected}
+        role="option"
         disabled={isUsed}
+        aria-disabled={isUsed}
         className={`focusable-ring rounded-lg py-2 flex items-center w-full ${isUsed ? "disabled:cursor-not-allowed" : "cursor-pointer"}`}
       >
         {isColor && (

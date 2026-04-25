@@ -13,7 +13,15 @@ import CustomSelectBox from "../../ui/CustomSelectBox";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import SelectOption from "../../ui/selectOption";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
-import { SEARCH_DEBOUNCE_MS } from "../../utils/constants";
+import {
+  ANNOUNCEMENT_DEBOUNCE_MS,
+  SEARCH_DEBOUNCE_MS,
+} from "../../utils/constants";
+import { useCurrentUser } from "../authentication/useCurrentUser";
+import ErrorWrapper from "../../ui/ErrorWrapper";
+import ErrorDisplay from "../../ui/ErrorDisplay";
+import EmptyMessage from "../../ui/EmptyMessage";
+import { useSearchManager } from "../../hooks/useSearchManager";
 
 const SORT_BY_OPTIONS = [
   {
@@ -40,14 +48,25 @@ const calculateFutureDueDate = function (date) {
 
 function RecurringBillsBody() {
   const {
+    isLoading: isLoadingUser,
+    error: userError,
+    isFetching: isFetchingUser,
+    refetch: refetchUser,
+  } = useCurrentUser();
+
+  const {
     data: allTransactions,
-    isLoading,
-    error,
-    isFetching,
-    refetch,
+    isLoading: isLoadingTransactions,
+    error: transactionError,
+    isFetching: isFetchingTransactions,
+    refetch: refetchTransactions,
   } = useAllTransactions();
 
+  const isLoading = isLoadingUser || isLoadingTransactions;
+
+  const [announcement, setAnnouncement] = useState(``);
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || "",
   );
@@ -76,8 +95,8 @@ function RecurringBillsBody() {
   });
 
   const handleSearchInput = function (e) {
-    isUserInput.current = true;
     setSearchTerm(e.target.value);
+    isUserInput.current = true;
   };
 
   const handleSortByOption = (sortByObj) => {
@@ -127,8 +146,6 @@ function RecurringBillsBody() {
   const [value, direction] = sortByValue.split("-");
   const directionValue = direction === "asc" ? 1 : -1;
 
-  console.log("processedBills", processedBills);
-
   const searchedRecurringBills = useMemo(() => {
     //filtered
     const filteredSearchResults = processedBills?.filter(
@@ -176,12 +193,39 @@ function RecurringBillsBody() {
     0,
   );
 
+  // useSearchManager({
+  //   isLoading,
+  //   selectedSortByLabel: selectedSortByOption?.label,
+  //   count: searchedRecurringBills?.length,
+  //   generateAnnouncement: ({ count, searchTerm, sortLabel }) => {
+  //     let annoucement = "";
+
+  //     if (count === 0) {
+  //       annoucement = `No recurring bills${
+  //         searchTerm
+  //           ? ` match your search for ${searchTerm}. Try a different name or amount.`
+  //           : ", It looks like you don't have any recurring bills yet."
+  //       } `;
+
+  //       return annoucement;
+  //     }
+
+  //     if (count === 0) return;
+
+  //     annoucement = searchTerm
+  //       ? `Found ${count} recurring bills matching ${searchTerm}, sorted by ${sortLabel}`
+  //       : `Showing ${count} recurring bills, sorted by ${sortLabel}`;
+
+  //     return annoucement;
+  //   },
+  // });
+
   useEffect(() => {
     const handler = setTimeout(() => {
       const searchTermToLowerCase = searchTerm?.toLowerCase();
 
       if (searchTermToLowerCase !== searchParams.get("search")?.toLowerCase()) {
-        if (searchTermToLowerCase.trim() !== "") {
+        if (searchTermToLowerCase.trim()) {
           searchParams.set("search", searchTerm);
         } else {
           searchParams.delete("search");
@@ -192,10 +236,86 @@ function RecurringBillsBody() {
     }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(handler);
-  }, [searchTerm, setSearchParams, searchParams]);
+  }, [searchTerm, setSearchParams]);
+
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") || "";
+
+    if (urlSearch !== searchTerm && !isUserInput.current) {
+      setSearchTerm(urlSearch);
+    }
+
+    if (urlSearch === searchTerm && isUserInput.current) {
+      isUserInput.current = false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.get("search")]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const currentSearch = searchParams.get("search") || "";
+
+    const searchPart = currentSearch ? `${currentSearch}` : "";
+    const sortLabel = selectedSortByOption?.label;
+    const count = searchedRecurringBills?.length;
+
+    const timeout = setTimeout(() => {
+      if (count === 0) {
+        setAnnouncement(
+          `No recurring bills${
+            searchPart
+              ? ` match your search for ${searchPart}. Try a different name or amount.`
+              : ", It looks like you don't have any recurring bills yet."
+          } `,
+        );
+        return;
+      }
+
+      if (count === 0) return;
+
+      setAnnouncement(
+        searchPart
+          ? `Found ${count} recurring bills matching ${currentSearch}, sorted by ${sortLabel}`
+          : `Showing ${count} recurring bills, sorted by ${sortLabel}`,
+      );
+    }, ANNOUNCEMENT_DEBOUNCE_MS);
+
+    return () => clearTimeout(timeout);
+  }, [
+    isLoading,
+    selectedSortByOption,
+    searchParams,
+    searchedRecurringBills?.length,
+  ]);
+
+  if (transactionError || userError)
+    return (
+      <ErrorWrapper>
+        <ErrorDisplay
+          error={transactionError?.message || userError?.message}
+          isLoading={isFetchingTransactions || isFetchingUser}
+          onRetry={() => {
+            refetchTransactions();
+            refetchUser();
+          }}
+        />
+      </ErrorWrapper>
+    );
+
+  const isFiltered = searchParams.get("search")?.trim();
 
   return (
     <div className="relative flex-1">
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+
       {isLoading ? (
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
@@ -207,7 +327,7 @@ function RecurringBillsBody() {
               </span>
 
               <div>
-                <h4 className="text-preset-4">Total bills</h4>
+                <h2 className="text-preset-4">Total bills</h2>
 
                 <p className="text-preset-1 mt-2.75">
                   {formatCurrency(paidBillAmount + totalUpcomingBillAmount)}
@@ -216,7 +336,7 @@ function RecurringBillsBody() {
             </div>
 
             <div className="bg-surface-primary py-5 px-5 rounded-xl mt-3">
-              <h4 className="text-preset-3 mb-5">Summary</h4>
+              <h2 className="text-preset-3 mb-5">Summary</h2>
 
               <ul className="divide-y divide-border-divider/15">
                 <RecurringBillSummaryItem
@@ -281,12 +401,30 @@ function RecurringBillsBody() {
                 }}
               />
             </div>
-
             <ul className="divide-y divide-border-subtle">
               {searchedRecurringBills?.map((bill) => (
                 <RecurringListItem key={bill.id} bill={bill} />
               ))}
             </ul>
+            {searchedRecurringBills?.length === 0 && !isLoading && (
+              <EmptyMessage
+                className="h-[40vh]"
+                title={isFiltered ? "No matching bills" : "No recurring bills "}
+                text={
+                  isFiltered
+                    ? `We couldn't find any bills matching "${searchTerm}". Try a different name or amount.`
+                    : "It looks like you don't have any recurring bills yet."
+                }
+                icon={
+                  isFiltered ? (
+                    "🔍"
+                  ) : (
+                    <RecurringBillsIcon className="w-12 h-12 opacity-20" />
+                  )
+                }
+                shadowOfTheBox={""}
+              />
+            )}
           </div>
         </>
       )}
