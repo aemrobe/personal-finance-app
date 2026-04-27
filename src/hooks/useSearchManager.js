@@ -1,42 +1,41 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  ANNOUNCEMENT_DEBOUNCE_MS,
-  SEARCH_DEBOUNCE_MS,
-} from "../utils/constants";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { SEARCH_DEBOUNCE_MS } from "../utils/constants";
 import { useSearchParams } from "react-router-dom";
 
-export function useSearchManager({
-  resetPageOnSearch = false,
-  isLoading,
-  selectedSortByLabel,
-  count,
-  generateAnnouncement,
-}) {
-  const [announcement, setAnnouncement] = useState(``);
+export function useSearchManager({ resetPageOnSearch = false }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || "",
   );
   const isUserInput = useRef(false);
 
+  const updateSearch = useCallback((e) => {
+    setSearchTerm(e.target.value);
+    isUserInput.current = true;
+  }, []);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       const searchTermToLowerCase = searchTerm?.toLowerCase();
 
       if (searchTermToLowerCase !== searchParams.get("search")?.toLowerCase()) {
-        if (searchTermToLowerCase.trim()) {
-          searchParams.set("search", searchTerm);
-          if (resetPageOnSearch) searchParams.set("page", 1);
-        } else {
-          searchParams.delete("search");
-        }
-      }
+        setSearchParams((prev) => {
+          const newParams = new URLSearchParams(prev);
 
-      setSearchParams(searchParams);
+          if (searchTermToLowerCase.trim()) {
+            newParams.set("search", searchTerm);
+            if (resetPageOnSearch) newParams.set("page", 1);
+          } else {
+            newParams.delete("search");
+          }
+
+          return newParams;
+        });
+      }
     }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(handler);
-  }, [searchTerm, setSearchParams]);
+  }, [searchTerm, setSearchParams, resetPageOnSearch]);
 
   useEffect(() => {
     const urlSearch = searchParams.get("search") || "";
@@ -51,34 +50,10 @@ export function useSearchManager({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.get("search")]);
 
-  useEffect(() => {
-    if (isLoading) return;
-
-    const timeout = setTimeout(() => {
-      const message = generateAnnouncement({
-        count,
-        searchTerm: searchParams.get("search") || "",
-        sortLabel: selectedSortByLabel,
-      });
-
-      setAnnouncement(message);
-    }, ANNOUNCEMENT_DEBOUNCE_MS);
-
-    return () => clearTimeout(timeout);
-  }, [
-    count,
-    isLoading,
-    searchParams,
-    generateAnnouncement,
-    selectedSortByLabel,
-  ]);
-
   return {
-    announcement,
     searchTerm,
-    setSearchTerm,
     searchParams,
     setSearchParams,
-    isUserInput,
+    updateSearch,
   };
 }

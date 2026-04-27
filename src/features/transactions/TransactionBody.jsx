@@ -1,17 +1,10 @@
-import { useSearchParams } from "react-router-dom";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import CustomSelectBox from "../../ui/CustomSelectBox";
-import SearchIcon from "../../ui/Icons/SearchIcon";
 import { useCategories } from "../categories/useCategory";
 import SelectOption from "../../ui/selectOption";
 import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  ANNOUNCEMENT_DEBOUNCE_MS,
-  PAGE_SIZE,
-  SEARCH_DEBOUNCE_MS,
-  SORT_BY_OPTIONS,
-} from "../../utils/constants";
+import { useCallback } from "react";
+import { PAGE_SIZE, SORT_BY_OPTIONS } from "../../utils/constants";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import { useTransactions } from "./useTransactions";
@@ -21,6 +14,8 @@ import { useCurrentUser } from "../authentication/useCurrentUser";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import EmptyMessage from "../../ui/EmptyMessage";
 import SearchBox from "../../ui/SearchBox";
+import { useSearchManager } from "../../hooks/useSearchManager";
+import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 
 function TransactionBody() {
   const {
@@ -50,8 +45,8 @@ function TransactionBody() {
   const isLoading =
     isLoadingUser || isLoadingTransactions || isLoadingCategories;
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const isUserInput = useRef(false);
+  const { searchTerm, searchParams, setSearchParams, updateSearch } =
+    useSearchManager({ resetPageOnSearch: true });
 
   const findAvailableCategory = useCallback(
     (_, categories) => {
@@ -120,99 +115,42 @@ function TransactionBody() {
     setSearchParams(searchParams);
   };
 
-  const handleSearchInput = function (e) {
-    isUserInput.current = true;
-    setSearchTerm(e.target.value);
-  };
   const pageNumber = searchParams.get("page");
 
   const currentPage = !pageNumber ? 1 : Number(pageNumber);
 
   const pageCount = Math.ceil(count / PAGE_SIZE);
 
-  const [announcement, setAnnouncement] = useState(``);
-  const [searchTerm, setSearchTerm] = useState(
-    searchParams.get("search") || "",
-  );
-
   const isFiltered =
     searchParams.get("search")?.trim() ||
     selectedCategory?.category !== "All Transactions";
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      const searchTermToLowerCase = searchTerm?.toLowerCase();
-
-      if (searchTermToLowerCase !== searchParams.get("search")?.toLowerCase()) {
-        if (searchTermToLowerCase.trim() !== "") {
-          searchParams.set("search", searchTerm);
-          searchParams.set("page", 1);
-        } else {
-          searchParams.delete("search");
-        }
-      }
-
-      setSearchParams(searchParams);
-    }, SEARCH_DEBOUNCE_MS);
-
-    return () => clearTimeout(handler);
-  }, [searchTerm, setSearchParams, searchParams]);
-
-  useEffect(() => {
-    const currentUrlQuery = searchParams.get("search") || "";
-
-    if (searchTerm !== currentUrlQuery && !isUserInput.current) {
-      setSearchTerm(currentUrlQuery);
-    }
-
-    if (searchTerm === currentUrlQuery && isUserInput.current) {
-      isUserInput.current = false;
-    }
-  }, [searchParams, searchTerm]);
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    const currentSearch = searchParams.get("search") || "";
-
-    const searchPart = currentSearch ? `for search ${currentSearch}` : "";
-    const sortLabel = selectedSortByOption?.label;
-    const filterCategory =
-      selectedCategory?.category === "All Transactions"
-        ? "all categories"
-        : `The ${selectedCategory?.category} category`;
-
-    const timeout = setTimeout(() => {
-      if (!count || Number(count) === 0) {
-        setAnnouncement(
-          `No transactions found${isFiltered ? ` ${searchPart} in ${filterCategory}, sorted by ${sortLabel}. Try adjusting your filters or search term.` : ", It looks like You don't have any transactions yet."} `,
-        );
-        return;
-      }
-
-      if (
-        !pageCount ||
-        !selectedCategory?.category ||
-        !selectedSortByOption?.label
-      )
-        return;
-
-      setAnnouncement(
-        `Showing page ${currentPage} of ${pageCount} from ${filterCategory} ${searchPart}, sorted by ${selectedSortByOption.label}`,
-      );
-    }, ANNOUNCEMENT_DEBOUNCE_MS);
-
-    return () => clearTimeout(timeout);
-  }, [
-    count,
+  //Screen reader Announcement message
+  const { announcement } = useGenerateAnnouncement({
     isLoading,
-    currentPage,
-    pageCount,
-    selectedCategory,
-    selectedSortByOption,
+    count: transactions?.length,
     searchParams,
-    isFiltered,
-  ]);
+    selectedSortByLabel: selectedSortByOption?.label,
+    generateAnnouncement: ({ count, searchTerm, sortLabel }) => {
+      const hasSearch = Boolean(searchTerm?.trim());
+      const isAllCategory = selectedCategory?.category === "All Transactions";
+      const categoryText = isAllCategory
+        ? "all categories"
+        : `the ${selectedCategory?.category}`;
+      const transactionText = `transaction${count === 1 ? "" : "s"}`;
+
+      if (!count || Number(count) === 0) {
+        return `No transactions found${hasSearch ? ` matching ${searchTerm} in ${categoryText}` : `in ${categoryText}`}. Try adjusting your search or filters.`;
+      }
+
+      if (hasSearch) {
+        return `Found ${count} ${transactionText} matching "${searchTerm}" in ${categoryText}, sorted by ${sortLabel}`;
+      }
+
+      // Without search (normal browsing)
+      return `Showing ${count} transactions in ${categoryText}, sorted by ${sortLabel}. Page ${currentPage} of ${pageCount}`;
+    },
+  });
 
   if (categoriesError || transactionError || userError)
     return (
@@ -250,7 +188,7 @@ function TransactionBody() {
         <SearchBox
           searchTerm={searchTerm}
           isLoading={isLoading}
-          onChange={handleSearchInput}
+          onChange={(e) => updateSearch(e)}
         />
 
         <CustomSelectBox

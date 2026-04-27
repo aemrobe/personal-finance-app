@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useAllTransactions } from "../transactions/useAllTransactions";
 import { formatCurrency, getOrdinal } from "../../utils/helpers";
 import {
@@ -7,21 +7,17 @@ import {
   SelectedIcon,
   SortByIcon,
 } from "../../ui/Icons";
-import { useSearchParams } from "react-router-dom";
 import SearchBox from "../../ui/SearchBox";
 import CustomSelectBox from "../../ui/CustomSelectBox";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import SelectOption from "../../ui/selectOption";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
-import {
-  ANNOUNCEMENT_DEBOUNCE_MS,
-  SEARCH_DEBOUNCE_MS,
-} from "../../utils/constants";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import EmptyMessage from "../../ui/EmptyMessage";
 import { useSearchManager } from "../../hooks/useSearchManager";
+import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 
 const SORT_BY_OPTIONS = [
   {
@@ -64,14 +60,9 @@ function RecurringBillsBody() {
 
   const isLoading = isLoadingUser || isLoadingTransactions;
 
-  const [announcement, setAnnouncement] = useState(``);
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [searchTerm, setSearchTerm] = useState(
-    searchParams.get("search") || "",
-  );
-
-  const isUserInput = useRef(false);
+  // Search value managing hook
+  const { searchTerm, searchParams, setSearchParams, updateSearch } =
+    useSearchManager({});
 
   const findAvailableSortByOption = useCallback(
     (_, sortByOptions) => {
@@ -93,11 +84,6 @@ function RecurringBillsBody() {
     matchKey: "value",
     findNextAvailable: findAvailableSortByOption,
   });
-
-  const handleSearchInput = function (e) {
-    setSearchTerm(e.target.value);
-    isUserInput.current = true;
-  };
 
   const handleSortByOption = (sortByObj) => {
     setSelectedSortByOption(sortByObj);
@@ -193,101 +179,26 @@ function RecurringBillsBody() {
     0,
   );
 
-  // useSearchManager({
-  //   isLoading,
-  //   selectedSortByLabel: selectedSortByOption?.label,
-  //   count: searchedRecurringBills?.length,
-  //   generateAnnouncement: ({ count, searchTerm, sortLabel }) => {
-  //     let annoucement = "";
-
-  //     if (count === 0) {
-  //       annoucement = `No recurring bills${
-  //         searchTerm
-  //           ? ` match your search for ${searchTerm}. Try a different name or amount.`
-  //           : ", It looks like you don't have any recurring bills yet."
-  //       } `;
-
-  //       return annoucement;
-  //     }
-
-  //     if (count === 0) return;
-
-  //     annoucement = searchTerm
-  //       ? `Found ${count} recurring bills matching ${searchTerm}, sorted by ${sortLabel}`
-  //       : `Showing ${count} recurring bills, sorted by ${sortLabel}`;
-
-  //     return annoucement;
-  //   },
-  // });
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      const searchTermToLowerCase = searchTerm?.toLowerCase();
-
-      if (searchTermToLowerCase !== searchParams.get("search")?.toLowerCase()) {
-        if (searchTermToLowerCase.trim()) {
-          searchParams.set("search", searchTerm);
-        } else {
-          searchParams.delete("search");
-        }
-      }
-
-      setSearchParams(searchParams);
-    }, SEARCH_DEBOUNCE_MS);
-
-    return () => clearTimeout(handler);
-  }, [searchTerm, setSearchParams]);
-
-  useEffect(() => {
-    const urlSearch = searchParams.get("search") || "";
-
-    if (urlSearch !== searchTerm && !isUserInput.current) {
-      setSearchTerm(urlSearch);
-    }
-
-    if (urlSearch === searchTerm && isUserInput.current) {
-      isUserInput.current = false;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.get("search")]);
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    const currentSearch = searchParams.get("search") || "";
-
-    const searchPart = currentSearch ? `${currentSearch}` : "";
-    const sortLabel = selectedSortByOption?.label;
-    const count = searchedRecurringBills?.length;
-
-    const timeout = setTimeout(() => {
-      if (count === 0) {
-        setAnnouncement(
-          `No recurring bills${
-            searchPart
-              ? ` match your search for ${searchPart}. Try a different name or amount.`
-              : ", It looks like you don't have any recurring bills yet."
-          } `,
-        );
-        return;
-      }
-
-      if (count === 0) return;
-
-      setAnnouncement(
-        searchPart
-          ? `Found ${count} recurring bills matching ${currentSearch}, sorted by ${sortLabel}`
-          : `Showing ${count} recurring bills, sorted by ${sortLabel}`,
-      );
-    }, ANNOUNCEMENT_DEBOUNCE_MS);
-
-    return () => clearTimeout(timeout);
-  }, [
+  //Screen reader Announcement message
+  const { announcement } = useGenerateAnnouncement({
     isLoading,
-    selectedSortByOption,
+    count: searchedRecurringBills?.length,
     searchParams,
-    searchedRecurringBills?.length,
-  ]);
+    selectedSortByLabel: selectedSortByOption?.label,
+    generateAnnouncement: ({ count, searchTerm, sortLabel }) => {
+      if (count === 0) {
+        return `No recurring bills${
+          searchTerm
+            ? ` match your search for ${searchTerm}. Try a different name or amount.`
+            : ", It looks like you don't have any recurring bills yet."
+        } `;
+      }
+
+      return searchTerm
+        ? `Found ${count} recurring bills matching ${searchTerm}, sorted by ${sortLabel}`
+        : `Showing ${count} recurring bills, sorted by ${sortLabel}`;
+    },
+  });
 
   if (transactionError || userError)
     return (
@@ -367,7 +278,7 @@ function RecurringBillsBody() {
               <SearchBox
                 searchTerm={searchTerm}
                 isLoading={isLoading}
-                onChange={handleSearchInput}
+                onChange={(e) => updateSearch(e)}
                 className="flex-1 max-w-64.5"
               />
 
