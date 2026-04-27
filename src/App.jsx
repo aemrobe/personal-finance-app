@@ -4,26 +4,26 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import AppLayout from "./ui/AppLayout";
-import Overview from "./features/overview/Overview";
 
 import Pots from "./pages/Pots";
 import Login from "./pages/Login";
-import ProtectedRoute from "./ui/ProtectedRoute";
-
-import Signup from "./pages/Signup";
-import ErrorFallBack from "./ui/ErrorFallBack";
-import { ToastProvider } from "./context/ToastContext";
-import Budgets from "./pages/Budgets";
-import { NETWORKERROREVENT } from "./utils/constants";
 import Transactions from "./pages/Transactions";
 import RecurringBills from "./pages/RecurringBills";
+import Budgets from "./pages/Budgets";
+import Signup from "./pages/Signup";
+
+import AppLayout from "./ui/AppLayout";
+import ErrorFallBack from "./ui/ErrorFallBack";
+import ProtectedRoute from "./ui/ProtectedRoute";
+import { ToastProvider } from "./context/ToastContext";
+
+import { NETWORKERROREVENT } from "./utils/constants";
+import Overview from "./pages/Overview";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({

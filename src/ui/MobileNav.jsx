@@ -24,7 +24,7 @@ function MobileNav() {
         </NavButton>
 
         <NavButton navText={"Pots"} path={"/pots"}>
-          <NavPotsIcon />
+          <NavPotsIcon classNameIcon={"w-4.5 h-5.5"} />
         </NavButton>
 
         <NavButton navText={"Recurring Bills"} path={"/recurring-bills"}>

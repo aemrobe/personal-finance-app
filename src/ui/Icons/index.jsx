@@ -16,3 +16,4 @@ export { default as CaretLeftIcon } from "./CaretLeftIcon";
 export { default as RecurringBillsIcon } from "./RecurringBillsIcon";
 export { default as SearchIcon } from "./SearchIcon";
 export { default as BillDueIcon } from "./BillDueIcon";
+export { default as PotIcon } from "./PotIcon";

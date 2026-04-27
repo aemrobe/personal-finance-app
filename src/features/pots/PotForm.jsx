@@ -35,9 +35,8 @@ function PotForm({
     (theme) => !usedThemes.includes(theme.color),
   );
 
-  // const isWorking = isCreatingPot || isUpdatingPot;
+  const isWorking = isCreatingPot || isUpdatingPot;
 
-  const isWorking = true;
   const { user } = useCurrentUser();
 
   const { onShowToastMessage } = useToast();

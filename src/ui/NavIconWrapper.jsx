@@ -1,7 +1,7 @@
-function NavIconWrapper({ children, className }) {
+function NavIconWrapper({ children, className, size = "size-6" }) {
   return (
     <div
-      className={`flex items-center justify-center  size-6 ${className} `}
+      className={`flex items-center justify-center  ${size} ${className} `}
       aria-hidden={true}
     >
       {children}
