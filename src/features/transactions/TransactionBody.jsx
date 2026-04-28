@@ -16,6 +16,7 @@ import EmptyMessage from "../../ui/EmptyMessage";
 import SearchBox from "../../ui/SearchBox";
 import { useSearchManager } from "../../hooks/useSearchManager";
 import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
+import TransactionDataContainer from "./TransactionDataContainer";
 
 function TransactionBody() {
   const {
@@ -255,7 +256,7 @@ function TransactionBody() {
         {isLoading ? (
           <SpinnerMiniContainer size="text-5xl" />
         ) : (
-          <ul>
+          <TransactionDataContainer>
             {transactions?.map((transaction) => (
               <TransactionDataItem
                 key={transaction.id}
@@ -265,7 +266,7 @@ function TransactionBody() {
                 }}
               />
             ))}
-          </ul>
+          </TransactionDataContainer>
         )}
 
         {transactions?.length === 0 && !isLoading && (

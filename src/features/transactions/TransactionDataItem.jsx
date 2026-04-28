@@ -1,6 +1,6 @@
 import { formatCurrency, formatDate } from "../../utils/helpers";
 
-function TransactionDataItem({ transaction }) {
+function TransactionDataItem({ transaction, page = "transaction" }) {
   const { avatar, name, category, amount, date } = transaction;
 
   return (
@@ -12,13 +12,21 @@ function TransactionDataItem({ transaction }) {
       />
 
       <div className="ml-3">
-        <p className="text-preset-4-bold mb-1">{name}</p>
-        <p className="text-preset-5"> {category}</p>
+        <p className="text-preset-4-bold text-content-main mb-1">{name}</p>
+        {page === "transaction" && (
+          <p className="text-preset-5 text-content-secondary"> {category}</p>
+        )}
       </div>
 
       <div className="ml-auto text-right">
-        <p className="text-preset-4-bold mb-1">{formatCurrency(amount)}</p>
-        <p className="text-preset-5">{formatDate(date)}</p>
+        <p
+          className={`text-preset-4-bold mb-1 ${amount > 0 ? "text-icon-success" : "text-content-main"}`}
+        >
+          {`${amount > 0 ? "+" : ""}${formatCurrency(amount)}`}
+        </p>
+        <p className="text-preset-5 text-content-secondary">
+          {formatDate(date)}
+        </p>
       </div>
     </li>
   );

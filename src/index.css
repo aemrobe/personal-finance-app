@@ -91,6 +91,8 @@
   --color-border-base: var(--color-beige-500);
   --color-border-subtle: var(--color-grey-100);
   --color-border-divider: var(--color-grey-500);
+  --color-border-bill-upcoming: var(--color-yellow-500);
+  --color-border-bill-due: var(--color-cyan-500);
 
   /* Text selection */
   --color-highlight-bg: var(--color-yellow-500);
