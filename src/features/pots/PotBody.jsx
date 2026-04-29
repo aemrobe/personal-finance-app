@@ -59,7 +59,7 @@ function PotBody() {
 
   return (
     <Menus>
-      <div className="relative flex-1 flex flex-col gap-6">
+      <div className="relative flex-1 flex flex-col gap-6 max-w-172 mx-auto w-full">
         {isLoading ? (
           <SpinnerMiniContainer size="text-5xl" />
         ) : (
