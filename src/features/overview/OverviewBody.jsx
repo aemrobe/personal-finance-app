@@ -1,7 +1,7 @@
 import { useBudgetAnayltics } from "../budgets/useBudgetAnalytics";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
-import { PotIcon } from "../../ui/Icons";
+import { PotIcon, RecurringBillsIcon } from "../../ui/Icons";
 import PieChartFigure from "../../ui/PieChartFigure";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import { formatCurrency } from "../../utils/helpers";
@@ -17,6 +17,7 @@ import OverviewCategoryContainer from "./OverviewCategoryContainer";
 import OverviewSection from "./OverviewSection";
 import { useRecurringBillsAnalytics } from "../recurring-bills/useRecurringBillsAnalytics";
 import { useNavigate } from "react-router-dom";
+import EmptyMessage from "../../ui/EmptyMessage";
 
 function OverviewBody() {
   const navigate = useNavigate();
@@ -55,8 +56,12 @@ function OverviewBody() {
     refetchAnayltics,
   } = useBudgetAnayltics();
 
-  const { paidBillAmount, totalUpcomingBillAmount, dueSoonBillAmount } =
-    useRecurringBillsAnalytics();
+  const {
+    paidBillAmount,
+    totalUpcomingBillAmount,
+    dueSoonBillAmount,
+    processedBills,
+  } = useRecurringBillsAnalytics();
 
   const isLoading =
     isLoadingUser || isLoadingBalance || isLoadingPots || isLoadingAnalytics;
@@ -114,37 +119,49 @@ function OverviewBody() {
               buttonText={"See Details"}
               onClick={() => navigate("/pots")}
             >
-              <div className="bg-surface-app rounded-xl py-5 px-4 flex gap-4 items-center my-5">
-                <PotIcon
-                  className="text-icon-success w-[1.675rem] h-[2.148rem]"
-                  classNameParent={"size-10"}
+              {pots?.length === 0 ? (
+                <EmptyMessage
+                  title={"No pots found"}
+                  text={"Start your saving journey by creating your first pot!"}
+                  icon={"🐖"}
+                  className="min-h-62.5 mt-5"
+                  shadowOfTheBox=""
                 />
-
-                <div>
-                  <h3 className="text-preset-4 text-content-secondary mb-2.75">
-                    Total Saved
-                  </h3>
-
-                  <p className="text-preset-1 text-content-main">
-                    {formatCurrency(totalSavedInPots, false)}
-                  </p>
-                </div>
-              </div>
-
-              <OverviewCategoryContainer className="grid gap-4 grid-cols-2">
-                {pots?.slice(0, 4)?.map((pot) => {
-                  const { id, name, total, theme: color } = pot;
-
-                  return (
-                    <OverviewCategory
-                      key={id}
-                      title={name}
-                      amount={total}
-                      color={color}
+              ) : (
+                <>
+                  <div className="bg-surface-app rounded-xl py-5 px-4 flex gap-4 items-center my-5">
+                    <PotIcon
+                      className="text-icon-success w-[1.675rem] h-[2.148rem]"
+                      classNameParent={"size-10"}
                     />
-                  );
-                })}
-              </OverviewCategoryContainer>
+
+                    <div>
+                      <h3 className="text-preset-4 text-content-secondary mb-2.75">
+                        Total Saved
+                      </h3>
+
+                      <p className="text-preset-1 text-content-main">
+                        {formatCurrency(totalSavedInPots, false)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <OverviewCategoryContainer className="grid gap-4 grid-cols-2">
+                    {pots?.slice(0, 4)?.map((pot) => {
+                      const { id, name, total, theme: color } = pot;
+
+                      return (
+                        <OverviewCategory
+                          key={id}
+                          title={name}
+                          amount={total}
+                          color={color}
+                        />
+                      );
+                    })}
+                  </OverviewCategoryContainer>
+                </>
+              )}
             </OverviewSection>
 
             <OverviewSection
@@ -152,18 +169,28 @@ function OverviewBody() {
               buttonText={"View All"}
               onClick={() => navigate("/transactions")}
             >
-              <TransactionDataContainer className="mt-8">
-                {transactions?.slice(0, 5)?.map((transaction) => (
-                  <TransactionDataItem
-                    page="overview"
-                    key={transaction.id}
-                    transaction={{
-                      ...transaction,
-                      category: transaction?.categories?.category,
-                    }}
-                  />
-                ))}
-              </TransactionDataContainer>
+              {transactions.length === 0 ? (
+                <EmptyMessage
+                  title={"No transaction history "}
+                  text={"It looks like You don't have any transactions yet."}
+                  icon={"💸"}
+                  shadowOfTheBox={""}
+                  className="min-h-62.5 mt-5"
+                />
+              ) : (
+                <TransactionDataContainer className="mt-8">
+                  {transactions?.slice(0, 5)?.map((transaction) => (
+                    <TransactionDataItem
+                      page="overview"
+                      key={transaction.id}
+                      transaction={{
+                        ...transaction,
+                        category: transaction?.categories?.category,
+                      }}
+                    />
+                  ))}
+                </TransactionDataContainer>
+              )}
             </OverviewSection>
 
             <OverviewSection
@@ -171,34 +198,48 @@ function OverviewBody() {
               buttonText={"See Details"}
               onClick={() => navigate("/budgets")}
             >
-              <PieChartFigure
-                className={"mt-7 mb-4"}
-                totalSpent={totalSpentForAllCategories}
-                totalMaximum={totalMaximumForAllCategories}
-                chartData={chartData}
-                heightOfContainer={"h-60"}
-                innerRadius={85}
-                outerRadius={120}
-              />
-              <OverviewCategoryContainer className="grid gap-4 grid-cols-2">
-                {budgets?.slice(0, 4)?.map((budget) => {
-                  const {
-                    id,
-                    categories: { category },
-                    maximum,
-                    theme,
-                  } = budget;
+              {budgets?.length === 0 ? (
+                <EmptyMessage
+                  title={"No budgets created"}
+                  text={
+                    "It looks like you don't have any budgets setup. Create a budget to keep your spending on track."
+                  }
+                  icon={"💰"}
+                  className="min-h-62.5 mt-5"
+                  shadowOfTheBox=""
+                />
+              ) : (
+                <>
+                  <PieChartFigure
+                    className={"mt-7 mb-4"}
+                    totalSpent={totalSpentForAllCategories}
+                    totalMaximum={totalMaximumForAllCategories}
+                    chartData={chartData}
+                    heightOfContainer={"h-60"}
+                    innerRadius={85}
+                    outerRadius={120}
+                  />
+                  <OverviewCategoryContainer className="grid gap-4 grid-cols-2">
+                    {budgets?.slice(0, 4)?.map((budget) => {
+                      const {
+                        id,
+                        categories: { category },
+                        maximum,
+                        theme,
+                      } = budget;
 
-                  return (
-                    <OverviewCategory
-                      key={id}
-                      title={category}
-                      amount={maximum}
-                      color={theme}
-                    />
-                  );
-                })}
-              </OverviewCategoryContainer>
+                      return (
+                        <OverviewCategory
+                          key={id}
+                          title={category}
+                          amount={maximum}
+                          color={theme}
+                        />
+                      );
+                    })}
+                  </OverviewCategoryContainer>
+                </>
+              )}
             </OverviewSection>
 
             <OverviewSection
@@ -206,29 +247,37 @@ function OverviewBody() {
               buttonText={"See Details"}
               onClick={() => navigate("/recurring-bills")}
             >
-              <ul className="mt-8 flex flex-col gap-3">
-                <OverviewBillBalanaceCard
-                  title={"Paid Bills"}
-                  balance={paidBillAmount}
-                  borderColor={"border-icon-success"}
+              {processedBills?.length === 0 ? (
+                <EmptyMessage
+                  className="min-h-62.5 mt-5"
+                  title={"No recurring bills "}
+                  text={"It looks like you don't have any recurring bills yet."}
+                  icon={<RecurringBillsIcon className="w-12 h-12 opacity-20" />}
+                  shadowOfTheBox={""}
                 />
-                <OverviewBillBalanaceCard
-                  title={"Total Upcoming"}
-                  balance={totalUpcomingBillAmount}
-                  borderColor={"border-border-bill-upcoming"}
-                />
-                <OverviewBillBalanaceCard
-                  title={"Due Soon"}
-                  balance={dueSoonBillAmount}
-                  borderColor={"border-border-bill-due"}
-                />
-              </ul>
+              ) : (
+                <ul className="mt-8 flex flex-col gap-3">
+                  <OverviewBillBalanaceCard
+                    title={"Paid Bills"}
+                    balance={paidBillAmount}
+                    borderColor={"border-icon-success"}
+                  />
+                  <OverviewBillBalanaceCard
+                    title={"Total Upcoming"}
+                    balance={totalUpcomingBillAmount}
+                    borderColor={"border-border-bill-upcoming"}
+                  />
+                  <OverviewBillBalanaceCard
+                    title={"Due Soon"}
+                    balance={dueSoonBillAmount}
+                    borderColor={"border-border-bill-due"}
+                  />
+                </ul>
+              )}
             </OverviewSection>
           </div>
         </>
       )}
-
-      {/* Balance */}
     </div>
   );
 }

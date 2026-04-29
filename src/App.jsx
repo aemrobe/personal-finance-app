@@ -24,6 +24,7 @@ import { ToastProvider } from "./context/ToastContext";
 
 import { NETWORKERROREVENT } from "./utils/constants";
 import Overview from "./pages/Overview";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
@@ -100,7 +101,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       <ToastProvider>
         <RouterProvider router={router} />
       </ToastProvider>

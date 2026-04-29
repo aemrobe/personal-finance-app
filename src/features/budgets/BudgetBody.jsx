@@ -93,7 +93,7 @@ function BudgetBody() {
               outerRadius={120}
             />
 
-            <div>
+            <div className="overflow-y-auto no-scrollbar  max-h-72">
               <span className="sr-only">Spending distribution overview</span>
 
               <h2 className="text-preset-2 text-content-main mb-6">

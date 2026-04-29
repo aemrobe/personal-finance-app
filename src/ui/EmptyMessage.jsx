@@ -11,7 +11,7 @@ function EmptyMessage({
   actionText,
   modalName,
   returnToSelector,
-  className = "min-h-100 h-[60vh]",
+  className = "min-h-100 w-full",
   shadowOfTheBox = "shadow-md",
   as: Heading = "h2",
 }) {

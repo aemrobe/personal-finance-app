@@ -55,7 +55,14 @@ export function useTransactions() {
 
   if (page < pageCount) {
     queryClient.prefetchQuery({
-      queryKey: ["transactions", `${user?.id}`, filter, sortBy, page + 1],
+      queryKey: [
+        "transactions",
+        `${user?.id}`,
+        filter,
+        sortBy,
+        page + 1,
+        searchTerm,
+      ],
       queryFn: () =>
         getTransactions({
           filter,
@@ -68,7 +75,14 @@ export function useTransactions() {
 
   if (page > 1) {
     queryClient.prefetchQuery({
-      queryKey: ["transactions", `${user?.id}`, filter, sortBy, page - 1],
+      queryKey: [
+        "transactions",
+        `${user?.id}`,
+        filter,
+        sortBy,
+        page - 1,
+        searchTerm,
+      ],
       queryFn: () =>
         getTransactions({
           filter,

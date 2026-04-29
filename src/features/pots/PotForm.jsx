@@ -30,9 +30,10 @@ function PotForm({
   const { createPot, isCreatingPot } = useCreatePot();
   const { updatePot, isUpdatingPot } = useUpdatePot();
 
-  const usedThemes = pots.map((pot) => pot.theme);
+  const usedThemes = pots.map((pot) => pot.theme.toLowerCase());
+
   const availableThemes = THEMES.filter(
-    (theme) => !usedThemes.includes(theme.color),
+    (theme) => !usedThemes.includes(theme.color.toLowerCase()),
   );
 
   const isWorking = isCreatingPot || isUpdatingPot;
@@ -200,6 +201,8 @@ function PotForm({
         <CustomSelectBox
           isColor={true}
           widthOfTriggerButton="w-full"
+          widthOfTheMenuList="w-full"
+          heightOfTheMenuList="max-h-75"
           inputFieldName={"theme"}
           labelName={"Color Tag"}
           modalType={`${potModalType}-color`}
