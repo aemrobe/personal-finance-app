@@ -186,6 +186,114 @@ const chartData = useMemo(
 );
 ```
 
+### 🏠 Overview Module (Mobile Dashboard & Data Aggregation)
+
+The Overview page acts as the central command center of the application, synthesizing data from four different domains into a unified mobile-first dashboard.
+
+- **Holistic Data Orchestration:** Developed a "Global Loading & Error" pattern. By consolidating loading states from `useBalance`, `usePots`, and `useBudgetAnalytics`, I ensured a flicker-free initial render where all dashboard tiles reveal simultaneously once the core data is ready.
+
+- **Intelligent Empty States:** Designed a standardized `EmptyMessage` system. When a new user has no data, the dashboard hides complex analytical components (like the Recharts PieChart) and replaces them with actionable empty states that maintain a consistent `min-height` to preserve the grid layout.
+
+- **Dynamic Summary Tiles:** Engineered responsive balance cards that provide immediate visibility into Total Balance, Income, and Expenses, utilizing custom formatting helpers to handle currency display across varying screen widths.
+
+- **Cross-Module Preview Logic:** Implemented "Subset Mapping" to show the most relevant data snippets—such as the top 4 savings pots or the 5 most recent transactions—providing a high-level snapshot without overwhelming the mobile viewport.
+
+```jsx
+// Example: Unified Error and Loading Orchestration for the Dashboard
+const isLoading =
+  isLoadingUser || isLoadingBalance || isLoadingPots || isLoadingAnalytics;
+
+if (errorAnalytics || potsError || userError || balanceError)
+  return (
+    <ErrorWrapper>
+      <ErrorDisplay
+        error={
+          errorAnalytics?.message || userError?.message || potsError?.message
+        }
+        onRetry={refetchAll}
+      />
+    </ErrorWrapper>
+  );
+```
+
+### 💸 Transactions Module (Search, Filter & Pagination)
+
+The Transactions page is the most data-intensive part of the app, requiring high-performance filtering, state management, and clear accessibility feedback.
+
+- **Advanced Server-Side Filtering:** Leveraged **URL Search Params** as the "Source of Truth." By syncing the search input and category dropdown with the URL, I ensured that users can bookmark specific filtered views or share them easily.
+
+- **Accessible UX & Screen Reader Support:** Integrated the `useGenerateAnnouncement` hook to provide real-time updates for assistive technologies. As users filter by category or type, a hidden `aria-live` region announces the number of results found, ensuring blind and low-vision users stay oriented.
+
+- **Robust Search & Multi-Criteria Sorting:** Integrated a debounced search system and a custom sorting engine (Latest, Oldest, A-Z, etc.) that allows users to navigate hundreds of entries with 60fps performance on mobile devices.
+
+- **Pagination & Slice Logic:** To maintain performance, I implemented client-side pagination logic that splits the transaction history into manageable chunks, reducing the DOM node count and improving mobile scroll performance.
+
+```jsx
+// Example: Implementation of the ARIA announcement logic for filtered results
+const { announcement } = useGenerateAnnouncement({
+  isLoading,
+  count: transactions?.length,
+  searchParams,
+  selectedSortByLabel: selectedSortByOption?.label,
+  generateAnnouncement: ({ count, searchTerm, sortLabel }) => {
+    const hasSearch = Boolean(searchTerm?.trim());
+    const isAllCategory = selectedCategory?.category === "All Transactions";
+    const categoryText = isAllCategory
+      ? "all categories"
+      : `the ${selectedCategory?.category}`;
+    const transactionText = `transaction${count === 1 ? "" : "s"}`;
+
+    if (!count || Number(count) === 0) {
+      return `No transactions found${hasSearch ? ` matching ${searchTerm} in ${categoryText}` : `in ${categoryText}`}. Try adjusting your search or filters.`;
+    }
+
+    if (hasSearch) {
+      return `Found ${count} ${transactionText} matching "${searchTerm}" in ${categoryText}, sorted by ${sortLabel}`;
+    }
+
+    // Without search (normal browsing)
+    return `Showing ${count} transactions in ${categoryText}, sorted by ${sortLabel}. Page ${currentPage} of ${pageCount}`;
+  },
+});
+```
+
+### 📅 Recurring Bills Module (Financial Forecasting & Accessibility)
+
+The Recurring Bills page tracks temporal data, specifically focusing on monthly obligations and payment status.
+
+- **Status-Driven UI Logic:** Engineered a sophisticated list rendering system where each bill displays its specific payment cycle using a `getOrdinal` helper (e.g., "Monthly-1st"). The UI uses conditional styling and icons (`SelectedIcon`, `BillDueIcon`) to visually distinguish between "Paid" and "Due Soon" statuses.
+
+- **Aria-Live Announcements:** Implemented a custom accessibility hook, `useGenerateAnnouncement`, to provide real-time feedback whenever filters change, announcing the exact number of results and the current sort order.
+
+- **Consolidated Bill Analytics:** Utilized a custom `useRecurringBillsAnalytics` hook to calculate aggregate totals for the "Total Bills" header and a detailed "Summary" card, which breaks down the count and currency total for paid, upcoming, and overdue obligations.
+
+- **Dynamic Filtering & Sorting:** Integrated a `useSearchManager` hook to allow users to search bills by name or amount while simultaneously applying complex sort logic (Latest, Highest, A-Z) via a custom `useMemo` pipeline.
+
+```jsx
+// Example: Sorting and Filtering logic for the Recurring Bills list
+const searchedRecurringBills = useMemo(() => {
+  //filtered
+  const filteredSearchResults = processedBills?.filter(
+    (bill) =>
+      bill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bill.amount.toString().includes(searchTerm),
+  );
+
+  //Sorted
+  return filteredSearchResults?.sort((a, b) => {
+    let compareValue = 0;
+
+    if (value === "name")
+      compareValue = a.name.localeCompare(b.name); // ascending a - z
+    else if (value === "date")
+      compareValue = a.dayOfMonth - b.dayOfMonth; //ascending oldest - newest
+    else if (value === "amount") compareValue = a.amount - b.amount; // ascending smallest - biggest
+
+    return compareValue * directionValue;
+  });
+}, [processedBills, searchTerm, directionValue, value]);
+```
+
 ### Useful resources
 
 - [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
