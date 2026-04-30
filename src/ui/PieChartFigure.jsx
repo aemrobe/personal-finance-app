@@ -19,7 +19,7 @@ function PieChartFigure({
 
   return (
     <div
-      className={`relative ${heightOfContainer} w-full  ${className}`}
+      className={`relative ${heightOfContainer} w-full   ${className}`}
       aria-hidden="true"
       style={{ pointerEvents: "none" }}
     >

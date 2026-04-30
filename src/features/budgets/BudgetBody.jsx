@@ -77,14 +77,14 @@ function BudgetBody() {
     );
 
   return (
-    <div className="flex-1 flex flex-col gap-6 relative">
+    <div className="flex-1 flex flex-col gap-6 relative max-w-172 mx-auto w-full">
       {isLoading ? (
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
         <>
-          <div className="bg-surface-primary pt-6 px-5 pb-4 rounded-xl">
+          <div className="bg-surface-primary pt-6 pb-4 md:py-8 px-5 md:px-8  rounded-xl flex md:grid  grid-cols-2 md:gap-8 md:items-center">
             <PieChartFigure
-              className={"mb-8"}
+              className={"mb-8 md:mb-0"}
               totalSpent={totalSpentForAllCategories}
               totalMaximum={totalMaximumForAllCategories}
               chartData={chartData}
@@ -93,7 +93,7 @@ function BudgetBody() {
               outerRadius={120}
             />
 
-            <div className="overflow-y-auto no-scrollbar  max-h-72">
+            <div className="overflow-y-auto no-scrollbar  max-h-72 ">
               <span className="sr-only">Spending distribution overview</span>
 
               <h2 className="text-preset-2 text-content-main mb-6">

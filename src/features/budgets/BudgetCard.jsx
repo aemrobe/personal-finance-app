@@ -25,7 +25,7 @@ function BudgetCard({ budget }) {
   } = budget;
 
   return (
-    <div className="rounded-xl py-6 px-5 bg-surface-primary ">
+    <div className="rounded-xl py-6 px-5 bg-surface-primary md:p-8 ">
       <div className="flex items-center justify-between mb-5 relative">
         <div className="flex items-center gap-4">
           <span
@@ -107,7 +107,7 @@ function BudgetCard({ budget }) {
         <BudgetStat title={"Remaining"} value={remainingAmount} />
       </div>
 
-      <div className="bg-surface-secondary p-4 rounded-xl">
+      <div className="bg-surface-secondary p-4 md:p-5 rounded-xl">
         <div className="flex justify-between mb-5">
           <h3 className="capitalize text-preset-3 text-content-main">
             Latest Spending

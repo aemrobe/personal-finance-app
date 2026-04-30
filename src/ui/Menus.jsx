@@ -49,7 +49,7 @@ function Toggle({ id, name }) {
     <button
       id={`menu-trigger-${id}`}
       aria-label={`${openId === id ? `close menu for ${name}` : `open menu for ${name}`}`}
-      className="focusable-ring text-icon-tertiary"
+      className="focusable-ring text-icon-tertiary p-2"
       onClick={handleClick}
     >
       <EllipsisIcon />
