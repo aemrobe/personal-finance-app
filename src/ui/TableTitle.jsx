@@ -1,4 +1,4 @@
-function TransactionTableTitle({ className, children }) {
+function TableTitle({ className, children }) {
   return (
     <div
       role="columnheader"
@@ -9,4 +9,4 @@ function TransactionTableTitle({ className, children }) {
   );
 }
 
-export default TransactionTableTitle;
+export default TableTitle;

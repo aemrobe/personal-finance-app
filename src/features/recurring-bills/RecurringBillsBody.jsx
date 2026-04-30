@@ -18,6 +18,8 @@ import EmptyMessage from "../../ui/EmptyMessage";
 import { useSearchManager } from "../../hooks/useSearchManager";
 import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 import { useRecurringBillsAnalytics } from "./useRecurringBillsAnalytics";
+import TableHeader from "../../ui/TableHeader";
+import TableTitle from "../../ui/TableTitle";
 
 const SORT_BY_OPTIONS = [
   {
@@ -156,7 +158,7 @@ function RecurringBillsBody() {
   const isFiltered = searchParams.get("search")?.trim();
 
   return (
-    <div className="relative flex-1">
+    <div className="relative flex-1 max-w-172 mx-auto w-full">
       <div
         role="status"
         aria-live="polite"
@@ -170,8 +172,8 @@ function RecurringBillsBody() {
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
         <>
-          <div>
-            <div className="bg-surface-inverse py-6 px-5 rounded-xl text-content-inverse flex items-center gap-5 flex-wrap">
+          <div className="md:grid md:grid-cols-2 md:gap-6">
+            <div className="bg-surface-inverse py-6 md:pt-9.5 md:px-6 rounded-xl text-content-inverse flex items-center gap-5 md:gap-8 flex-wrap md:flex-col md:items-start md:justify-center">
               <span className="size-10 flex items-center justify-center shrink-0">
                 <RecurringBillsIcon className={"w-8 "} />
               </span>
@@ -185,7 +187,7 @@ function RecurringBillsBody() {
               </div>
             </div>
 
-            <div className="bg-surface-primary py-5 px-5 rounded-xl mt-3">
+            <div className="bg-surface-primary py-5 px-5 rounded-xl mt-3 md:mt-0">
               <h2 className="text-preset-3 mb-5">Summary</h2>
 
               <ul className="divide-y divide-border-divider/15">
@@ -212,13 +214,13 @@ function RecurringBillsBody() {
             </div>
           </div>
 
-          <div className="bg-surface-primary py-6 px-5 mt-6 rounded-xl">
-            <div className="flex gap-6 mb-6">
+          <div className="bg-surface-primary py-6 px-5 md:p-8 mt-6 rounded-xl">
+            <div className="flex md:justify-between gap-6 mb-6 ">
               <SearchBox
                 searchTerm={searchTerm}
                 isLoading={isLoading}
                 onChange={(e) => updateSearch(e)}
-                className="flex-1 max-w-64.5"
+                className="flex-1 max-w-64.5  md:max-w-xs"
               />
 
               <CustomSelectBox
@@ -252,11 +254,22 @@ function RecurringBillsBody() {
               />
             </div>
 
-            <ul className="divide-y divide-border-subtle">
-              {searchedRecurringBills?.map((bill) => (
-                <RecurringListItem key={bill.id} bill={bill} />
-              ))}
-            </ul>
+            <div role="table" aria-label="recurring bills">
+              <TableHeader className="md:grid-cols-[auto_repeat(2,1fr)]">
+                <TableTitle className={"md:w-85"}>Bill Title</TableTitle>
+
+                <TableTitle>Due Date</TableTitle>
+
+                <TableTitle className="text-right">Amount</TableTitle>
+              </TableHeader>
+
+              <ul role="rowgroup" className="divide-y divide-border-subtle">
+                {searchedRecurringBills?.map((bill) => (
+                  <RecurringListItem key={bill.id} bill={bill} />
+                ))}
+              </ul>
+            </div>
+
             {searchedRecurringBills?.length === 0 && !isLoading && (
               <EmptyMessage
                 className="h-[40vh]"
@@ -285,8 +298,11 @@ function RecurringBillsBody() {
 
 function RecurringListItem({ bill }) {
   return (
-    <li className="first:pt-0 last:pb-0 py-5">
-      <div className="flex items-center gap-4 mb-2">
+    <li
+      role="row"
+      className="first:pt-0 last:pb-0 py-5  md:grid md:gap-8 md:grid-cols-[auto_repeat(2,1fr)] md:items-center "
+    >
+      <div role="cell" className="flex md:w-85 items-center gap-4 mb-2 md:mb-0">
         <img
           className="block size-8 rounded-full"
           src={bill.avatar}
@@ -295,7 +311,7 @@ function RecurringListItem({ bill }) {
         <p className="text-preset-4-bold">{bill.name}</p>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div role="cell" className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-icon-success">
           <p className="text-preset-5">Monthly-{getOrdinal(bill.dayOfMonth)}</p>
 
@@ -308,11 +324,18 @@ function RecurringListItem({ bill }) {
         </div>
 
         <p
-          className={`text-preset-4-bold ${bill.status === "paid" ? "text-content-main" : ""} ${bill.status === "soon" ? "text-content-error" : ""} `}
+          className={`md:hidden text-preset-4-bold text-right ${bill.status === "paid" ? "text-content-main" : ""} ${bill.status === "soon" ? "text-content-error" : ""} `}
         >
           {formatCurrency(bill.amount)}
         </p>
       </div>
+
+      <p
+        role="cell"
+        className={`hidden md:block text-preset-4-bold text-right ${bill.status === "paid" ? "text-content-main" : ""} ${bill.status === "soon" ? "text-content-error" : ""} `}
+      >
+        {formatCurrency(bill.amount)}
+      </p>
     </li>
   );
 }

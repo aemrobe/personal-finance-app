@@ -17,7 +17,8 @@ import SearchBox from "../../ui/SearchBox";
 import { useSearchManager } from "../../hooks/useSearchManager";
 import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 import TransactionDataContainer from "./TransactionDataContainer";
-import TransactionTableHeader from "./TransactionTableHeader";
+import TableHeader from "../../ui/TableHeader";
+import TableTitle from "../../ui/TableTitle";
 
 function TransactionBody() {
   const {
@@ -258,7 +259,16 @@ function TransactionBody() {
           <SpinnerMiniContainer size="text-5xl" />
         ) : (
           <div role="table" aria-label="Transactions">
-            <TransactionTableHeader />
+            <TableHeader>
+              <TableTitle className={"md:w-68"}>Recipient / Sender</TableTitle>
+
+              <TableTitle>Category</TableTitle>
+
+              <TableTitle>Transaction Date</TableTitle>
+
+              <TableTitle className="text-right">Amount</TableTitle>
+            </TableHeader>
+
             <TransactionDataContainer role="rowgroup">
               {transactions?.map((transaction) => (
                 <TransactionDataItem
