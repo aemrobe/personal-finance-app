@@ -17,6 +17,7 @@ import SearchBox from "../../ui/SearchBox";
 import { useSearchManager } from "../../hooks/useSearchManager";
 import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 import TransactionDataContainer from "./TransactionDataContainer";
+import TransactionTableHeader from "./TransactionTableHeader";
 
 function TransactionBody() {
   const {
@@ -175,7 +176,7 @@ function TransactionBody() {
     );
 
   return (
-    <div className="flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl relative">
+    <div className="max-w-181 mx-auto w-full flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl relativ">
       <div
         role="status"
         aria-live="polite"
@@ -256,17 +257,21 @@ function TransactionBody() {
         {isLoading ? (
           <SpinnerMiniContainer size="text-5xl" />
         ) : (
-          <TransactionDataContainer>
-            {transactions?.map((transaction) => (
-              <TransactionDataItem
-                key={transaction.id}
-                transaction={{
-                  ...transaction,
-                  category: transaction?.categories?.category,
-                }}
-              />
-            ))}
-          </TransactionDataContainer>
+          <div role="table" aria-label="Transactions">
+            <TransactionTableHeader />
+            <TransactionDataContainer role="rowgroup">
+              {transactions?.map((transaction) => (
+                <TransactionDataItem
+                  isTable={true}
+                  key={transaction.id}
+                  transaction={{
+                    ...transaction,
+                    category: transaction?.categories?.category,
+                  }}
+                />
+              ))}
+            </TransactionDataContainer>
+          </div>
         )}
 
         {transactions?.length === 0 && !isLoading && (

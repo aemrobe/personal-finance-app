@@ -17,7 +17,7 @@ function SearchBox({ searchTerm, isLoading, onChange, className = "" }) {
         onChange={onChange}
         name="transactions"
         placeholder="Search transaction"
-        className="py-3 px-5 rounded-lg disabled-input text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder disabled:cursor-not-allowed min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
+        className=" py-3 pl-5 pr-13 rounded-lg disabled-input text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder disabled:cursor-not-allowed min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
       />
 
       <SearchIcon
