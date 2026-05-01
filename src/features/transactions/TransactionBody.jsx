@@ -19,8 +19,11 @@ import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 import TransactionDataContainer from "./TransactionDataContainer";
 import TableHeader from "../../ui/TableHeader";
 import TableTitle from "../../ui/TableTitle";
+import { useScreen } from "../../context/ScreenContext";
 
 function TransactionBody() {
+  const { isSmallerScreenSize } = useScreen();
+
   const {
     isLoading: isLoadingUser,
     error: userError,
@@ -258,21 +261,32 @@ function TransactionBody() {
         {isLoading ? (
           <SpinnerMiniContainer size="text-5xl" />
         ) : (
-          <div role="table" aria-label="Transactions">
-            <TableHeader>
-              <TableTitle className={"md:w-68"}>Recipient / Sender</TableTitle>
+          <div
+            role={!isSmallerScreenSize ? "table" : undefined}
+            aria-label="Transactions"
+          >
+            <TableHeader isTable={!isSmallerScreenSize}>
+              <TableTitle isTable={!isSmallerScreenSize} className={"md:w-68"}>
+                Recipient / Sender
+              </TableTitle>
 
-              <TableTitle>Category</TableTitle>
+              <TableTitle isTable={!isSmallerScreenSize}>Category</TableTitle>
 
-              <TableTitle>Transaction Date</TableTitle>
+              <TableTitle isTable={!isSmallerScreenSize}>
+                Transaction Date
+              </TableTitle>
 
-              <TableTitle className="text-right">Amount</TableTitle>
+              <TableTitle isTable={!isSmallerScreenSize} className="text-right">
+                Amount
+              </TableTitle>
             </TableHeader>
 
-            <TransactionDataContainer role="rowgroup">
+            <TransactionDataContainer
+              role={!isSmallerScreenSize ? "rowgroup" : undefined}
+            >
               {transactions?.map((transaction) => (
                 <TransactionDataItem
-                  isTable={true}
+                  isTable={!isSmallerScreenSize}
                   key={transaction.id}
                   transaction={{
                     ...transaction,

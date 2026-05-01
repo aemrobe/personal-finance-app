@@ -2,6 +2,7 @@ function BillDueIcon({ className }) {
   return (
     <svg
       fill="none"
+      aria-hidden="true"
       viewBox="0 0 14 14"
       className={className}
       xmlns="http://www.w3.org/2000/svg"

@@ -20,6 +20,8 @@ import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 import { useRecurringBillsAnalytics } from "./useRecurringBillsAnalytics";
 import TableHeader from "../../ui/TableHeader";
 import TableTitle from "../../ui/TableTitle";
+import { useA11yBreakpoint } from "../../hooks/useA11yBreakpoint";
+import { useScreen } from "../../context/ScreenContext";
 
 const SORT_BY_OPTIONS = [
   {
@@ -43,6 +45,8 @@ function RecurringBillsBody() {
     isFetching: isFetchingUser,
     refetch: refetchUser,
   } = useCurrentUser();
+
+  const { isSmallerScreenSize } = useScreen();
 
   const {
     processedBills,
@@ -120,6 +124,8 @@ function RecurringBillsBody() {
     });
   }, [processedBills, searchTerm, directionValue, value]);
 
+  console.log("issmallScreensize", isSmallerScreenSize);
+
   //Screen reader Announcement message
   const { announcement } = useGenerateAnnouncement({
     isLoading,
@@ -173,7 +179,7 @@ function RecurringBillsBody() {
       ) : (
         <>
           <div className="md:grid md:grid-cols-2 md:gap-6">
-            <div className="bg-surface-inverse py-6 md:pt-9.5 md:px-6 rounded-xl text-content-inverse flex items-center gap-5 md:gap-8 flex-wrap md:flex-col md:items-start md:justify-center">
+            <div className="bg-surface-inverse py-6 md:pt-9.5 px-5 md:px-6 rounded-xl text-content-inverse flex items-center gap-5 md:gap-8 flex-wrap md:flex-col md:items-start md:justify-center">
               <span className="size-10 flex items-center justify-center shrink-0">
                 <RecurringBillsIcon className={"w-8 "} />
               </span>
@@ -254,18 +260,41 @@ function RecurringBillsBody() {
               />
             </div>
 
-            <div role="table" aria-label="recurring bills">
-              <TableHeader className="md:grid-cols-[auto_repeat(2,1fr)]">
-                <TableTitle className={"md:w-85"}>Bill Title</TableTitle>
+            <div
+              role={!isSmallerScreenSize ? "table" : undefined}
+              aria-label="recurring bills"
+            >
+              <TableHeader
+                isTable={!isSmallerScreenSize}
+                className="md:grid-cols-[auto_repeat(2,1fr)]"
+              >
+                <TableTitle
+                  isTable={!isSmallerScreenSize}
+                  className={"md:w-85"}
+                >
+                  Bill Title
+                </TableTitle>
 
-                <TableTitle>Due Date</TableTitle>
+                <TableTitle isTable={!isSmallerScreenSize}>Due Date</TableTitle>
 
-                <TableTitle className="text-right">Amount</TableTitle>
+                <TableTitle
+                  isTable={!isSmallerScreenSize}
+                  className="text-right"
+                >
+                  Amount
+                </TableTitle>
               </TableHeader>
 
-              <ul role="rowgroup" className="divide-y divide-border-subtle">
+              <ul
+                role={!isSmallerScreenSize ? "rowgroup" : undefined}
+                className="divide-y divide-border-subtle"
+              >
                 {searchedRecurringBills?.map((bill) => (
-                  <RecurringListItem key={bill.id} bill={bill} />
+                  <RecurringListItem
+                    key={bill.id}
+                    bill={bill}
+                    isTable={!isSmallerScreenSize}
+                  />
                 ))}
               </ul>
             </div>
@@ -296,29 +325,53 @@ function RecurringBillsBody() {
   );
 }
 
-function RecurringListItem({ bill }) {
+function RecurringListItem({ bill, isTable }) {
+  console.log("bill", bill.status);
   return (
     <li
-      role="row"
+      role={isTable ? "row" : undefined}
       className="first:pt-0 last:pb-0 py-5  md:grid md:gap-8 md:grid-cols-[auto_repeat(2,1fr)] md:items-center "
     >
-      <div role="cell" className="flex md:w-85 items-center gap-4 mb-2 md:mb-0">
+      <div
+        role={isTable ? "cell" : undefined}
+        className="flex md:w-85 items-center gap-4 mb-2 md:mb-0"
+      >
         <img
+          aria-hidden="true"
           className="block size-8 rounded-full"
           src={bill.avatar}
-          alt={`${bill.name} logo`}
+          alt={""}
         />
         <p className="text-preset-4-bold">{bill.name}</p>
       </div>
 
-      <div role="cell" className="flex items-center justify-between">
+      <div
+        role={isTable ? "cell" : undefined}
+        className="flex items-center justify-between"
+      >
         <div className="flex items-center gap-2 text-icon-success">
           <p className="text-preset-5">Monthly-{getOrdinal(bill.dayOfMonth)}</p>
 
           <span className="size-4 flex item-center justify-center">
-            {bill.status === "paid" && <SelectedIcon className={" w-3.5"} />}
+            {bill.status === "paid" && (
+              <span>
+                <SelectedIcon className={" w-3.5"} />
+                <span className="sr-only">already paid</span>
+              </span>
+            )}
             {bill.status === "soon" && (
-              <BillDueIcon className={"text-content-error w-3.5"} />
+              <span>
+                <BillDueIcon className={"text-content-error w-3.5"} />
+                <span className="sr-only">to be paid soon</span>
+              </span>
+            )}
+
+            {bill.status === "overdue" && (
+              <span className="sr-only">overdue</span>
+            )}
+
+            {bill.status === "upcoming" && (
+              <span className="sr-only">upcoming</span>
             )}
           </span>
         </div>
@@ -331,7 +384,7 @@ function RecurringListItem({ bill }) {
       </div>
 
       <p
-        role="cell"
+        role={isTable ? "cell" : undefined}
         className={`hidden md:block text-preset-4-bold text-right ${bill.status === "paid" ? "text-content-main" : ""} ${bill.status === "soon" ? "text-content-error" : ""} `}
       >
         {formatCurrency(bill.amount)}

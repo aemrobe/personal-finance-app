@@ -21,7 +21,8 @@ function TransactionDataItem({
         <img
           className="w-8 h-8 rounded-full"
           src={avatar}
-          alt={`${name}'s profile`}
+          aria-hidden="true"
+          alt={""}
         />
 
         {isTransactionsPage && (

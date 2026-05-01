@@ -1,7 +1,7 @@
-function TableTitle({ className, children }) {
+function TableTitle({ isTable, className, children }) {
   return (
     <div
-      role="columnheader"
+      role={isTable ? "columnheader" : undefined}
       className={`text-preset-5 text-content-secondary ${className}`}
     >
       {children}

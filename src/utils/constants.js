@@ -13,6 +13,7 @@ export const SEARCH_DEBOUNCE_MS = 500;
 export const NETWORKERROREVENT = "network-error";
 export const AUGUSTMONTH = 7;
 export const YEAR2024 = 2024;
+export const TABLET_BREAKPOINT = 48;
 
 export const THEMES = [
   {
