@@ -92,13 +92,13 @@ function OverviewBody() {
     );
 
   return (
-    <div className="relative flex-1">
+    <div className="relative flex-1 max-w-172 mx-auto w-full">
       {isLoading ? (
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
         <>
           <section className="mb-8" aria-label="Account summary">
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col md:grid gap-3 md:gap-6 md:grid-cols-3">
               <OverviewBalance
                 title={"Current Balance"}
                 balance={currentBalance}
@@ -113,7 +113,7 @@ function OverviewBody() {
             </ul>
           </section>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 md:gap-6">
             <OverviewSection
               title={"Pots"}
               buttonText={"See Details"}
@@ -128,8 +128,8 @@ function OverviewBody() {
                   shadowOfTheBox=""
                 />
               ) : (
-                <>
-                  <div className="bg-surface-app rounded-xl py-5 px-4 flex gap-4 items-center my-5">
+                <div className="md:flex md:gap-5 ">
+                  <div className="bg-surface-app rounded-xl py-5 px-4 flex gap-4 items-center mt-5 md:w-61.75">
                     <PotIcon
                       className="text-icon-success w-[1.675rem] h-[2.148rem]"
                       classNameParent={"size-10"}
@@ -146,7 +146,7 @@ function OverviewBody() {
                     </div>
                   </div>
 
-                  <OverviewCategoryContainer className="grid gap-4 grid-cols-2">
+                  <OverviewCategoryContainer className="grid gap-4 grid-cols-2 md:flex-1 mt-5">
                     {pots?.slice(0, 4)?.map((pot) => {
                       const { id, name, total, theme: color } = pot;
 
@@ -160,7 +160,7 @@ function OverviewBody() {
                       );
                     })}
                   </OverviewCategoryContainer>
-                </>
+                </div>
               )}
             </OverviewSection>
 
@@ -209,9 +209,9 @@ function OverviewBody() {
                   shadowOfTheBox=""
                 />
               ) : (
-                <>
+                <div className="md:flex md:items-start md:gap-4">
                   <PieChartFigure
-                    className={"mt-7 mb-4"}
+                    className={"mt-7 md:mt-12.75 mb-4 md:mb-7.75"}
                     totalSpent={totalSpentForAllCategories}
                     totalMaximum={totalMaximumForAllCategories}
                     chartData={chartData}
@@ -219,7 +219,8 @@ function OverviewBody() {
                     innerRadius={85}
                     outerRadius={120}
                   />
-                  <OverviewCategoryContainer className="grid gap-4 grid-cols-2">
+
+                  <OverviewCategoryContainer className="md:pl-2 md:mt-15.25 grid gap-4 grid-cols-2 md:grid-cols-1 md:relative md:right-3.25">
                     {budgets?.slice(0, 4)?.map((budget) => {
                       const {
                         id,
@@ -238,7 +239,7 @@ function OverviewBody() {
                       );
                     })}
                   </OverviewCategoryContainer>
-                </>
+                </div>
               )}
             </OverviewSection>
 

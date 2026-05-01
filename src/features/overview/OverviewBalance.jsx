@@ -10,7 +10,7 @@ function OverviewBalance({
   return (
     <li
       className={`${backgroundColor} 
-     rounded-xl p-5`}
+     rounded-xl p-5 md:p-6`}
     >
       <h2
         className={`text-preset-4 

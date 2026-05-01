@@ -3,7 +3,7 @@ import { CaretRightIcon } from "../../ui/Icons";
 
 function OverviewSection({ title, buttonText, children, onClick }) {
   return (
-    <section className="bg-surface-primary py-6 px-5 rounded-xl ">
+    <section className="bg-surface-primary py-6 px-5 md:p-8 rounded-xl">
       <div className="flex items-center justify-between">
         <h2 className="text-preset-2 text-content-main ">{title}</h2>
 
