@@ -1,4 +1,3 @@
-import NavButton from "./NavButton";
 import {
   NavBudgetIcon,
   NavOverviewIcon,
@@ -6,11 +5,20 @@ import {
   NavRecurringBillsIcon,
   NavTransactionIcon,
 } from "./Icons";
+import LargeLogoIcon from "./Icons/LargeLogoIcon";
+import NavButton from "./NavButton";
 
-function MobileNav() {
+function SideNav() {
   return (
-    <nav className="z-30 lg:hidden bg-surface-inverse rounded-t-lg fixed inset-x-0 bottom-0 pt-2 px-4 md:px-10">
-      <ul className="flex md:gap-10.5 justify-center">
+    <nav
+      className="w-[inherit] fixed
+     h-full hidden lg:block  lg:py-10  bg-surface-inverse lg:rounded-tr-2xl "
+    >
+      <div className="lg:mb-16 lg:px-4 xl:px-6 2xl:px-8">
+        <LargeLogoIcon className={"w-30.5 text-content-inverse"} />
+      </div>
+
+      <ul className=" lg:flex lg:flex-col lg:pr-4 xl:pr-5 2xl:pr-6 lg:gap-1">
         <NavButton navText={"Overview"} path={"/overview"}>
           <NavOverviewIcon />
         </NavButton>
@@ -35,4 +43,4 @@ function MobileNav() {
   );
 }
 
-export default MobileNav;
+export default SideNav;

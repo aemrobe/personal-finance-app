@@ -30,7 +30,7 @@ function PotCard({ pot, balance }) {
   const isWorking = isUpdatingBalance || isDeletingPot;
 
   return (
-    <div className="bg-surface-primary pt-6 pb-9.5 px-5 md:px-6 rounded-xl">
+    <div className="bg-surface-primary pt-6 pb-9.5 lg:pb-6 px-5 md:px-6 rounded-xl">
       <div className="flex items-center justify-between mb-8  relative">
         <div className="flex items-center gap-4">
           <span
