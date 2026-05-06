@@ -14,7 +14,7 @@ import {
 
 const generateUniqueId = () => Date.now() + Math.random();
 
-const ToastContext = createContext(null);
+const ToastContext = createContext();
 
 function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);

@@ -1,9 +1,9 @@
-function LargeLogoIcon({ className }) {
+function LargeLogoIcon({ className, ...props }) {
   return (
     <svg
       className={className}
       fill="none"
-      aria-hidden="true"
+      {...props}
       viewBox="0 0 122 22"
       xmlns="http://www.w3.org/2000/svg"
     >

@@ -17,3 +17,5 @@ export { default as RecurringBillsIcon } from "./RecurringBillsIcon";
 export { default as SearchIcon } from "./SearchIcon";
 export { default as BillDueIcon } from "./BillDueIcon";
 export { default as PotIcon } from "./PotIcon";
+export { default as MinimizeMenuIcon } from "./MinimizeMenuIcon";
+export { default as SmallLogoIcon } from "./SmallLogoIcon";

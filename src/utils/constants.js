@@ -14,6 +14,7 @@ export const NETWORKERROREVENT = "network-error";
 export const AUGUSTMONTH = 7;
 export const YEAR2024 = 2024;
 export const TABLET_BREAKPOINT = 48;
+export const SIDENAV_COLLAPSE_MS = 700;
 
 export const THEMES = [
   {

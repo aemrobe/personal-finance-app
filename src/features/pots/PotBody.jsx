@@ -61,7 +61,7 @@ function PotBody() {
 
   return (
     <Menus>
-      <div className="relative flex-1 flex flex-col gap-6 max-w-172 lg:max-w-none mx-auto lg:mx-0 w-full lg:grid lg:grid-cols-2 lg:gap-6 lg:justify-start lg:flex-none ">
+      <div className="relative flex-1 flex flex-col gap-6 max-w-172 lg:max-w-none mx-auto lg:mx-0 w-full lg:grid lg:grid-cols-2 lg:gap-6 lg:content-start ">
         {isLoading ? (
           <SpinnerMiniContainer size="text-5xl" />
         ) : (

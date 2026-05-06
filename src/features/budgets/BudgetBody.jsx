@@ -82,7 +82,7 @@ function BudgetBody() {
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
         <>
-          <div className="bg-surface-primary pt-6 pb-4 md:py-8 px-5 md:px-8  rounded-xl flex md:grid  grid-cols-2 md:gap-8 md:items-center">
+          <div className="bg-surface-primary pt-6 pb-4 md:py-8 px-5 md:px-8  rounded-xl flex flex-col md:grid  md:grid-cols-2 md:gap-8 md:items-center">
             <PieChartFigure
               className={"mb-8 md:mb-0"}
               totalSpent={totalSpentForAllCategories}
