@@ -77,12 +77,12 @@ function BudgetBody() {
     );
 
   return (
-    <div className="flex-1 flex flex-col gap-6 relative max-w-172 mx-auto w-full">
+    <div className="flex-1 flex flex-col gap-6 relative max-w-172 lg:max-w-none mx-auto lg:mx-0 w-full">
       {isLoading ? (
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
-        <>
-          <div className="bg-surface-primary pt-6 pb-4 md:py-8 px-5 md:px-8  rounded-xl flex flex-col md:grid  md:grid-cols-2 md:gap-8 md:items-center">
+        <div className="lg:flex lg:items-start  lg:gap-6">
+          <div className="lg:max-w-107 mb-6 bg-surface-primary pt-6 pb-4 md:py-8 px-5 md:px-8  rounded-xl flex flex-col md:grid  md:grid-cols-2 md:gap-8 md:items-center lg:flex-1 lg:flex lg:flex-col lg:items-stretch">
             <PieChartFigure
               className={"mb-8 md:mb-0"}
               totalSpent={totalSpentForAllCategories}
@@ -109,13 +109,13 @@ function BudgetBody() {
           </div>
 
           <Menus>
-            <div className="flex flex-col gap-6">
+            <div className="lg:flex-1 flex flex-col gap-6">
               {chartData?.map((budget) => (
                 <BudgetCard key={budget.id} budget={budget} />
               ))}
             </div>
           </Menus>
-        </>
+        </div>
       )}
     </div>
   );

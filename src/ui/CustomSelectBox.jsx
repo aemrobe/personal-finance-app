@@ -17,7 +17,7 @@ function CustomSelectBox({
   OptionComponent,
   optionProperty1,
   optionProperty2,
-  isFilterType,
+  isFilterType = false,
   widthOfTriggerButton = "",
   heightOfTriggerButton = "",
   widthOfTheMenuList = "",
@@ -174,7 +174,7 @@ function CustomSelectBox({
                     option={option}
                     optionProperty1={optionProperty1}
                     optionProperty2={optionProperty2}
-                    isFilterType
+                    isFilterType={isFilterType}
                     isColor={isColor}
                     handleSelect={handleSelect}
                     {...meta}
