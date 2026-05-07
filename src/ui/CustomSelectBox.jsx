@@ -4,6 +4,7 @@ import { useOutsideClicks } from "../hooks/useOutsideClicks";
 import { ChevroDownIcon } from "./Icons";
 
 function CustomSelectBox({
+  className,
   modalType,
   isWorking,
   inputFieldName,
@@ -86,7 +87,7 @@ function CustomSelectBox({
   return (
     <div
       ref={closeOutsideClickRef}
-      className={`relative ${isFilterType ? "flex gap-2 items-center shrink-0" : ""}`}
+      className={`relative ${className} ${isFilterType ? "flex gap-2 items-center shrink-0" : ""}`}
     >
       <span
         id={`label-${modalType}`}

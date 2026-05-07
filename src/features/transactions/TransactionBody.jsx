@@ -180,7 +180,7 @@ function TransactionBody() {
     );
 
   return (
-    <div className="max-w-181 mx-auto w-full flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl relativ">
+    <div className="max-w-181 lg:max-w-none mx-auto lg:mx-0 w-full flex-1 flex flex-col bg-surface-primary py-6 md:p-8 px-5 rounded-xl relative">
       <div
         role="status"
         aria-live="polite"
@@ -190,14 +190,17 @@ function TransactionBody() {
         {announcement}
       </div>
 
-      <div className="flex gap-6 items-center mb-6 ">
+      <div className="flex gap-6  items-center mb-6 ">
         <SearchBox
+          placeholder={"Search transaction"}
+          className="lg:flex-1 lg:max-w-[20rem]"
           searchTerm={searchTerm}
           isLoading={isLoading}
           onChange={(e) => updateSearch(e)}
         />
 
         <CustomSelectBox
+          className={"lg:ml-auto"}
           labelName={"Sort by"}
           modalType={`transactions-sortBy`}
           isFilterType={true}
@@ -265,8 +268,14 @@ function TransactionBody() {
             role={!isSmallerScreenSize ? "table" : undefined}
             aria-label="Transactions"
           >
-            <TableHeader isTable={!isSmallerScreenSize}>
-              <TableTitle isTable={!isSmallerScreenSize} className={"md:w-68"}>
+            <TableHeader
+              className="md:grid-cols-[auto_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]"
+              isTable={!isSmallerScreenSize}
+            >
+              <TableTitle
+                isTable={!isSmallerScreenSize}
+                className={"md:w-68  xl:w-auto"}
+              >
                 Recipient / Sender
               </TableTitle>
 

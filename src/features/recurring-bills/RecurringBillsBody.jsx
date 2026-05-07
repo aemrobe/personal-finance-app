@@ -124,8 +124,6 @@ function RecurringBillsBody() {
     });
   }, [processedBills, searchTerm, directionValue, value]);
 
-  console.log("issmallScreensize", isSmallerScreenSize);
-
   //Screen reader Announcement message
   const { announcement } = useGenerateAnnouncement({
     isLoading,
@@ -223,6 +221,7 @@ function RecurringBillsBody() {
           <div className="bg-surface-primary py-6 px-5 md:p-8 mt-6 rounded-xl">
             <div className="flex md:justify-between gap-6 mb-6 ">
               <SearchBox
+                placeholder={"Search recurring bills"}
                 searchTerm={searchTerm}
                 isLoading={isLoading}
                 onChange={(e) => updateSearch(e)}
