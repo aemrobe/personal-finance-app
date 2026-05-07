@@ -1,9 +1,11 @@
 import Button from "../../ui/Button";
 import { CaretRightIcon } from "../../ui/Icons";
 
-function OverviewSection({ title, buttonText, children, onClick }) {
+function OverviewSection({ title, buttonText, children, onClick, className }) {
   return (
-    <section className="bg-surface-primary py-6 px-5 md:p-8 rounded-xl">
+    <section
+      className={`${className} bg-surface-primary py-6 px-5 md:p-8 rounded-xl  `}
+    >
       <div className="flex items-center justify-between">
         <h2 className="text-preset-2 text-content-main ">{title}</h2>
 
