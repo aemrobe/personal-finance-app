@@ -12,7 +12,7 @@ function SearchBox({
       className={`flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg gap-2 focusable-ring-within relative ${className}`}
     >
       <label htmlFor="search-transaction" className="sr-only">
-        Search transaction
+        {placeholder}
       </label>
 
       <input

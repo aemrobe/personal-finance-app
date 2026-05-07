@@ -162,7 +162,7 @@ function RecurringBillsBody() {
   const isFiltered = searchParams.get("search")?.trim();
 
   return (
-    <div className="relative flex-1 max-w-172 mx-auto w-full">
+    <div className="relative flex-1 max-w-172 mx-auto lg:max-w-none lg:mx-0 w-full">
       <div
         role="status"
         aria-live="polite"
@@ -175,9 +175,9 @@ function RecurringBillsBody() {
       {isLoading ? (
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
-        <>
-          <div className="md:grid md:grid-cols-2 md:gap-6">
-            <div className="bg-surface-inverse py-6 md:pt-9.5 px-5 md:px-6 rounded-xl text-content-inverse flex items-center gap-5 md:gap-8 flex-wrap md:flex-col md:items-start md:justify-center">
+        <div className="lg:flex lg:gap-6 lg:items-start ">
+          <div className="lg:max-w-84.25  md:grid lg:flex-1 md:grid-cols-2 lg:grid-cols-1 md:gap-6">
+            <div className="bg-surface-inverse py-6 md:pt-9.5 lg:pt-6 px-5 md:px-6 rounded-xl text-content-inverse flex items-center gap-5 md:gap-8 flex-wrap md:flex-col md:items-start md:justify-center">
               <span className="size-10 flex items-center justify-center shrink-0">
                 <RecurringBillsIcon className={"w-8 "} />
               </span>
@@ -218,7 +218,7 @@ function RecurringBillsBody() {
             </div>
           </div>
 
-          <div className="bg-surface-primary py-6 px-5 md:p-8 mt-6 rounded-xl">
+          <div className="lg:flex-1 bg-surface-primary py-6 px-5 md:p-8 mt-6 lg:mt-0 rounded-xl">
             <div className="flex md:justify-between gap-6 mb-6 ">
               <SearchBox
                 placeholder={"Search recurring bills"}
@@ -265,11 +265,11 @@ function RecurringBillsBody() {
             >
               <TableHeader
                 isTable={!isSmallerScreenSize}
-                className="md:grid-cols-[auto_repeat(2,1fr)]"
+                className="md:grid-cols-[auto_repeat(2,1fr)] lg:grid-cols-[2fr_repeat(2,1fr)] xl:grid-cols-[1fr_repeat(2,120px)]"
               >
                 <TableTitle
                   isTable={!isSmallerScreenSize}
-                  className={"md:w-85"}
+                  className={"md:w-85 lg:w-auto"}
                 >
                   Bill Title
                 </TableTitle>
@@ -318,7 +318,7 @@ function RecurringBillsBody() {
               />
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
@@ -329,11 +329,11 @@ function RecurringListItem({ bill, isTable }) {
   return (
     <li
       role={isTable ? "row" : undefined}
-      className="first:pt-0 last:pb-0 py-5  md:grid md:gap-8 md:grid-cols-[auto_repeat(2,1fr)] md:items-center "
+      className="first:pt-0 last:pb-0 py-5 lg:px-4  md:grid md:gap-8 md:grid-cols-[auto_repeat(2,1fr)] lg:grid-cols-[2fr_repeat(2,1fr)] xl:grid-cols-[1fr_repeat(2,120px)] md:items-center "
     >
       <div
         role={isTable ? "cell" : undefined}
-        className="flex md:w-85 items-center gap-4 mb-2 md:mb-0"
+        className="flex md:w-85 lg:w-auto items-center gap-4 mb-2 md:mb-0"
       >
         <img
           aria-hidden="true"
