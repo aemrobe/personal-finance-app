@@ -12,11 +12,11 @@ function TransactionDataItem({
   return (
     <li
       role={isTable ? "row" : undefined}
-      className={`flex items-center py-4 border-b border-border-subtle first:pt-0 last:pb-0 last:border-b-0 ${isTransactionsPage ? "md:grid md:gap-8 md:grid-cols-[auto_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]" : ""}`}
+      className={`flex items-center py-4 border-b border-border-subtle first:pt-0 last:pb-0 lg:px-4 last:border-b-0 ${isTransactionsPage ? "md:grid md:gap-8 md:grid-cols-[auto_repeat(3,1fr)] lg:grid-cols-[2fr_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]" : ""}`}
     >
       <div
         role={isTable ? "cell" : undefined}
-        className={`${isTransactionsPage ? "md:flex md:items-center  md:w-68 lg:w-68 xl:w-auto" : ""}`}
+        className={`${isTransactionsPage ? "md:flex md:items-center  md:w-68 lg:w-auto" : ""}`}
       >
         <img
           className="w-8 h-8 rounded-full"

@@ -269,12 +269,12 @@ function TransactionBody() {
             aria-label="Transactions"
           >
             <TableHeader
-              className="md:grid-cols-[auto_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]"
+              className="md:grid-cols-[auto_repeat(3,1fr)] lg:grid-cols-[2fr_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]"
               isTable={!isSmallerScreenSize}
             >
               <TableTitle
                 isTable={!isSmallerScreenSize}
-                className={"md:w-68  xl:w-auto"}
+                className={"md:w-68  lg:w-auto"}
               >
                 Recipient / Sender
               </TableTitle>

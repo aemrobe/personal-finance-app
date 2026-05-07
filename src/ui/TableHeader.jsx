@@ -6,7 +6,7 @@ function TableHeader({
   return (
     <div
       role={isTable ? "row" : undefined}
-      className={`hidden md:py-3 md:mb-6 md:items-center md:grid md:gap-8 ${className} md:border-b md:border-border-subtle`}
+      className={`hidden md:py-3 lg:px-4 md:mb-6 md:items-center md:grid md:gap-8 ${className} md:border-b md:border-border-subtle`}
     >
       {children}
     </div>
