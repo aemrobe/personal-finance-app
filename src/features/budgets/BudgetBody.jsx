@@ -11,6 +11,7 @@ import { formatCurrency } from "../../utils/helpers";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import PieChartFigure from "../../ui/PieChartFigure";
 import { useBudgetAnayltics } from "./useBudgetAnalytics";
+import { useEffect, useRef, useState } from "react";
 
 function BudgetBody() {
   const {
@@ -38,7 +39,29 @@ function BudgetBody() {
     refetch: refetchCategories,
   } = useCategories();
 
+  const scrollRef = useRef(null);
+  const [showShadow, setShowShadow] = useState();
+
   const isLoading = isLoadingUser || isLoadingCategories || isLoadingAnalytics;
+
+  //showing a shadow when a list overflows.
+  useEffect(() => {
+    const checkOverflow = function () {
+      const el = scrollRef.current;
+
+      if (el) {
+        const hasOverflow = el.scrollHeight > el.clientHeight;
+
+        setShowShadow(hasOverflow);
+      }
+    };
+
+    checkOverflow();
+
+    window.addEventListener("resize", checkOverflow);
+
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [chartData]);
 
   if (userError || errorAnalytics || categoriesError)
     return (
@@ -93,18 +116,27 @@ function BudgetBody() {
               outerRadius={120}
             />
 
-            <div className="overflow-y-auto no-scrollbar  max-h-72 ">
-              <span className="sr-only">Spending distribution overview</span>
-
+            <div className="relative">
               <h2 className="text-preset-2 text-content-main mb-6">
                 Spending Summary
               </h2>
 
-              <ul className="divide-y divide-border-subtle">
+              <ul
+                ref={scrollRef}
+                className="divide-y divide-border-subtle overflow-y-auto no-scrollbar max-h-59"
+              >
                 {chartData.map((budget) => (
-                  <SpendingSummaryItem key={budget.id} budget={budget} />
+                  <SpendingSummaryItem
+                    showShadow={showShadow}
+                    key={budget.id}
+                    budget={budget}
+                  />
                 ))}
               </ul>
+
+              <div
+                className={`absolute bottom-0 inset-x-0 h-5 pointer-events-none transition-opacity duration-300 bg-linear-to-t from-border-subtle/50 to-transparent ${showShadow ? "opacity-100" : "opacity-0"} `}
+              ></div>
             </div>
           </div>
 
@@ -121,11 +153,13 @@ function BudgetBody() {
   );
 }
 
-function SpendingSummaryItem({ budget }) {
+function SpendingSummaryItem({ budget, showShadow }) {
   const { fill, name, value: totalSpent, maximum } = budget;
 
   return (
-    <li className="flex items-center py-4 first:pt-0 last:pb-0">
+    <li
+      className={`flex items-center py-4 first:pt-0 ${showShadow ? "last:pb-4" : "last:pb-0"}`}
+    >
       <div className="flex items-center gap-4">
         <span
           style={{
