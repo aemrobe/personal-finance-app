@@ -9,7 +9,7 @@ function OverviewBalance({
 }) {
   return (
     <li
-      className={`${backgroundColor} 
+      className={`relative ${backgroundColor} 
      rounded-xl p-5 md:p-6`}
     >
       <h2

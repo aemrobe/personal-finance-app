@@ -1,7 +1,13 @@
 import Button from "../../ui/Button";
 import { CaretRightIcon } from "../../ui/Icons";
 
-function OverviewSection({ title, buttonText, children, onClick, className }) {
+function OverviewSection({
+  title,
+  buttonText,
+  children,
+  onClick,
+  className = "",
+}) {
   return (
     <section
       className={`${className} bg-surface-primary py-6 px-5 md:p-8 rounded-xl  `}

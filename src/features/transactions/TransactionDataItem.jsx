@@ -12,7 +12,7 @@ function TransactionDataItem({
   return (
     <li
       role={isTable ? "row" : undefined}
-      className={`flex items-center border-b border-border-subtle first:pt-0 last:pb-0 ${isTransactionsPage ? "py-4 lg:px-4" : "py-5"} last:border-b-0 ${isTransactionsPage ? "md:grid md:gap-8 md:grid-cols-[auto_repeat(3,1fr)] lg:grid-cols-[2fr_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]" : ""}`}
+      className={`flex items-center border-b border-border-subtle first:pt-0 last:pb-0 ${isTransactionsPage ? "py-4 lg:px-4" : "py-5"} last:border-b-0 ${isTransactionsPage ? "md:grid md:gap-8 md:grid-cols-[auto_repeat(3,1fr)] lg:grid-cols-[3fr_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]" : ""}`}
     >
       <div
         role={isTable ? "cell" : undefined}

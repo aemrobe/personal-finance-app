@@ -123,7 +123,7 @@ function BudgetBody() {
 
               <ul
                 ref={scrollRef}
-                className="divide-y divide-border-subtle overflow-y-auto no-scrollbar max-h-59"
+                className="divide-y divide-border-subtle overflow-y-auto no-scrollbar max-h-59 focus-visible::outline-none"
               >
                 {chartData.map((budget) => (
                   <SpendingSummaryItem
@@ -168,6 +168,7 @@ function SpendingSummaryItem({ budget, showShadow }) {
           className="w-1 h-5.25 inline-block rounded-lg"
         />
         <span className="text-preset-4 text-content-secondary">{name}</span>
+        <span className="sr-only"> category</span>
       </div>
 
       <div className="ml-auto flex items-center gap-2">

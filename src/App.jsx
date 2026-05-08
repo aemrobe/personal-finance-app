@@ -25,6 +25,7 @@ import { ToastProvider } from "./context/ToastContext";
 import { NETWORKERROREVENT } from "./utils/constants";
 import Overview from "./pages/Overview";
 import { ScreenProvider } from "./context/ScreenContext";
+import { SideNavProvider } from "./context/SideNavContext";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
@@ -103,9 +104,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
       <ScreenProvider>
-        <ToastProvider>
-          <RouterProvider router={router} />
-        </ToastProvider>
+        <SideNavProvider>
+          <ToastProvider>
+            <RouterProvider router={router} />
+          </ToastProvider>
+        </SideNavProvider>
       </ScreenProvider>
     </QueryClientProvider>
   );

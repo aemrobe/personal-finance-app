@@ -3,9 +3,10 @@ import MobileNav from "./MobileNav";
 import SideNav from "./SideNav";
 import { useState } from "react";
 import { SIDENAV_COLLAPSE_MS } from "../utils/constants";
+import { useSideNav } from "../context/SideNavContext";
 
 function AppLayout() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isCollapsed, setIsCollapsed } = useSideNav();
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleToggle = function () {

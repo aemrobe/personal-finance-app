@@ -18,9 +18,13 @@ import OverviewSection from "./OverviewSection";
 import { useRecurringBillsAnalytics } from "../recurring-bills/useRecurringBillsAnalytics";
 import { useNavigate } from "react-router-dom";
 import EmptyMessage from "../../ui/EmptyMessage";
+import { useSideNav } from "../../context/SideNavContext";
+import { useMemo } from "react";
 
 function OverviewBody() {
   const navigate = useNavigate();
+  const { isCollapsed } = useSideNav();
+
   const {
     isLoading: isLoadingUser,
     error: userError,
@@ -68,7 +72,10 @@ function OverviewBody() {
 
   const { current: currentBalance, income, expenses } = balance;
 
-  const totalSavedInPots = pots?.reduce((acc, cur) => acc + cur.total, 0);
+  const totalSavedInPots = useMemo(
+    () => pots?.reduce((acc, cur) => acc + cur.total, 0),
+    [pots],
+  );
 
   if (errorAnalytics || potsError || userError || balanceError)
     return (
@@ -92,7 +99,9 @@ function OverviewBody() {
     );
 
   return (
-    <div className="relative flex-1 max-w-172 mx-auto lg:max-w-190 xl:max-w-none lg:mx-0 w-full">
+    <div
+      className={`relative flex-1 max-w-172 mx-auto lg:max-w-none xl:max-w-none lg:mx-0 w-full`}
+    >
       {isLoading ? (
         <SpinnerMiniContainer size="text-5xl" />
       ) : (
@@ -113,8 +122,12 @@ function OverviewBody() {
             </ul>
           </section>
 
-          <div className="flex flex-col xl:flex-row  gap-4 md:gap-6">
-            <div className="xl:flex-1 2xl:flex-2 2xl:max-w-152 flex flex-col gap-4 md:gap-0">
+          <div
+            className={`${isCollapsed ? "lg:max-w-none" : "lg:max-w-190 xl:max-w-none"} flex flex-col ${isCollapsed ? "lg:flex-row" : ""} xl:flex-row  gap-4 md:gap-6   `}
+          >
+            <div
+              className={`xl:flex-1 transition-all duration-500 ${isCollapsed ? "lg:flex-1 xl:max-w-142.75" : "xl:max-w-none"} 2xl:flex-2 2xl:max-w-152 flex flex-col gap-4 md:gap-0`}
+            >
               <OverviewSection
                 title={"Pots"}
                 buttonText={"See Details"}
@@ -131,8 +144,12 @@ function OverviewBody() {
                     shadowOfTheBox=""
                   />
                 ) : (
-                  <div className="md:flex md:gap-5 ">
-                    <div className="bg-surface-app rounded-xl py-5 px-4 flex gap-4 items-center mt-5 md:w-61.75">
+                  <div
+                    className={`md:flex ${isCollapsed ? "lg:flex-col xl:flex-row" : ""} xl:flex-row md:gap-5 `}
+                  >
+                    <div
+                      className={`bg-surface-app rounded-xl py-5 px-4 flex gap-4 items-center mt-5 md:w-61.75 ${isCollapsed ? "lg:w-full xl:w-61.75" : "lg:w-61.75"}`}
+                    >
                       <PotIcon
                         className="text-icon-success w-[1.675rem] h-[2.148rem]"
                         classNameParent={"size-10"}
@@ -198,7 +215,9 @@ function OverviewBody() {
               </OverviewSection>
             </div>
 
-            <div className="xl:flex-1 xl:max-w-107 2xl:max-w-none flex flex-col gap-4 md:gap-6 ">
+            <div
+              className={`xl:flex-1 transition-all duration-500 ${isCollapsed ? "lg:flex-1 xl:max-w-[55%]" : "xl:max-w-107"} 2xl:max-w-none flex flex-col gap-4 md:gap-6 `}
+            >
               <OverviewSection
                 title={"Budgets"}
                 buttonText={"See Details"}

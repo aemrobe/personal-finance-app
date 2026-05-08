@@ -269,7 +269,7 @@ function TransactionBody() {
             aria-label="Transactions"
           >
             <TableHeader
-              className="md:grid-cols-[auto_repeat(3,1fr)] lg:grid-cols-[2fr_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]"
+              className="md:grid-cols-[auto_repeat(3,1fr)] lg:grid-cols-[3fr_repeat(3,1fr)] xl:grid-cols-[1fr_repeat(3,157px)]"
               isTable={!isSmallerScreenSize}
             >
               <TableTitle

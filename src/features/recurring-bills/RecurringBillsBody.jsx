@@ -265,7 +265,7 @@ function RecurringBillsBody() {
             >
               <TableHeader
                 isTable={!isSmallerScreenSize}
-                className="md:grid-cols-[auto_repeat(2,1fr)] lg:grid-cols-[2fr_repeat(2,1fr)] xl:grid-cols-[1fr_repeat(2,120px)]"
+                className="md:grid-cols-[auto_repeat(2,1fr)] lg:grid-cols-[3fr_repeat(2,1fr)] xl:grid-cols-[1fr_repeat(2,120px)]"
               >
                 <TableTitle
                   isTable={!isSmallerScreenSize}
@@ -329,7 +329,7 @@ function RecurringListItem({ bill, isTable }) {
   return (
     <li
       role={isTable ? "row" : undefined}
-      className="first:pt-0 last:pb-0 py-5 lg:px-4  md:grid md:gap-8 md:grid-cols-[auto_repeat(2,1fr)] lg:grid-cols-[2fr_repeat(2,1fr)] xl:grid-cols-[1fr_repeat(2,120px)] md:items-center "
+      className="first:pt-0 last:pb-0 py-5 lg:px-4  md:grid md:gap-8 md:grid-cols-[auto_repeat(2,1fr)] lg:grid-cols-[3fr_repeat(2,1fr)] xl:grid-cols-[1fr_repeat(2,120px)] md:items-center "
     >
       <div
         role={isTable ? "cell" : undefined}
