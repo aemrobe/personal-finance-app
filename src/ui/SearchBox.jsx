@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import SearchIcon from "./Icons/SearchIcon";
 
 function SearchBox({
@@ -7,6 +8,24 @@ function SearchBox({
   placeholder,
   className = "",
 }) {
+  const inputRef = useRef(null);
+  const wasLoading = useRef(isLoading);
+  const didUserType = useRef(false);
+
+  const handleInputChange = (e) => {
+    didUserType.current = true;
+    onChange(e);
+  };
+
+  useEffect(() => {
+    if (wasLoading.current && !isLoading && didUserType.current) {
+      inputRef.current.focus();
+      didUserType.current = false;
+    }
+
+    wasLoading.current = isLoading;
+  }, [isLoading]);
+
   return (
     <div
       className={`flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg gap-2 focusable-ring-within relative ${className}`}
@@ -16,11 +35,12 @@ function SearchBox({
       </label>
 
       <input
+        ref={inputRef}
         type="text"
         id="search-transaction"
         value={searchTerm}
         disabled={isLoading}
-        onChange={onChange}
+        onChange={handleInputChange}
         name="transactions"
         placeholder={placeholder}
         className=" py-3 pl-5 pr-13 rounded-lg disabled-input text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder disabled:cursor-not-allowed min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "

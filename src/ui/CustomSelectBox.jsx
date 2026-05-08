@@ -31,6 +31,7 @@ function CustomSelectBox({
   const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const customSelectBoxButtonRef = useRef(null);
+  const prevIsOpen = useRef(isOpen);
 
   const toggleDropdown = function () {
     if (isOpen) {
@@ -48,7 +49,6 @@ function CustomSelectBox({
     setVisible(false);
     setTimeout(() => {
       setIsOpen(false);
-      customSelectBoxButtonRef.current?.focus();
     }, ANIMATION_DURATION_SELECT_MENU);
   };
 
@@ -69,6 +69,16 @@ function CustomSelectBox({
       closeDropDown();
     }
   });
+
+  useEffect(() => {
+    if (prevIsOpen.current === true && !isOpen) {
+      requestAnimationFrame(() => {
+        customSelectBoxButtonRef.current?.focus();
+      });
+    }
+
+    prevIsOpen.current = isOpen;
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -100,7 +110,7 @@ function CustomSelectBox({
         id={`color-tag-${modalType}`}
         ref={customSelectBoxButtonRef}
         type="button"
-        disabled={isWorking}
+        aria-disabled={isWorking}
         aria-labelledby={`label-${modalType}`}
         aria-haspopup="listbox"
         aria-controls={`listbox-${modalType}`}

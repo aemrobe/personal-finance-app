@@ -106,19 +106,23 @@ function TransactionBody() {
   const handleCategoryChange = (categoryObj) => {
     setSelectedCategory(categoryObj);
 
-    searchParams.set("category", categoryObj.category);
-    searchParams.set("page", 1);
+    const newParams = new URLSearchParams(searchParams);
 
-    setSearchParams(searchParams);
+    newParams.set("category", categoryObj.category);
+    newParams.set("page", 1);
+
+    setSearchParams(newParams);
   };
 
   const handleSortByOption = (sortByObj) => {
     setSelectedSortByOption(sortByObj);
 
-    searchParams.set("sortBy", sortByObj.value);
-    searchParams.set("page", 1);
+    const newParams = new URLSearchParams(searchParams);
 
-    setSearchParams(searchParams);
+    newParams.set("sortBy", sortByObj.value);
+    newParams.set("page", 1);
+
+    setSearchParams(newParams);
   };
 
   const pageNumber = searchParams.get("page");
