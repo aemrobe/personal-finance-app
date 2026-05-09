@@ -117,7 +117,7 @@ function CustomSelectBox({
         aria-expanded={isOpen}
         onKeyDown={handleKeyDown}
         onClick={toggleDropdown}
-        className={`outline-none focusable-ring flex shrink-0 md:border  items-center rounded-lg disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5` : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base `"}  `}
+        className={`outline-none focusable-ring flex shrink-0 md:border hover:border-border-divider hover:cursor-pointer transition-all duration-500   items-center ${isFilterType ? "rounded-full md:rounded-lg" : "rounded-lg"}  disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5` : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base `"}  `}
       >
         {isColor && (
           <span
@@ -166,7 +166,7 @@ function CustomSelectBox({
             className={`overflow-y-scroll no-scrollbar ${widthOfTheMenuList} ${heightOfTheMenuList} `}
           >
             {mobileHeaderText && (
-              <p className="md:hidden mx-5 py-4 text-preset-4 text-content-secondary border-b border-border-subtle">
+              <p className="md:hidden  mx-5 py-3 text-preset-4 text-content-secondary border-b border-border-subtle">
                 {mobileHeaderText}
               </p>
             )}

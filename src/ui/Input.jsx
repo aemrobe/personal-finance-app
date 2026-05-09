@@ -29,7 +29,7 @@ const Input = forwardRef(function Input(
       )}
 
       <div
-        className={`relative overflow-hidden  ${error ? "[--ring-color:var(--color-border-error)]" : ""} border ${error ? "border-border-error" : "border-border-base"} rounded-lg flex items-center focus-within:border-content-main focusable-ring-within`}
+        className={`hover:border-border-divider group transition-all duration-500 relative overflow-hidden  ${error ? "[--ring-color:var(--color-border-error)]" : ""} border ${error ? "border-border-error" : "border-border-base"} rounded-lg flex items-center focus-within:border-content-main focusable-ring-within`}
       >
         {prefix && (
           <span
@@ -49,7 +49,7 @@ const Input = forwardRef(function Input(
           aria-describedby={error ? errorId : null}
           disabled={isLoading}
           onChange={onChange}
-          className={`min-w-0 outline-none py-3 ${prefix ? "pl-10" : "pl-5"}  ${icon ? "pr-12" : "pr-5"} text-content-main placeholder:text-content-placeholder text-preset-4 rounded-lg flex-auto
+          className={`min-w-0 group-hover:cursor-pointer outline-none py-3 ${prefix ? "pl-10" : "pl-5"}  ${icon ? "pr-12" : "pr-5"} text-content-main placeholder:text-content-placeholder text-preset-4 rounded-lg flex-auto
          disabled-input
             `}
           {...props}

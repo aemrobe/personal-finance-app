@@ -101,7 +101,7 @@ function SideNav({ isCollapsed, onToggle, isAnimating }) {
         <button
           aria-label={`${isCollapsed ? "Expand Menu" : "Minimize Menu"}`}
           aria-expanded={!isCollapsed}
-          className={`focusable-ring mt-auto py-4 lg:px-4 xl:px-6 2xl:px-8   text-icon-tertiary flex `}
+          className={`focusable-ring mt-auto py-4 lg:px-4 xl:px-6 2xl:px-8   text-nav-content-default hover:text-nav-content-hover sidenav-transition flex hover:cursor-pointer group`}
           onClick={onToggle}
         >
           <span className={`shrink-0 size-6 flex items-center justify-center`}>
@@ -112,7 +112,7 @@ function SideNav({ isCollapsed, onToggle, isAnimating }) {
 
           <span
             aria-hidden="true"
-            className={`sidenav-transition ml-4 text-preset-3 whitespace-nowrap ${isCollapsed ? "opacity-0" : "opacity-100"}`}
+            className={`sidenav-transition text-nav-content-default group-hover:text-nav-content-hover  ml-4 text-preset-3 whitespace-nowrap ${isCollapsed ? "opacity-0" : "opacity-100"}`}
           >
             Minimize Menu
           </span>

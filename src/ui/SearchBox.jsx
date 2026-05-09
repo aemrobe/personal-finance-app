@@ -28,7 +28,7 @@ function SearchBox({
 
   return (
     <div
-      className={`flex focusable-ring min-w-0  justify-between items-center border border-border-base rounded-lg gap-2 focusable-ring-within relative ${className}`}
+      className={`group transition-colors duration-500 flex focusable-ring min-w-0  justify-between items-center border border-border-base hover:border-content-main hover:cursor-pointer  rounded-lg gap-2 focusable-ring-within relative ${className}`}
     >
       <label htmlFor="search-transaction" className="sr-only">
         {placeholder}
@@ -43,7 +43,7 @@ function SearchBox({
         onChange={handleInputChange}
         name="transactions"
         placeholder={placeholder}
-        className=" py-3 pl-5 pr-13 rounded-lg disabled-input text-ellipsis whitespace-nowrap text-preset-4 text-content-placeholder disabled:cursor-not-allowed min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
+        className="group-hover:cursor-pointer py-3 pl-5 pr-13 rounded-lg disabled-input text-ellipsis whitespace-nowrap text-preset-4 text-content-main group-hover:placeholder:text-content-main transition-colors duration-500 disabled:cursor-not-allowed min-w-0 focus:outline-none placeholder:text-content-placeholder placeholder:text-preset-4 flex-1 "
       />
 
       <SearchIcon

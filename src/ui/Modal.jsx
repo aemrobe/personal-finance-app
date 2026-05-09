@@ -167,7 +167,7 @@ function Window({ children, modalName, titleId, contentId }) {
         aria-labelledby={titleId}
         aria-describedby={contentId}
         tabIndex={"-1"}
-        className={`outline-none z-50 px-5 py-6 bg-surface-primary w-[89.3%] fixed top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 rounded-xl`}
+        className={`outline-none z-50 px-5 py-6 md:p-8 bg-surface-primary w-[89.3%] fixed top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 rounded-xl max-w-140`}
       >
         {cloneElement(children, {
           onCloseModal: () => {
@@ -184,7 +184,7 @@ function Window({ children, modalName, titleId, contentId }) {
             restoreFocus();
           }}
           aria-label="Close Modal"
-          className="focusable-ring text-content-secondary  rounded-full w-8 h-8 flex items-center justify-center absolute right-5 top-6 z-51"
+          className="focusable-ring text-content-secondary hover:cursor-pointer  rounded-full w-8 h-8 flex items-center justify-center absolute right-5 top-6 md:right-8 md:top-8.75 z-51"
         >
           <CloseIcon />
         </button>
