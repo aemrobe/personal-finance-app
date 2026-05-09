@@ -12,6 +12,7 @@ import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import PieChartFigure from "../../ui/PieChartFigure";
 import { useBudgetAnayltics } from "./useBudgetAnalytics";
 import { useEffect, useRef, useState } from "react";
+import { SPINNER_FULL_PAGE_LAYOUT } from "../../utils/constants";
 
 function BudgetBody() {
   const {
@@ -100,9 +101,12 @@ function BudgetBody() {
     );
 
   return (
-    <div className="flex-1 flex flex-col gap-6 relative max-w-172 lg:max-w-none mx-auto lg:mx-0 w-full">
+    <div className="flex-1 flex flex-col gap-6 relative max-w-172 lg:max-w-none mx-auto lg:mx-0 w-full  ">
       {isLoading ? (
-        <SpinnerMiniContainer size="text-5xl" />
+        <SpinnerMiniContainer
+          position={SPINNER_FULL_PAGE_LAYOUT.position}
+          size={SPINNER_FULL_PAGE_LAYOUT.size}
+        />
       ) : (
         <div className="lg:flex lg:items-start  lg:gap-6">
           <div className="lg:max-w-107 mb-6 bg-surface-primary pt-6 pb-4 md:py-8 px-5 md:px-8  rounded-xl flex flex-col md:grid  md:grid-cols-2 md:gap-8 md:items-center lg:flex-1 lg:flex lg:flex-col lg:items-stretch">

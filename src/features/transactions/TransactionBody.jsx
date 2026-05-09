@@ -4,7 +4,11 @@ import { useCategories } from "../categories/useCategory";
 import SelectOption from "../../ui/selectOption";
 import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
 import { useCallback } from "react";
-import { PAGE_SIZE, SORT_BY_OPTIONS } from "../../utils/constants";
+import {
+  PAGE_SIZE,
+  SORT_BY_OPTIONS,
+  SPINNER_FULL_PAGE_LAYOUT,
+} from "../../utils/constants";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import { useTransactions } from "./useTransactions";
@@ -266,7 +270,10 @@ function TransactionBody() {
 
       <div className="flex-1">
         {isLoading ? (
-          <SpinnerMiniContainer size="text-5xl" />
+          <SpinnerMiniContainer
+            position={SPINNER_FULL_PAGE_LAYOUT.position}
+            size={SPINNER_FULL_PAGE_LAYOUT.size}
+          />
         ) : (
           <div
             role={!isSmallerScreenSize ? "table" : undefined}

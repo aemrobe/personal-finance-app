@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import EmptyMessage from "../../ui/EmptyMessage";
 import { useSideNav } from "../../context/SideNavContext";
 import { useMemo } from "react";
+import { SPINNER_FULL_PAGE_LAYOUT } from "../../utils/constants";
 
 function OverviewBody() {
   const navigate = useNavigate();
@@ -103,7 +104,10 @@ function OverviewBody() {
       className={`relative flex-1 max-w-172 mx-auto lg:max-w-none xl:max-w-none lg:mx-0 w-full`}
     >
       {isLoading ? (
-        <SpinnerMiniContainer size="text-5xl" />
+        <SpinnerMiniContainer
+          position={SPINNER_FULL_PAGE_LAYOUT.position}
+          size={SPINNER_FULL_PAGE_LAYOUT.size}
+        />
       ) : (
         <>
           <section className="mb-8" aria-label="Account summary">

@@ -22,6 +22,7 @@ import TableHeader from "../../ui/TableHeader";
 import TableTitle from "../../ui/TableTitle";
 import { useA11yBreakpoint } from "../../hooks/useA11yBreakpoint";
 import { useScreen } from "../../context/ScreenContext";
+import { SPINNER_FULL_PAGE_LAYOUT } from "../../utils/constants";
 
 const SORT_BY_OPTIONS = [
   {
@@ -63,6 +64,7 @@ function RecurringBillsBody() {
   } = useRecurringBillsAnalytics();
 
   const isLoading = isLoadingUser || isLoadingTransactions;
+  // const isLoading = true;
 
   // Search value managing hook
   const { searchTerm, searchParams, setSearchParams, updateSearch } =
@@ -173,7 +175,10 @@ function RecurringBillsBody() {
       </div>
 
       {isLoading ? (
-        <SpinnerMiniContainer size="text-5xl" />
+        <SpinnerMiniContainer
+          position={SPINNER_FULL_PAGE_LAYOUT.position}
+          size={SPINNER_FULL_PAGE_LAYOUT.size}
+        />
       ) : (
         <div className="lg:flex lg:gap-6 lg:items-start ">
           <div className="lg:max-w-84.25  md:grid lg:flex-1 md:grid-cols-2 lg:grid-cols-1 md:gap-6">

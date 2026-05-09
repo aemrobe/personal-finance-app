@@ -15,6 +15,10 @@ export const AUGUSTMONTH = 7;
 export const YEAR2024 = 2024;
 export const TABLET_BREAKPOINT = 48;
 export const SIDENAV_COLLAPSE_MS = 700;
+export const SPINNER_FULL_PAGE_LAYOUT = {
+  position: "inset-0  transform -translate-y-28  md:-translate-y-30",
+  size: "text-5xl",
+};
 
 export const THEMES = [
   {

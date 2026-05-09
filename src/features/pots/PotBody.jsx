@@ -3,6 +3,7 @@ import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import Menus from "../../ui/Menus";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
+import { SPINNER_FULL_PAGE_LAYOUT } from "../../utils/constants";
 import { useBalance } from "../Balance/useBalance";
 import PotCard from "./PotCard";
 import PotForm from "./PotForm";
@@ -26,8 +27,6 @@ function PotBody() {
   } = useBalance();
 
   const isLoading = isLoadingPots || isLoadingBalance;
-
-  // const isLoading = true;
 
   if (potsError || balanceError)
     return (
@@ -63,7 +62,10 @@ function PotBody() {
     <Menus>
       <div className="relative flex-1 flex flex-col gap-6 max-w-172 lg:max-w-none mx-auto lg:mx-0 w-full lg:grid lg:grid-cols-2 lg:gap-6 lg:content-start ">
         {isLoading ? (
-          <SpinnerMiniContainer size="text-5xl" />
+          <SpinnerMiniContainer
+            position={SPINNER_FULL_PAGE_LAYOUT.position}
+            size={SPINNER_FULL_PAGE_LAYOUT.size}
+          />
         ) : (
           pots.map((pot) => (
             <PotCard key={pot.id} pot={pot} balance={balance} />

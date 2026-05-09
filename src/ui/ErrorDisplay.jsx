@@ -16,11 +16,11 @@ function ErrorDisplay({
   return (
     <div
       role="alert"
-      className="bg-surface-primary max-w-lg rounded-xl shadow-md p-8 flex flex-col items-center"
+      className="bg-surface-primary max-w-lg md:max-w-2xl rounded-xl shadow-md p-8 md:p-12 flex flex-col items-center"
     >
       <Heading
         tabIndex={"-1"}
-        className="text-preset-2 mb-3 text-center text-content-main outline-none"
+        className="text-preset-2 md:text-preset-1 mb-3 md:mb-5 text-center text-content-main outline-none"
         ref={pageTitle}
         aria-describedby="error-text"
       >
@@ -29,7 +29,7 @@ function ErrorDisplay({
 
       <p
         id="error-text"
-        className="text-preset-4 mb-8 text-center text-content-secondary break-all leading-relaxed"
+        className="text-preset-4 md:text-base mb-8 md:mb-10 text-center text-content-secondary wrap-break-word max-w-md leading-relaxed"
       >
         {error}
       </p>
