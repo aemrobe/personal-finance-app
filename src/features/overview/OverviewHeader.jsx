@@ -19,7 +19,7 @@ function OverviewHeader() {
         disabled:cursor-not-allowed
        disabled:pointer-events-auto;
         text-preset-4 text-content-secondary bg-transparent
-        hover:text-content-main hover:bg-surface-tertiary-hover
+       hover:bg-surface-inverse hover:text-content-inverse
     hover:cursor-pointer
         px-4 py-2 rounded-lg 
         transition-all duration-500 

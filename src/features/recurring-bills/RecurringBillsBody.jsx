@@ -20,7 +20,6 @@ import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
 import { useRecurringBillsAnalytics } from "./useRecurringBillsAnalytics";
 import TableHeader from "../../ui/TableHeader";
 import TableTitle from "../../ui/TableTitle";
-import { useA11yBreakpoint } from "../../hooks/useA11yBreakpoint";
 import { useScreen } from "../../context/ScreenContext";
 import { SPINNER_FULL_PAGE_LAYOUT } from "../../utils/constants";
 
@@ -64,7 +63,6 @@ function RecurringBillsBody() {
   } = useRecurringBillsAnalytics();
 
   const isLoading = isLoadingUser || isLoadingTransactions;
-  // const isLoading = true;
 
   // Search value managing hook
   const { searchTerm, searchParams, setSearchParams, updateSearch } =
@@ -330,7 +328,6 @@ function RecurringBillsBody() {
 }
 
 function RecurringListItem({ bill, isTable }) {
-  console.log("bill", bill.status);
   return (
     <li
       role={isTable ? "row" : undefined}

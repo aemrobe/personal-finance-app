@@ -26,6 +26,7 @@ import { NETWORKERROREVENT } from "./utils/constants";
 import Overview from "./pages/Overview";
 import { ScreenProvider } from "./context/ScreenContext";
 import { SideNavProvider } from "./context/SideNavContext";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
@@ -102,7 +103,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       <ScreenProvider>
         <SideNavProvider>
           <ToastProvider>

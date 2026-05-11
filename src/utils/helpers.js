@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 export const formatCurrency = (value, showDecimals = true) => {
   return new Intl.NumberFormat("en", {
     style: "currency",

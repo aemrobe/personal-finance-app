@@ -59,13 +59,11 @@ async function createTransactions() {
       avatar: transaction.avatar,
       name: transaction.name,
       date: transaction.date,
-      amount:transaction.amount,
+      amount: transaction.amount,
       recurring: transaction.recurring,
       budgetId: budget ? budget.id : null,
     };
   });
-
-  console.log(finalTransaction);
 
   const { error } = await supabase
     .from("transactions")
@@ -103,7 +101,7 @@ function Uploader() {
     setIsLoading(false);
   }
 
-  async function deleteAll(){
+  async function deleteAll() {
     setIsLoading(true);
     //### deleting case ###
     //delete children first
@@ -156,9 +154,14 @@ function Uploader() {
       >
         upload transactions only
       </button>
-      <button className="border-2 border-cyan-500 mt-5 block" onClick={() => {
-deleteAll();
-      }}>delete all data</button>
+      <button
+        className="border-2 border-cyan-500 mt-5 block"
+        onClick={() => {
+          deleteAll();
+        }}
+      >
+        delete all data
+      </button>
     </div>
   );
 }

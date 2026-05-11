@@ -20,8 +20,8 @@ function LoginForm() {
     setError,
   } = useForm({
     defaultValues: {
-      email: "bereket@gmail.com",
-      password: "121343565",
+      email: "",
+      password: "",
     },
   });
 
