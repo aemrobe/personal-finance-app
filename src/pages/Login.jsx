@@ -3,7 +3,7 @@ import LoginForm from "../features/authentication/LoginForm";
 
 function Login() {
   return (
-    <AuthPageWrapper title="login" marginTop="mt-42">
+    <AuthPageWrapper title="login">
       <LoginForm />
     </AuthPageWrapper>
   );

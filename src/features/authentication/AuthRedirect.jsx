@@ -15,7 +15,7 @@ function AuthRedirect({ text, linkName, path }) {
       <NavLink
         aria-describedby={descriptionId}
         className={
-          "focusable-ring relative auth-redirect-link text-preset-4-bold capitalize"
+          "focusable-ring rounded-md relative auth-redirect-link text-preset-4-bold capitalize"
         }
         to={path}
       >

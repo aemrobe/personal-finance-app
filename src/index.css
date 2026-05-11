@@ -429,3 +429,10 @@ input:-webkit-autofill:active {
   border-radius: inherit;
   animation: pulse-out cubic-bezier(0.165, 0.84, 0.44, 1) 0.7s forwards;
 }
+
+.illustration {
+  background-image: url("./assets/images/illustration-authentication.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}

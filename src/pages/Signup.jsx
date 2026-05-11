@@ -3,7 +3,7 @@ import SignupForm from "../features/authentication/SignupForm";
 
 function Signup() {
   return (
-    <AuthPageWrapper title="sign up" marginTop="mt-29">
+    <AuthPageWrapper title="sign up">
       <SignupForm />
     </AuthPageWrapper>
   );

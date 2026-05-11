@@ -29,7 +29,7 @@ const Input = forwardRef(function Input(
       )}
 
       <div
-        className={`hover:border-border-divider group transition-all duration-500 relative overflow-hidden  ${error ? "[--ring-color:var(--color-border-error)]" : ""} border ${error ? "border-border-error" : "border-border-base"} rounded-lg flex items-center focus-within:border-content-main focusable-ring-within`}
+        className={`hover:border-border-divider group overflow-hidden transition-all duration-500 relative  ${error ? "[--ring-color:var(--color-border-error)]" : ""} border ${error ? "border-border-error" : "border-border-base"} rounded-lg flex items-center  focusable-ring-within `}
       >
         {prefix && (
           <span
@@ -51,6 +51,7 @@ const Input = forwardRef(function Input(
           onChange={onChange}
           className={`min-w-0 group-hover:cursor-pointer outline-none py-3 ${prefix ? "pl-10" : "pl-5"}  ${icon ? "pr-12" : "pr-5"} text-content-main placeholder:text-content-placeholder text-preset-4 rounded-lg flex-auto
          disabled-input
+         
             `}
           {...props}
         />
@@ -60,7 +61,7 @@ const Input = forwardRef(function Input(
             aria-label={labelForIcon}
             type="button"
             onClick={onIconClick}
-            className="ml-4 absolute right-5 outline-none"
+            className="ml-4 absolute right-5 rounded-md  focusable-ring"
           >
             {icon}
           </button>
