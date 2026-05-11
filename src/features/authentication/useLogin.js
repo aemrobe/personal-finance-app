@@ -17,7 +17,7 @@ export function useLogin() {
         text: `Welcome back, ${data.user.user_metadata.fullName}`,
       });
 
-      navigate("/pots", { replace: true });
+      navigate("/overview", { replace: true });
     },
     onError: (error) => {
       console.error(error.message);

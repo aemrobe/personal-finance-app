@@ -11,6 +11,9 @@ export function useLogout() {
   const { mutate: logout, isPending: isLoading } = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
+      onShowToastMessage({
+        text: `User signed out successfully!`,
+      });
       navigate("/login", {
         replace: true,
       });

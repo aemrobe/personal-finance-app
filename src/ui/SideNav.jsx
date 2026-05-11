@@ -1,3 +1,4 @@
+import { useLogout } from "../features/authentication/useLogout";
 import {
   MinimizeMenuIcon,
   NavBudgetIcon,
@@ -5,13 +6,16 @@ import {
   NavPotsIcon,
   NavRecurringBillsIcon,
   NavTransactionIcon,
+  SignOutIcon,
   SmallLogoIcon,
 } from "./Icons";
 import LargeLogoIcon from "./Icons/LargeLogoIcon";
 import NavButton from "./NavButton";
+import SpinnerMiniContainer from "./SpinnerMiniContainer";
 
 function SideNav({ isCollapsed, onToggle, isAnimating }) {
   const transitionClass = isAnimating ? "sidenav-transition" : "";
+  const { logout, isLoading } = useLogout();
 
   return (
     <nav
@@ -99,9 +103,37 @@ function SideNav({ isCollapsed, onToggle, isAnimating }) {
         </ul>
 
         <button
+          disabled={isLoading}
+          aria-label="Sign out"
+          onClick={() => logout()}
+          className="focusable-ring disabled:cursor-not-allowed mt-auto py-4 lg:px-4 xl:px-6 2xl:px-8  text-nav-content-default hover:text-nav-content-hover
+ sidenav-transition flex items-center hover:cursor-pointer group w-full border-none bg-transparent relative"
+        >
+          {isLoading && (
+            <div className=" shrink-0 w-full size-6 flex items-center justify-center">
+              <SpinnerMiniContainer />
+            </div>
+          )}
+
+          <span
+            aria-hidden="true"
+            className={`shrink-0 size-6 flex items-center justify-center text-nav-icon-default group-hover:text-nav-icon-hover ${isLoading ? "opacity-0" : "opacity-100"}`}
+          >
+            <SignOutIcon className={"w-6 h-6"} />
+          </span>
+
+          <span
+            aria-hidden="true"
+            className={`text-preset-3 sidenav-transition ml-4 whitespace-nowrap  ${isCollapsed || isLoading ? "opacity-0 pointer-events-none" : "opacity-100"} `}
+          >
+            Sign Out
+          </span>
+        </button>
+
+        <button
           aria-label={`${isCollapsed ? "Expand Menu" : "Minimize Menu"}`}
           aria-expanded={!isCollapsed}
-          className={`focusable-ring mt-auto py-4 lg:px-4 xl:px-6 2xl:px-8   text-nav-content-default hover:text-nav-content-hover sidenav-transition flex hover:cursor-pointer group`}
+          className={`focusable-ring  py-4 lg:px-4 xl:px-6 2xl:px-8   text-nav-content-default hover:text-nav-content-hover sidenav-transition flex hover:cursor-pointer group`}
           onClick={onToggle}
         >
           <span className={`shrink-0 size-6 flex items-center justify-center`}>

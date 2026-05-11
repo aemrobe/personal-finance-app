@@ -61,7 +61,7 @@ const Input = forwardRef(function Input(
             aria-label={labelForIcon}
             type="button"
             onClick={onIconClick}
-            className="ml-4 absolute right-5 rounded-md  focusable-ring"
+            className="ml-4 absolute right-5 rounded-md  focusable-ring hover:cursor-pointer"
           >
             {icon}
           </button>

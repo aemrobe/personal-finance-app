@@ -19,3 +19,4 @@ export { default as BillDueIcon } from "./BillDueIcon";
 export { default as PotIcon } from "./PotIcon";
 export { default as MinimizeMenuIcon } from "./MinimizeMenuIcon";
 export { default as SmallLogoIcon } from "./SmallLogoIcon";
+export { default as SignOutIcon } from "./SignOutIcon";
