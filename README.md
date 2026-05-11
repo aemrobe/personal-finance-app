@@ -1,24 +1,24 @@
-# Frontend Mentor - Personal finance app
+# Frontend Mentor - Personal finance app solution
 
-![Design preview for the Personal finance app coding challenge](./preview.jpg)
+This is a solution to the [Personal finance app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/personal-finance-app-JfjtZgyMt1). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-## Welcome! 👋
+## Table of contents
 
-Thanks for purchasing this premium Frontend Mentor coding challenge.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+- [Author](#author)
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects. These premium challenges are perfect portfolio pieces, so please feel free to use what you create in your portfolio to show others.
+## Overview
 
-**To do this challenge, you need a very strong understanding of HTML, CSS, and JavaScript.**
+### The challenge
 
-## The challenge
-
-Your challenge is to build out this personal finance app and get it looking as close to the design as possible.
-
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
-
-We provide the data in a local `data.json` file, so use that to populate the content on first load. If you want to take it up a notch, feel free to build this as a full-stack application!
-
-Your users should be able to:
+Users should be able to:
 
 - See all of the personal finance app data at-a-glance on the overview page
 - View all transactions on the transactions page with pagination for every ten transactions
@@ -36,100 +36,315 @@ Your users should be able to:
 - **Bonus**: Save details to a database (build the project as a full-stack app)
 - **Bonus**: Create an account and log in (add user authentication to the full-stack app)
 
-Want some support on the challenge? [Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+### Screenshot
 
-### Expected behaviour
+![](./screenshots/desktop-view-personal-finance-app.png)
 
-**⚠️ IMPORTANT ⚠️: The data in some designs will differ from what's in the `data.json` file. We recommend using the desktop designs to reference how the data should look, as these all include the correct data and copy. The tablet and mobile layouts are there for layout reference.**
+![](./screenshots/mobile-view-personal-finance-app.png)
 
-- Overview
-  - This page should display all the information at-a-glance and allow for easy navigation.
-  - We recommend building this page last, as it will require logic from the other pages (e.g., recurring bills) in order to display the data correctly.
-- Transactions
-  - Output the transactions from the `data.json` file, paginating results for every ten transactions.
-  - The search should allow for name search, but feel free to add other functionality like searching for transaction amounts if you want to test yourself.
-  - The sorting options include: Latest (most recent), Oldest, A to Z, Z to A, Highest (transaction amount), Lowest.
-  - The filter is by transaction category, which are: Entertainment, Bills, Groceries, Dining Out, Transportation, Personal Care, Education, Lifestyle, Shopping, General. Filtering by category should only show transactions from the selected category.
-- Budgets
-  - Don't worry if you can't create a donut pie chart exactly like in the design. Do your best to get close, but feel free to go in your own direction.
-  - The "Spent" amount should calculate the money spent within the category for the current month (August 2024 in the app).
-  - The "Latest Spending" component should display the three last transactions for that category regardless of the month.
-  - Clicking "See All" on a budget should navigate to the Transactions page with the filter set to the relevant category. For example, clicking "See All" on Entertainment should only show transactions with the Entertainment category.
-  - Adding a new budget should automatically pull in the three latest transactions from the created budget category and calculate the amount spent so far for August 2024.
-  - Deleting a budget should remove it from the Budgets page and the Overview.
-- Pots
-  - Adding money to a pot should deduct the given amount from the current balance (seen on the Overview page).
-  - Withdrawing money from a pot should add that amount to the current balance.
-  - Deleting a pot should return all the money from the pot to the current balance.
-- Recurring Bills
-  - List out all the recurring transactions and ensure only one item is shown per vendor.
-  - Show the recurring transactions that have already been paid for August 2024.
-  - Show the payments due to be paid soon based on their monthly payment date. Calculate this from recurring transactions yet to be paid for August 2024, but due within five days of the latest overall transaction in the app (Emma Richardson - 19 August 2024).
-  - The search should search based on name.
-  - The sorting options include: Latest (earliest in the month), Oldest, A to Z, Z to A, Highest (transaction amount), Lowest.
+### Links
 
-## Where to find everything
+- Solution URL: [Add solution URL here](https://your-solution-url.com)
+- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
 
-Your task is to build out the project to the design file provided. We provide both Sketch and Figma versions of the design, so you can choose which tool you prefer to use. You can download the design file on the platform. **Please be sure not to share them with anyone else.** The design download comes with a `README.md` file as well to help you get set up.
+## My process
 
-All the required assets for this project are in the `/assets` folder. The images are already exported for the correct screen size and optimized. Some are reusable at multiple screen sizes. So if you don't see an image in a specific folder, it will typically be in another folder for that page.
+### Built with
 
-We also include variable and static font files for the required fonts for this project. You can choose to either link to Google Fonts or use the local font files to host the fonts yourself. Note that we've removed the static font files for the font weights that aren't needed for this project.
+- Semantic HTML5 markup
+- CSS custom properties
+- Flexbox
+- Mobile-first workflow
+- [React](https://reactjs.org/) - JS library
+- [Tailwind css](https://tailwindcss.com/) - For styles
+- [TanStack Query](https://tanstack.com/query/latest) - For data fetching and state management
+- [Supabase](https://supabase.com/) - Backend & Database
 
-The design system in the design file will give you more information about the various colors, fonts, and styles used in this project. Our fonts always come from [Google Fonts](https://fonts.google.com/).
+### What I learned
 
-## Building your project
+During the first phase of this project, I focused on building a scalable core architecture and implementing the full CRUD logic for the Savings Pots module.
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+#### 🏛️ Core Architecture & UI Patterns
 
-1. Separate the `starter-code` from the rest of this project and rename it to something meaningful for you. Initialize the codebase as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/). **⚠️ IMPORTANT ⚠️: There are already a couple of `.gitignore` files in this project. Please do not remove them or change the content of the files. If you create a brand new project, please use the `.gitignore` files provided in your new codebase. This is to avoid the accidental upload of the design files to GitHub. With these premium challenges, please be sure not to share the design files in your GitHub repo. Thanks!**
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+Before building specific pages, I established a robust foundation to ensure accessibility and code reusability across the entire app:
 
-## Deploying your project
+- **Compound Component Pattern:** I implemented a flexible Menu and Modal system. This allows for decoupled but synchronized sub-components, making the UI highly declarative.
 
-As mentioned above, there are many ways to host your project for free. Our recommend hosts are:
+- **Advanced Focus Management:** To meet WCAG standards, I developed custom **focus traps** and **focus restoration** logic. This ensures that when a user closes a "Withdraw" or "Edit" modal, their focus returns precisely to the button that triggered it.
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+- **Accessible Navigation:** Engineered a responsive navigation system using **React Router's `NavLink`** for automatic route tracking and a custom `NavIconWrapper` for accessible SVG rendering.
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://medium.com/frontend-mentor/frontend-mentor-trusted-hosting-providers-bf000dfebe).
+#### 💰 Savings Pots Module (Feature Implementation) (Mobile View & Core Logic)
 
-## Create a custom `README.md`
+The Pots page served as the primary testing ground for complex database interactions and financial logic:
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+- **Transactional CRUD Operations:** Beyond simple data fetching, I implemented logic for adding and withdrawing funds. This required ensuring that the database and the local UI state stay perfectly in sync.
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+- **TanStack Query & Cache Invalidation:** I utilized **Optimistic Updates** and smart cache invalidation. For example, updating a savings pot automatically triggers a background refetch of the global balance to ensure data integrity across the app.
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+- **Business Logic Validation:** Using **React Hook Form**, I enforced strict financial rules, such as:
+  - Preventing "Withdraw" actions if the amount exceeds the current pot balance.
+  - Ensuring each pot has a unique color tag to maintain visual clarity in the UI.
 
-## Submitting your solution
+```jsx
+// Example: Implementation of the Compound Component Pattern for Pots Management
+<Menus.Menu>
+  <Menus.Toggle id={id} />
+  <Menus.List id={id}>
+    <Modal.Open modalName={`edit-pot-${id}`}>
+      <Menus.Button>Edit Pot</Menus.Button>
+    </Modal.Open>
+    <Modal.Open modalName={`delete-pot-${id}`}>
+      <Menus.Button>Delete Pot</Menus.Button>
+    </Modal.Open>
+  </Menus.List>
+</Menus.Menu>
+```
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://medium.com/frontend-mentor/a-complete-guide-to-submitting-solutions-on-frontend-mentor-ac6384162248) for tips on how to do this.
+#### 🛡️ Feedback & Safety Systems
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+- **Global Toast Notifications:** Integrated a context-based notification system to confirm successful "Money Added" or "Pot Created" actions.
 
-**⚠️ IMPORTANT ⚠️: With these premium challenges, please be sure not to upload the design files to GitHub when you're submitting to the platform and sharing it around. If you've created a brand new project, the easiest way to do that is to copy across the `.gitignore` provided in this starter project.**
+- **Error Boundaries:** Implemented `ErrorFallback` components specifically for the data-heavy sections of the Pots page to handle potential Supabase connection issues gracefully.
 
-## Sharing your solution
+#### 📊 Budgets Module (Mobile View & Core Logic)
 
-There are multiple places you can share your solution:
+The Budgets page is the analytical heart of the app, requiring complex data aggregation and visual representation.
 
-1. Share your solution page in the **#finished-projects** channel of our [community](https://www.frontendmentor.io/community). 
-2. Tweet [@frontendmentor](https://twitter.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in the tweet. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on other social channels like LinkedIn.
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
+- **Interactive Data Visualization:** I integrated the **Recharts library** to create a dynamic Donut Chart. This provides a high-level visual breakdown of spending across all categories.
 
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback. 
+- **Smart Spending Summary:** Developed a central summary component that calculates the total monthly limit vs. actual spent amount across all budgets. This data is dynamically updated and rendered both as a list and as a central label within the chart.
 
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
+- **Cross-Page Deep Linking:** Implemented a "See All" navigation feature. When a user clicks to view details for a specific budget (e.g., "Food"), the app programmatically navigates them to the Transactions page with the corresponding **URL Search Params** pre-set, automatically filtering the transaction list.
 
-## Got feedback for us?
+- **Relational Data Mapping:** Engineered a complex join between `budgets` and `transactions` in Supabase to calculate real-time spending totals for each category.
 
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
+- **Automated Context:** Designed a "Latest Transactions" preview for each budget card, showing only the three most recent entries to keep the mobile interface clean yet informative.
 
-**Have fun building!** 🚀
+```jsx
+// Example: The logic which I used to calculate total spent in number and percentage, remaining amount , latest three transactions for each budget category
+
+const chartData = useMemo(
+  () =>
+    budgets?.map((budget) => {
+      const {
+        categories: { category: budgetCategory },
+        theme,
+        maximum,
+        id,
+      } = budget;
+
+      const totalSpent = Math.abs(
+        filterSpendingTransactionForCategory(transactions, budgetCategory)
+          ?.filter((transaction) => {
+            const { date } = transaction;
+
+            const transactionDate = new Date(date);
+
+            return (
+              transactionDate.getMonth() === AUGUSTMONTH &&
+              transactionDate.getFullYear() === YEAR2024
+            );
+          })
+          .reduce((sum, cur) => sum + cur.amount, 0),
+      );
+
+      const remainingAmount = Math.max(maximum - totalSpent, 0);
+      const percentageOfSpent = Math.min((totalSpent / maximum) * 100, 100);
+
+      const latestTransactions = [
+        ...(filterSpendingTransactionForCategory(
+          transactions,
+          budgetCategory,
+        ) || []),
+      ]
+        ?.sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 3);
+
+      return {
+        name: budgetCategory,
+        value: totalSpent,
+        fill: theme,
+        id,
+        maximum,
+        remainingAmount,
+        percentageOfSpent,
+        latestTransactions,
+      };
+    }),
+  [budgets, transactions],
+);
+```
+
+### 🏠 Overview Module (Mobile Dashboard & Data Aggregation)
+
+The Overview page acts as the central command center of the application, synthesizing data from four different domains into a unified mobile-first dashboard.
+
+- **Holistic Data Orchestration:** Developed a "Global Loading & Error" pattern. By consolidating loading states from `useBalance`, `usePots`, and `useBudgetAnalytics`, I ensured a flicker-free initial render where all dashboard tiles reveal simultaneously once the core data is ready.
+
+- **Intelligent Empty States:** Designed a standardized `EmptyMessage` system. When a new user has no data, the dashboard hides complex analytical components (like the Recharts PieChart) and replaces them with actionable empty states that maintain a consistent `min-height` to preserve the grid layout.
+
+- **Dynamic Summary Tiles:** Engineered responsive balance cards that provide immediate visibility into Total Balance, Income, and Expenses, utilizing custom formatting helpers to handle currency display across varying screen widths.
+
+- **Cross-Module Preview Logic:** Implemented "Subset Mapping" to show the most relevant data snippets—such as the top 4 savings pots or the 5 most recent transactions—providing a high-level snapshot without overwhelming the mobile viewport.
+
+```jsx
+// Example: Unified Error and Loading Orchestration for the Dashboard
+const isLoading =
+  isLoadingUser || isLoadingBalance || isLoadingPots || isLoadingAnalytics;
+
+if (errorAnalytics || potsError || userError || balanceError)
+  return (
+    <ErrorWrapper>
+      <ErrorDisplay
+        error={
+          errorAnalytics?.message || userError?.message || potsError?.message
+        }
+        onRetry={refetchAll}
+      />
+    </ErrorWrapper>
+  );
+```
+
+### 💸 Transactions Module (Search, Filter & Pagination)
+
+The Transactions page is the most data-intensive part of the app, requiring high-performance filtering, state management, and clear accessibility feedback.
+
+- **Advanced Server-Side Filtering:** Leveraged **URL Search Params** as the "Source of Truth." By syncing the search input and category dropdown with the URL, I ensured that users can bookmark specific filtered views or share them easily.
+
+- **Accessible UX & Screen Reader Support:** Integrated the `useGenerateAnnouncement` hook to provide real-time updates for assistive technologies. As users filter by category or type, a hidden `aria-live` region announces the number of results found, ensuring blind and low-vision users stay oriented.
+
+- **Robust Search & Multi-Criteria Sorting:** Integrated a debounced search system and a custom sorting engine (Latest, Oldest, A-Z, etc.) that allows users to navigate hundreds of entries with 60fps performance on mobile devices.
+
+- **Pagination & Slice Logic:** To maintain performance, I implemented client-side pagination logic that splits the transaction history into manageable chunks, reducing the DOM node count and improving mobile scroll performance.
+
+```jsx
+// Example: Implementation of the ARIA announcement logic for filtered results
+const { announcement } = useGenerateAnnouncement({
+  isLoading,
+  count: transactions?.length,
+  searchParams,
+  selectedSortByLabel: selectedSortByOption?.label,
+  generateAnnouncement: ({ count, searchTerm, sortLabel }) => {
+    const hasSearch = Boolean(searchTerm?.trim());
+    const isAllCategory = selectedCategory?.category === "All Transactions";
+    const categoryText = isAllCategory
+      ? "all categories"
+      : `the ${selectedCategory?.category}`;
+    const transactionText = `transaction${count === 1 ? "" : "s"}`;
+
+    if (!count || Number(count) === 0) {
+      return `No transactions found${hasSearch ? ` matching ${searchTerm} in ${categoryText}` : `in ${categoryText}`}. Try adjusting your search or filters.`;
+    }
+
+    if (hasSearch) {
+      return `Found ${count} ${transactionText} matching "${searchTerm}" in ${categoryText}, sorted by ${sortLabel}`;
+    }
+
+    // Without search (normal browsing)
+    return `Showing ${count} transactions in ${categoryText}, sorted by ${sortLabel}. Page ${currentPage} of ${pageCount}`;
+  },
+});
+```
+
+### 📅 Recurring Bills Module (Financial Forecasting & Accessibility)
+
+The Recurring Bills page tracks temporal data, specifically focusing on monthly obligations and payment status.
+
+- **Status-Driven UI Logic:** Engineered a sophisticated list rendering system where each bill displays its specific payment cycle using a `getOrdinal` helper (e.g., "Monthly-1st"). The UI uses conditional styling and icons (`SelectedIcon`, `BillDueIcon`) to visually distinguish between "Paid" and "Due Soon" statuses.
+
+- **Aria-Live Announcements:** Implemented a custom accessibility hook, `useGenerateAnnouncement`, to provide real-time feedback whenever filters change, announcing the exact number of results and the current sort order.
+
+- **Consolidated Bill Analytics:** Utilized a custom `useRecurringBillsAnalytics` hook to calculate aggregate totals for the "Total Bills" header and a detailed "Summary" card, which breaks down the count and currency total for paid, upcoming, and overdue obligations.
+
+- **Dynamic Filtering & Sorting:** Integrated a `useSearchManager` hook to allow users to search bills by name or amount while simultaneously applying complex sort logic (Latest, Highest, A-Z) via a custom `useMemo` pipeline.
+
+```jsx
+// Example: Sorting and Filtering logic for the Recurring Bills list
+const searchedRecurringBills = useMemo(() => {
+  //filtered
+  const filteredSearchResults = processedBills?.filter(
+    (bill) =>
+      bill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bill.amount.toString().includes(searchTerm),
+  );
+
+  //Sorted
+  return filteredSearchResults?.sort((a, b) => {
+    let compareValue = 0;
+
+    if (value === "name")
+      compareValue = a.name.localeCompare(b.name); // ascending a - z
+    else if (value === "date")
+      compareValue = a.dayOfMonth - b.dayOfMonth; //ascending oldest - newest
+    else if (value === "amount") compareValue = a.amount - b.amount; // ascending smallest - biggest
+
+    return compareValue * directionValue;
+  });
+}, [processedBills, searchTerm, directionValue, value]);
+```
+
+#### 📱 Responsive Evolution: Tablet & Desktop Views
+
+Transitioning from a mobile-first design to a full-screen dashboard required a shift from stacked layouts to complex grid systems and persistent navigation.
+
+- **Dynamic Side Navigation (`SideNav`):** I engineered a sophisticated sidebar that replaces the mobile bottom navigation on larger screens. This component features:
+- **Animated State Management:** Implemented a "collapsed" and "expanded" state with smooth CSS transitions (`sidenav-transition`) to optimize screen real estate.
+- **Visual Hierarchy:** Strategically placed primary navigation, secondary actions (Sign Out), and layout controls (Minimize Menu) to create a professional desktop "SaaS" feel.
+- **Complex Layout Logic:** Used conditional Tailwind classes to handle visibility and width transitions without causing layout shifts in the main content area.
+
+- **Adaptive Component Architectures:** Many components were refined to change their "personality" based on the viewport:
+- **OverviewHeader:** Designed to dynamically hide/show the "Sign Out" button, moving it from a prominent header action on mobile to an integrated sidebar action on desktop.
+- **Grid Orchestration:** Leveraged CSS Grid to transform the single-column dashboard into a multi-column layout on tablet and desktop, ensuring balance and readable line lengths for financial data.
+
+#### 🔐 Authentication & Session Management
+
+The final phase of the app involved securing user data and managing the lifecycle of a full-stack session:
+
+- **Integrated Auth Logic:** Leveraged a custom `useLogout` hook across multiple entry points. This hook orchestrates a multi-step cleanup:
+- **API Interaction:** Communicates with Supabase to invalidate the session.
+- **Global Cache Purge:** Uses TanStack Query's `queryClient.removeQueries()` to ensure no sensitive financial data remains in the browser memory after sign-out.
+- **Secure Routing:** Utilizes React Router's `replace: true` navigation to prevent users from "back-buttoning" into a protected route after logging out.
+
+- **State-Aware UI Feedback:** Implemented a robust "Loading & Obscuring" pattern during authentication actions. When a user clicks "Sign Out":
+- Interactive icons and text are hidden using `opacity-0`.
+- A `SpinnerMiniContainer` is centered within the button's footprint to provide immediate visual confirmation while the API call is pending.
+- Buttons are programmatically disabled to prevent "double-tap" mutation errors.
+
+#### 🏗️ Refined Performance & Polish
+
+- **Transition Performance:** Fine-tuned the `transition-all` and `duration-500` properties across the app to ensure that layout shifts between mobile, tablet, and desktop feel fluid rather than jarring.
+
+```jsx
+// Example: Implementation of the responsive Sign Out button logic in the SideNav
+<button
+  onClick={() => logout()}
+  disabled={isLoading}
+  className="relative flex items-center group w-full bg-transparent border-none"
+>
+  {/* The spinner is absolutely positioned to prevent layout jumps when text/icons hide */}
+  {isLoading && (
+    <div className="w-full flex items-center justify-center">
+      <SpinnerMiniContainer />
+    </div>
+  )}
+
+  {/* Icon and Text visibility toggled via opacity to maintain space in the layout */}
+  <span
+    className={`shrink-0 size-6 flex items-center justify-center ${isLoading ? "opacity-0" : "opacity-100"}`}
+  >
+    <SignOutIcon className="w-6 h-6" />
+  </span>
+
+  <span
+    className={`text-preset-3 ml-4 ${isCollapsed || isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+  >
+    Sign Out
+  </span>
+</button>
+```
+
+## Author
+
+- Frontend Mentor - [@aemrobe](https://www.frontendmentor.io/profile/aemrobe)
+- Twitter - [@Aemro112](https://www.twitter.com/Aemro112)
