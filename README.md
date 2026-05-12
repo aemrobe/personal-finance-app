@@ -44,8 +44,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [solution URL](https://www.frontendmentor.io/solutions/full-stack-personal-finance-app-wasi6zjzm2)
+- Live Site URL: [live site URL](https://personal-finance-app-amro.netlify.app)
 
 ## My process
 
