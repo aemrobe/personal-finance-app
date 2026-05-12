@@ -68,8 +68,9 @@ export function useBudgetAnayltics() {
           .slice(0, 3);
 
         return {
-          name: budgetCategory,
+          category: budgetCategory,
           value: totalSpent,
+          theme,
           fill: theme,
           id,
           maximum,

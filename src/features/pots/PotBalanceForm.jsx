@@ -2,7 +2,7 @@ import Input from "../../ui/Input";
 import ProgressBar from "../../ui/ProgressBar";
 import { formatCurrency } from "../../utils/helpers";
 import Button from "../../ui/Button";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { FIELD_REQUIRED_MESSAGE } from "../../utils/constants";
 import { useUpdatePot } from "./useUpdatePot";
 import { useUpdateBalance } from "../Balance/useUpdateBalance";
@@ -29,7 +29,7 @@ function PotBalanceForm({
 
   const {
     register,
-    watch,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -40,7 +40,8 @@ function PotBalanceForm({
 
   const isAdd = type === "add";
 
-  const newAmount = watch("amount") || 0;
+  const newAmount = useWatch({ control, name: "amount" }) || 0;
+
   const newPercentage = (newAmount / target) * 100;
 
   const updatedValue = isAdd ? total + newAmount : total - newAmount;

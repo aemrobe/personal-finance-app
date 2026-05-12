@@ -15,6 +15,7 @@ import { useCategories } from "../categories/useCategory";
 import EmptyMessage from "../../ui/EmptyMessage";
 import { useCreateBudget } from "./useCreateBudget";
 import { useUpdateBudget } from "./useUpdateBudget";
+import { useEffect } from "react";
 
 const findAvailableCategory = (budgets, categories) => {
   return categories?.find(
@@ -90,9 +91,9 @@ function BudgetForm({
   } = useForm({
     defaultValues: isEditSession
       ? {
-          category: selectedCategory?.category,
+          category: budgetToEdit?.name,
           maximum: budgetToEdit.maximum,
-          theme: selectedTheme?.color,
+          theme: budgetToEdit?.fill,
         }
       : {
           category: selectedCategory?.category,

@@ -35,7 +35,7 @@ export function useSearchManager({ resetPageOnSearch = false }) {
     }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(handler);
-  }, [searchTerm, setSearchParams, resetPageOnSearch]);
+  }, [searchTerm, setSearchParams, resetPageOnSearch, searchParams]);
 
   useEffect(() => {
     const urlSearch = searchParams.get("search") || "";

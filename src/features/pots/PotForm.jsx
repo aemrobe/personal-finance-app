@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { usePots } from "./usePots";
 import { FIELD_REQUIRED_MESSAGE, THEMES } from "../../utils/constants";
 import Input from "../../ui/Input";
@@ -57,7 +57,7 @@ function PotForm({
     register,
     formState: { errors },
     handleSubmit,
-    watch,
+    control,
     setValue,
   } = useForm({
     defaultValues: isEditSession
@@ -72,6 +72,8 @@ function PotForm({
           theme: selectedTheme?.color,
         },
   });
+
+  const potName = useWatch({ control, name: "name" }) || "";
 
   if (availableThemes.length === 0 && !isEditSession)
     return (
@@ -88,7 +90,7 @@ function PotForm({
 
   // Max character for potname
   const maxCharacterCount = 30;
-  const potName = watch("name", "");
+
   const remainingCharacter = Math.max(maxCharacterCount - potName.length, 0);
 
   const onSubmit = function (data) {

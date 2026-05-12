@@ -158,7 +158,7 @@ function BudgetBody() {
 }
 
 function SpendingSummaryItem({ budget, showShadow }) {
-  const { fill, name, value: totalSpent, maximum } = budget;
+  const { theme, category, value: totalSpent, maximum } = budget;
 
   return (
     <li
@@ -167,11 +167,11 @@ function SpendingSummaryItem({ budget, showShadow }) {
       <div className="flex items-center gap-4">
         <span
           style={{
-            backgroundColor: fill,
+            backgroundColor: theme,
           }}
           className="w-1 h-5.25 inline-block rounded-lg"
         />
-        <span className="text-preset-4 text-content-secondary">{name}</span>
+        <span className="text-preset-4 text-content-secondary">{category}</span>
         <span className="sr-only"> category</span>
       </div>
 

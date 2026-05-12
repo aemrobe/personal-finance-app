@@ -15,9 +15,9 @@ function BudgetCard({ budget }) {
 
   const {
     id,
-    name,
+    category,
     maximum,
-    fill,
+    theme,
     percentageOfSpent,
     value: totalSpent,
     remainingAmount,
@@ -30,14 +30,16 @@ function BudgetCard({ budget }) {
         <div className="flex items-center gap-4">
           <span
             style={{
-              backgroundColor: fill,
+              backgroundColor: theme,
             }}
             className="w-4 h-4 inline-block rounded-full"
           ></span>
-          <h3 className="text-preset-2 text-content-main capitalize">{name}</h3>
+          <h3 className="text-preset-2 text-content-main capitalize">
+            {category}
+          </h3>
         </div>
 
-        <Menus.Toggle id={id} name={name} />
+        <Menus.Toggle id={id} name={category} />
 
         <Menus.List id={id}>
           <Modal.Open
@@ -76,7 +78,7 @@ function BudgetCard({ budget }) {
           <ConfirmDeleteModal
             titleId={`delete-budget-title-${id}`}
             contentId={`delete-budget-desc-${id}`}
-            title={name}
+            title={category}
             content={
               "Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
             }
@@ -98,12 +100,12 @@ function BudgetCard({ budget }) {
 
       <ProgressBar
         percentage={percentageOfSpent}
-        themeColor={fill}
+        themeColor={theme}
         containerClass={"h-8 mb-4 p-1"}
       />
 
       <div className="flex mb-5">
-        <BudgetStat title={"Spent"} value={totalSpent} bgColor={fill} />
+        <BudgetStat title={"Spent"} value={totalSpent} bgColor={theme} />
         <BudgetStat title={"Remaining"} value={remainingAmount} />
       </div>
 
@@ -118,7 +120,9 @@ function BudgetCard({ budget }) {
             variant="tertiary"
             icon={<CaretRightIcon className={"h-2.75"} />}
             onClick={() => {
-              navigate(`/transactions?category=${encodeURIComponent(name)}`);
+              navigate(
+                `/transactions?category=${encodeURIComponent(category)}`,
+              );
             }}
           >
             See All

@@ -1,7 +1,7 @@
 import { useFormSelection } from "../../hooks/useFormSelection";
 import CustomSelectBox from "../../ui/CustomSelectBox";
 import { useCategories } from "../categories/useCategory";
-import SelectOption from "../../ui/selectOption";
+import SelectOption from "../../ui/SelectOption";
 import { FilterMobileIcon, SortByIcon } from "../../ui/Icons";
 import { useCallback } from "react";
 import {
