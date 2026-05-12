@@ -10,7 +10,7 @@ import ModalTitle from "../../ui/ModalTitle";
 import ModalText from "../../ui/ModalText";
 import { useToast } from "../../context/ToastContext";
 import CustomSelectBox from "../../ui/CustomSelectBox";
-import SelectOption from "../../ui/selectOption";
+import SelectOption from "../../ui/SelectOption";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import { findAvailableTheme } from "../../utils/helpers";
 import EmptyMessage from "../../ui/EmptyMessage";

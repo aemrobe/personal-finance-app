@@ -9,7 +9,7 @@ import {
 import SearchBox from "../../ui/SearchBox";
 import CustomSelectBox from "../../ui/CustomSelectBox";
 import { useFormSelection } from "../../hooks/useFormSelection";
-import SelectOption from "../../ui/selectOption";
+import SelectOption from "../../ui/SelectOption";
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 import ErrorWrapper from "../../ui/ErrorWrapper";

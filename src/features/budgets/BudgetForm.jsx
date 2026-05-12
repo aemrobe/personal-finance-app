@@ -8,14 +8,13 @@ import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import { useBudgets } from "./useBudgets";
 import CustomSelectBox from "../../ui/CustomSelectBox";
-import SelectOption from "../../ui/selectOption";
+import SelectOption from "../../ui/SelectOption";
 import { useFormSelection } from "../../hooks/useFormSelection";
 import { findAvailableTheme } from "../../utils/helpers";
 import { useCategories } from "../categories/useCategory";
 import EmptyMessage from "../../ui/EmptyMessage";
 import { useCreateBudget } from "./useCreateBudget";
 import { useUpdateBudget } from "./useUpdateBudget";
-import { useEffect } from "react";
 
 const findAvailableCategory = (budgets, categories) => {
   return categories?.find(
