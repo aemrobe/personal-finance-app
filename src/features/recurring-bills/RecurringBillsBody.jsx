@@ -97,7 +97,7 @@ function RecurringBillsBody() {
     setSearchParams(searchParams);
   };
 
-  const sortByValue = selectedSortByOption?.value;
+  const sortByValue = selectedSortByOption?.value || "date-asc";
 
   const [value, direction] = sortByValue.split("-");
   const directionValue = direction === "asc" ? 1 : -1;
