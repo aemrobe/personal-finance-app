@@ -16,7 +16,7 @@ import ErrorWrapper from "../../ui/ErrorWrapper";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import EmptyMessage from "../../ui/EmptyMessage";
 import { useSearchManager } from "../../hooks/useSearchManager";
-import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
+import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncement";
 import { useRecurringBillsAnalytics } from "./useRecurringBillsAnalytics";
 import TableHeader from "../../ui/TableHeader";
 import TableTitle from "../../ui/TableTitle";

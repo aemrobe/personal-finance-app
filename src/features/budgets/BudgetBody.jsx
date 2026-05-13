@@ -10,7 +10,7 @@ import { formatCurrency } from "../../utils/helpers";
 
 import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import PieChartFigure from "../../ui/PieChartFigure";
-import { useBudgetAnayltics } from "./useBudgetAnalytics";
+import { useBudgetAnalytics } from "./useBudgetAnalytics";
 import { useEffect, useRef, useState } from "react";
 import { SPINNER_FULL_PAGE_LAYOUT } from "../../utils/constants";
 
@@ -23,8 +23,8 @@ function BudgetBody() {
     isLoadingAnalytics,
     isFetchingAnalytics,
     errorAnalytics,
-    refetchAnayltics,
-  } = useBudgetAnayltics();
+    refetchAnalytics,
+  } = useBudgetAnalytics();
 
   const {
     isLoading: isLoadingUser,
@@ -75,7 +75,7 @@ function BudgetBody() {
             isFetchingUser || isFetchingAnalytics || isFetchingCategories
           }
           onRetry={() => {
-            refetchAnayltics();
+            refetchAnalytics();
             refetchCategories();
             refetchUser();
           }}

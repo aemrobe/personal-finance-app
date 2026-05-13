@@ -1,4 +1,4 @@
-import { useBudgetAnayltics } from "../budgets/useBudgetAnalytics";
+import { useBudgetAnalytics } from "../budgets/useBudgetAnalytics";
 import ErrorDisplay from "../../ui/ErrorDisplay";
 import ErrorWrapper from "../../ui/ErrorWrapper";
 import { PotIcon, RecurringBillsIcon } from "../../ui/Icons";
@@ -58,8 +58,8 @@ function OverviewBody() {
     isLoadingAnalytics,
     isFetchingAnalytics,
     errorAnalytics,
-    refetchAnayltics,
-  } = useBudgetAnayltics();
+    refetchAnalytics,
+  } = useBudgetAnalytics();
 
   const {
     paidBillAmount,
@@ -71,7 +71,11 @@ function OverviewBody() {
   const isLoading =
     isLoadingUser || isLoadingBalance || isLoadingPots || isLoadingAnalytics;
 
-  const { current: currentBalance, income, expenses } = balance;
+  const {
+    current: currentBalance = 0,
+    income = 0,
+    expenses = 0,
+  } = balance || {};
 
   const totalSavedInPots = useMemo(
     () => pots?.reduce((acc, cur) => acc + cur.total, 0),
@@ -90,7 +94,7 @@ function OverviewBody() {
             isFetchingBalance
           }
           onRetry={() => {
-            refetchAnayltics();
+            refetchAnalytics();
             refetchPots();
             refetchUser();
             refetchBalance();

@@ -15,7 +15,7 @@ function PotCard({ pot, balance }) {
 
   const { updateBalance, isUpdatingBalance } = useUpdateBalance();
 
-  const { current: currentBalance, id: balanceId } = balance;
+  const { current: currentBalance = 0, id: balanceId = null } = balance || {};
 
   const percentageSavedMoney = Math.min((total / target) * 100, 100);
   const potData = {

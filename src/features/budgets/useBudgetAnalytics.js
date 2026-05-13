@@ -4,7 +4,7 @@ import { useAllTransactions } from "../transactions/useAllTransactions";
 import { filterSpendingTransactionForCategory } from "../../utils/helpers";
 import { AUGUSTMONTH, YEAR2024 } from "../../utils/constants";
 
-export function useBudgetAnayltics() {
+export function useBudgetAnalytics() {
   const {
     data: transactions,
     isLoading: isLoadingTransactions,
@@ -25,7 +25,7 @@ export function useBudgetAnayltics() {
   const isFetchingAnalytics = isFetchingTransactions || isFetchingBudgets;
   const errorAnalytics = transactionError?.message || budgetError?.message;
 
-  const refetchAnayltics = () => {
+  const refetchAnalytics = () => {
     refetchBudgets();
     refetchTransactions();
   };
@@ -101,6 +101,6 @@ export function useBudgetAnayltics() {
     isLoadingAnalytics,
     isFetchingAnalytics,
     errorAnalytics,
-    refetchAnayltics,
+    refetchAnalytics,
   };
 }

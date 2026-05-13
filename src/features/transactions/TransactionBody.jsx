@@ -19,7 +19,7 @@ import SpinnerMiniContainer from "../../ui/SpinnerMiniContainer";
 import EmptyMessage from "../../ui/EmptyMessage";
 import SearchBox from "../../ui/SearchBox";
 import { useSearchManager } from "../../hooks/useSearchManager";
-import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncment";
+import { useGenerateAnnouncement } from "../../hooks/useGenerateAnnouncement";
 import TransactionDataContainer from "./TransactionDataContainer";
 import TableHeader from "../../ui/TableHeader";
 import TableTitle from "../../ui/TableTitle";
