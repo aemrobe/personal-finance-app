@@ -92,9 +92,12 @@ function RecurringBillsBody() {
   const handleSortByOption = (sortByObj) => {
     setSelectedSortByOption(sortByObj);
 
-    searchParams.set("sortBy", sortByObj.value);
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
 
-    setSearchParams(searchParams);
+      newParams.set("sortBy", sortByObj.value);
+      return newParams;
+    });
   };
 
   const sortByValue = selectedSortByOption?.value || "date-asc";

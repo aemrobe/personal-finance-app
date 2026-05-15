@@ -1,50 +1,71 @@
 import { useState } from "react";
 import supabase from "../services/supabase";
-import { balance } from "./data-balance";
-import { budgets } from "./data-budgets";
-import { pots } from "./data-pots";
-import { transactions } from "./data-transactions";
+import { balance } from "../data/data-balance";
+import { budgets } from "../data/data-budgets";
+import { pots } from "../data/data-pots";
+import { transactions } from "../data/data-transactions";
 
 async function deleteBalance() {
   const { error } = await supabase.from("balance").delete().gt("id", 0);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function deleteBudgets() {
   const { error } = await supabase.from("budgets").delete().gt("id", 0);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function deletePots() {
   const { error } = await supabase.from("pots").delete().gt("id", 0);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function deleteTransactions() {
   const { error } = await supabase.from("transactions").delete().gt("id", 0);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function createBalance() {
   const { error } = await supabase.from("balance").insert(balance);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function createBudgets() {
   const { error } = await supabase.from("budgets").insert(budgets);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function createPots() {
   const { error } = await supabase.from("pots").insert(pots);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function createTransactions() {
@@ -69,7 +90,10 @@ async function createTransactions() {
     .from("transactions")
     .insert(finalTransaction);
 
-  if (error) console.error(error.message);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
 }
 
 function Uploader() {
@@ -112,6 +136,7 @@ function Uploader() {
 
     await deleteBalance();
     await deletePots();
+    setIsLoading(false);
   }
 
   async function uploadTransaction() {

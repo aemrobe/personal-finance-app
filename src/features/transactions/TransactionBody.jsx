@@ -110,23 +110,26 @@ function TransactionBody() {
   const handleCategoryChange = (categoryObj) => {
     setSelectedCategory(categoryObj);
 
-    const newParams = new URLSearchParams(searchParams);
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
 
-    newParams.set("category", categoryObj.category);
-    newParams.set("page", 1);
-
-    setSearchParams(newParams);
+      newParams.set("category", categoryObj.category);
+      newParams.set("page", 1);
+      return newParams;
+    });
   };
 
   const handleSortByOption = (sortByObj) => {
     setSelectedSortByOption(sortByObj);
 
-    const newParams = new URLSearchParams(searchParams);
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
 
-    newParams.set("sortBy", sortByObj.value);
-    newParams.set("page", 1);
+      newParams.set("sortBy", sortByObj.value);
+      newParams.set("page", 1);
 
-    setSearchParams(newParams);
+      return newParams;
+    });
   };
 
   const pageNumber = searchParams.get("page");
