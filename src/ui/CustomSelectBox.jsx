@@ -117,7 +117,7 @@ function CustomSelectBox({
         aria-expanded={isOpen}
         onKeyDown={handleKeyDown}
         onClick={toggleDropdown}
-        className={`outline-none focusable-ring flex shrink-0 md:border hover:border-border-divider hover:cursor-pointer transition-all duration-500   items-center ${isFilterType ? "rounded-full md:rounded-lg" : "rounded-lg"}  disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? ` justify-center p-[2.5px] md:py-3 md:px-5` : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base `"}  `}
+        className={`outline-none focusable-ring flex shrink-0 md:border hover:border-border-divider hover:cursor-pointer transition-all duration-500   items-center ${isFilterType ? "rounded-full md:rounded-lg" : "rounded-lg"}  disabled-input ${widthOfTriggerButton} ${heightOfTriggerButton} ${isFilterType ? "justify-center p-[2.5px] md:py-3 md:px-5" : "border py-3 px-5 border-border-base"} ${visible ? "border-content-main" : "md:border-border-base"}`.trim()}
       >
         {isColor && (
           <span

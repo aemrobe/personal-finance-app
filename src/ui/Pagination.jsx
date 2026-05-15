@@ -13,9 +13,13 @@ function Pagination({ count }) {
   const pageCount = Math.ceil(count / PAGE_SIZE);
 
   const handlePageChange = function (page) {
-    searchParams.set("page", page);
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
 
-    setSearchParams(searchParams);
+      newParams.set("page", page);
+
+      return newParams;
+    });
   };
 
   const nextPage = function () {
