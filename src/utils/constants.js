@@ -3,6 +3,7 @@ export const FIELD_REQUIRED_MESSAGE = "This field is required";
 export const INVALID_EMAIL_MESSAGE = "Invalid email address";
 export const EMAIL_PATTERN = /\S+@\S+\.\S+/;
 export const ANIMATION_DURATION = 200;
+export const MENUTRIGGERFOCUSAFTERCLOSED = 500;
 export const ANIMATION_DURATION_MENU = 200;
 export const ANIMATION_DURATION_SELECT_MENU = 300;
 export const TOAST_DURATION_MS = 4000;

@@ -17,11 +17,11 @@ export const formatDate = (dateString) => {
   }).format(newDate);
 };
 
-export const findAvailableTheme = (budgets, THEMES) => {
+export const findAvailableTheme = (allData, THEMES) => {
   return THEMES.find(
     (theme) =>
-      !budgets.some(
-        (budget) => budget.theme.toLowerCase() === theme.color.toLowerCase(),
+      !allData.some(
+        (data) => data.theme.toLowerCase() === theme.color.toLowerCase(),
       ),
   )?.color;
 };

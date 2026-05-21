@@ -9,10 +9,16 @@ function SelectOption({
   isSelected,
   isFilterType,
   isColor,
+  optionId,
+  isHighlighted,
 }) {
+  const highlightRingStyle =
+    "outline-none ring-2 ring-[var(--ring-color,var(--color-focus-ring))] ring-offset-1 ring-offset-[var(--offset-color,var(--color-offset-color))]";
+
   return (
     <li className="py-1" role="none">
       <button
+        id={optionId}
         onClick={() => {
           handleSelect(option);
         }}
@@ -21,7 +27,7 @@ function SelectOption({
         role="option"
         disabled={isUsed}
         aria-disabled={isUsed}
-        className={`focusable-ring rounded-lg py-2 flex items-center w-full ${isUsed ? "disabled:cursor-not-allowed" : "cursor-pointer"}`}
+        className={`${isHighlighted ? highlightRingStyle : ""} rounded-lg py-2 flex items-center w-full ${isUsed ? "disabled:cursor-not-allowed" : "cursor-pointer"}`}
       >
         {isColor && (
           <span

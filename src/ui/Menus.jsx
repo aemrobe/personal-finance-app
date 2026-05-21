@@ -1,7 +1,16 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { EllipsisIcon } from "./Icons";
 import { useOutsideClicks } from "../hooks/useOutsideClicks";
-import { ANIMATION_DURATION } from "../utils/constants";
+import {
+  ANIMATION_DURATION,
+  MENUTRIGGERFOCUSAFTERCLOSED,
+} from "../utils/constants";
 
 const MenuContext = createContext();
 
@@ -49,6 +58,7 @@ function Toggle({ id, name }) {
     <button
       id={`menu-trigger-${id}`}
       aria-label={`${openId === id ? `close menu for ${name}` : `open menu for ${name}`}`}
+      aria-expanded={openId === id}
       className="rounded-lg hover:cursor-pointer focusable-ring text-icon-tertiary p-2"
       onClick={handleClick}
     >
@@ -61,6 +71,28 @@ function List({ id, children }) {
   const { openId, close, showAnimation } = useContext(MenuContext);
 
   const ref = useOutsideClicks(close);
+
+  useEffect(() => {
+    if (openId !== id) return;
+
+    const menuTriggerButton = document.getElementById(`menu-trigger-${id}`);
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+        setTimeout(function () {
+          menuTriggerButton?.focus();
+        }, MENUTRIGGERFOCUSAFTERCLOSED);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [close, id, openId]);
 
   if (openId !== id) return;
 
@@ -89,7 +121,7 @@ function Button({ children, color, onClick, disabled }) {
     <li className="py-1">
       <button
         disabled={disabled}
-        className={`focusable-ring  block w-full py-2 capitalize ${color}`}
+        className={`focusable-ring rounded-lg  block w-full py-2 capitalize ${color}`}
         onClick={handleClick}
       >
         {children}
