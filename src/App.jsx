@@ -67,7 +67,7 @@ const router = createBrowserRouter([
     ),
     errorElement: <ErrorFallBack />,
     children: [
-      { index: true, element: <Navigate replace to="pots" /> },
+      { index: true, element: <Navigate replace to="overview" /> },
       {
         path: "overview",
         element: <Overview />,
