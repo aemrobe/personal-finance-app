@@ -33,6 +33,7 @@ function CustomSelectBox({
   // Track the highlighted index for keyboard navigation
   const [activeIndex, setActiveIndex] = useState(-1);
 
+  const [isKeyboardMode, setIsKeyboardMode] = useState(false);
   const customSelectBoxButtonRef = useRef(null);
   const prevIsOpen = useRef(isOpen);
 
@@ -53,8 +54,10 @@ function CustomSelectBox({
 
   const closeDropDown = function () {
     setVisible(false);
+
     setTimeout(() => {
       setIsOpen(false);
+      setIsKeyboardMode(false);
       setActiveIndex(-1); // Reset highlight when closed
     }, ANIMATION_DURATION_SELECT_MENU);
   };
@@ -68,6 +71,19 @@ function CustomSelectBox({
   // Centralized keyboard handler bound to the button trigger
   const handleKeyDown = function (e) {
     if (isWorking) return;
+
+    if (
+      [
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter",
+        " ",
+      ].includes(e.key)
+    ) {
+      setIsKeyboardMode(true);
+    }
 
     switch (e.key) {
       case "Enter":
@@ -219,6 +235,9 @@ function CustomSelectBox({
 
       {isOpen && (
         <div
+          onMouseMove={() => {
+            if (isKeyboardMode) setIsKeyboardMode(false);
+          }}
           className={`grid overflow-hidden bg-surface-primary shadow-3xl rounded-lg absolute ${isFilterType ? `right-0` : "inset-x-0"} top-full mt-4 duration-1000 transition-opacity ${visible ? "open-menu" : "close-menu"} z-20`}
         >
           <div
@@ -238,7 +257,7 @@ function CustomSelectBox({
             >
               {rawData.map((option, index) => {
                 const meta = getOptionMeta(option, selectedOption);
-                const isHighlighted = index === activeIndex;
+                const isHighlighted = index === activeIndex && isKeyboardMode;
 
                 return (
                   <OptionComponent
