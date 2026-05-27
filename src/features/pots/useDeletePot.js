@@ -18,7 +18,6 @@ export function useDeletePot() {
       });
     },
     onError: (error) => {
-      console.error(error.message);
       onShowToastMessage({
         text: `Failed to delete a pot: ${error.message}`,
       });

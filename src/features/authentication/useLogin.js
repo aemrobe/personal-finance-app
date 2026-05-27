@@ -19,8 +19,7 @@ export function useLogin() {
 
       navigate("/overview", { replace: true });
     },
-    onError: (error) => {
-      console.error(error.message);
+    onError: () => {
       queryClient.removeQueries({ queryKey: ["user"] });
     },
   });

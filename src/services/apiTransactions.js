@@ -36,7 +36,6 @@ export async function getTransactions({ filter, sortBy, page, searchTerm }) {
   const { data, error, count } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -49,7 +48,6 @@ export async function getAllTransactions() {
     .select("*,categories!inner(category)");
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 

@@ -7,7 +7,6 @@ export async function getCategories() {
     .order("id", { ascending: false });
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 

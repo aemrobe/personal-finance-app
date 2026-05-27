@@ -19,7 +19,6 @@ export function useDeleteBudget() {
       });
     },
     onError: (error) => {
-      console.error(error.message);
       onShowToastMessage({
         text: `Failed to delete a budget: ${error.message}`,
       });

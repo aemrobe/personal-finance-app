@@ -14,7 +14,6 @@ export function useUpdateBalance() {
       });
     },
     onError: (error) => {
-      console.error(`Balance Update Error: ${error}`);
       onShowToastMessage({
         text: `Failed to update a balance: ${error.message}`,
       });

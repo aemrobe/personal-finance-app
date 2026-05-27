@@ -138,7 +138,6 @@ function BudgetForm({
             });
           },
           onError: (error) => {
-            console.error(error.message);
             onShowToastMessage({
               text: `Failed to update a budget: ${error.message}`,
             });

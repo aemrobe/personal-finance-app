@@ -16,7 +16,6 @@ export async function getBalance() {
   let { data, error } = await supabase.from("balance").select("*");
 
   if (error) {
-    console.error(error.message);
     throw new Error(`${error.message}`);
   }
 

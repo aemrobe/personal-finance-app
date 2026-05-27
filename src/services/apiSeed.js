@@ -82,7 +82,6 @@ export async function seedNewUserData(userId) {
       throw new Error(balanceError.message);
     }
   } catch (error) {
-    console.error("Seeding Failed", error.message);
     throw new Error(error.message);
   }
 }

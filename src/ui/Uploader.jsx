@@ -9,7 +9,6 @@ async function deleteBalance() {
   const { error } = await supabase.from("balance").delete().gt("id", 0);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -18,7 +17,6 @@ async function deleteBudgets() {
   const { error } = await supabase.from("budgets").delete().gt("id", 0);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -27,7 +25,6 @@ async function deletePots() {
   const { error } = await supabase.from("pots").delete().gt("id", 0);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -36,7 +33,6 @@ async function deleteTransactions() {
   const { error } = await supabase.from("transactions").delete().gt("id", 0);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -45,7 +41,6 @@ async function createBalance() {
   const { error } = await supabase.from("balance").insert(balance);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -54,7 +49,6 @@ async function createBudgets() {
   const { error } = await supabase.from("budgets").insert(budgets);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -63,7 +57,6 @@ async function createPots() {
   const { error } = await supabase.from("pots").insert(pots);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -91,7 +84,6 @@ async function createTransactions() {
     .insert(finalTransaction);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 }
@@ -100,62 +92,79 @@ function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function uploadAll() {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    //### deleting case ###
-    //delete children first
-    await deleteTransactions();
+      //### deleting case ###
+      //delete children first
+      await deleteTransactions();
 
-    //then delete parent
-    await deleteBudgets();
+      //then delete parent
+      await deleteBudgets();
 
-    await deleteBalance();
-    await deletePots();
+      await deleteBalance();
+      await deletePots();
 
-    //### creating case ###
-    //parent should be created first
-    await createBudgets();
+      //### creating case ###
+      //parent should be created first
+      await createBudgets();
 
-    //then create children
-    await createTransactions();
+      //then create children
+      await createTransactions();
 
-    await createBalance();
-    await createPots();
+      await createBalance();
+      await createPots();
 
-    setIsLoading(false);
+      alert("Database successfully seeded!");
+    } catch (err) {
+      alert(`Failed to seed database: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function deleteAll() {
-    setIsLoading(true);
-    //### deleting case ###
-    //delete children first
-    await deleteTransactions();
+    try {
+      setIsLoading(true);
+      //### deleting case ###
+      //delete children first
+      await deleteTransactions();
 
-    //then delete parent
-    await deleteBudgets();
+      //then delete parent
+      await deleteBudgets();
 
-    await deleteBalance();
-    await deletePots();
-    setIsLoading(false);
+      await deleteBalance();
+      await deletePots();
+      alert("Database successfully seeded!");
+    } catch (err) {
+      alert(`Failed to seed database: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function uploadTransaction() {
-    setIsLoading(true);
-    //### Delete case ###
-    //children should be deleted first
-    await deleteTransactions();
+    try {
+      setIsLoading(true);
+      //### Delete case ###
+      //children should be deleted first
+      await deleteTransactions();
 
-    //then parents should be deleted
-    await deleteBudgets();
+      //then parents should be deleted
+      await deleteBudgets();
 
-    //### Create case ###
-    //Parent should be created first
-    await createBudgets();
+      //### Create case ###
+      //Parent should be created first
+      await createBudgets();
 
-    //then Children should be created
-    await createTransactions();
-
-    setIsLoading(false);
+      //then Children should be created
+      await createTransactions();
+      alert("Database successfully seeded!");
+    } catch (err) {
+      alert(`Failed to seed database: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

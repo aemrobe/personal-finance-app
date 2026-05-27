@@ -11,9 +11,6 @@ export function useCreatePot() {
         queryKey: ["pots"],
       });
     },
-    onError: (err) => {
-      console.error(err.message);
-    },
   });
 
   return {

@@ -31,6 +31,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
     onError: (error) => {
+      console.error("Global Mutation Error Logger:", error.message);
+
       if (error.message === "Failed to fetch" || !window.navigator.onLine) {
         window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
         return;
@@ -39,6 +41,8 @@ const queryClient = new QueryClient({
   }),
   queryCache: new QueryCache({
     onError: (error) => {
+      console.error("Global Query Error Logger:", error.message);
+
       if (error.message === "Failed to fetch" || !window.navigator.onLine) {
         window.dispatchEvent(new CustomEvent(NETWORKERROREVENT));
         return;

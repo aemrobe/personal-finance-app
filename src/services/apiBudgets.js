@@ -7,7 +7,6 @@ export async function getBudgets() {
     .order("id", { ascending: false });
 
   if (error) {
-    console.error(error.message);
     throw new Error(`${error.message}`);
   }
 
@@ -21,7 +20,6 @@ export async function createBudget(newData) {
     .select();
 
   if (error) {
-    console.error(error.message);
     throw new Error(`Failed to create a budget: ${error.message}`);
   }
 
@@ -46,7 +44,6 @@ export async function deleteBudget(id) {
   const { error } = await supabase.from("budgets").delete().eq("id", id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(`Failed to delete a budget: ${error.message}`);
   }
 }

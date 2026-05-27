@@ -7,7 +7,6 @@ export async function getPots() {
     .order("id", { ascending: false });
 
   if (error) {
-    console.error(error.message);
     throw Error(error.message);
   }
 
@@ -22,8 +21,6 @@ export async function createPot(newData) {
     .single();
 
   if (error) {
-    console.error(error.message);
-
     throw new Error(`Failed to create pot: ${error.message}`);
   }
 

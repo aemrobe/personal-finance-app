@@ -22,7 +22,6 @@ export function useSignup() {
         });
         navigate("/overview");
       } catch (error) {
-        console.error(error.message);
         onShowToastMessage({
           text: `Account created, but we couldn't load the sample. please try logging in`,
         });

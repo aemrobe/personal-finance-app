@@ -11,9 +11,6 @@ export function useCreateBudget() {
         queryKey: ["budgets"],
       });
     },
-    onError: (error) => {
-      console.error(error.message);
-    },
   });
 
   return {
