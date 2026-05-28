@@ -70,7 +70,6 @@ function CustomSelectBox({
 
   // Centralized keyboard handler bound to the button trigger
   const handleKeyDown = function (e) {
-    console.log(e.key);
     if (isWorking) return;
 
     if (
