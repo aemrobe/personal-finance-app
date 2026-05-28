@@ -16,13 +16,13 @@ function SelectOption({
     "outline-none ring-2 ring-[var(--ring-color,var(--color-focus-ring))] ring-offset-1 ring-offset-[var(--offset-color,var(--color-offset-color))]";
 
   return (
-    <li className="py-1" role="none">
-      <button
+    <li className="py-1" role="presentation">
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/role-supports-aria-props */}
+      <div
         id={optionId}
         onClick={() => {
           handleSelect(option);
         }}
-        type="button"
         aria-selected={isSelected}
         role="option"
         disabled={isUsed}
@@ -60,7 +60,7 @@ function SelectOption({
             <span className="sr-only">selected</span>
           </>
         )}
-      </button>
+      </div>
     </li>
   );
 }

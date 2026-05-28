@@ -46,7 +46,7 @@ function BudgetCard({ budget }) {
             modalName={`edit-budget-${id}`}
             returnToSelector={`#menu-trigger-${id}`}
           >
-            <Menus.Button color={"text-contain-main"}>Edit Budget</Menus.Button>
+            <Menus.Button color={"text-content-main"}>Edit Budget</Menus.Button>
           </Modal.Open>
 
           <Modal.Open

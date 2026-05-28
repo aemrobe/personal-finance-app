@@ -70,6 +70,7 @@ function CustomSelectBox({
 
   // Centralized keyboard handler bound to the button trigger
   const handleKeyDown = function (e) {
+    console.log(e.key);
     if (isWorking) return;
 
     if (
@@ -122,12 +123,12 @@ function CustomSelectBox({
         }
         break;
 
-      case "ArrowLeft":
+      case "Home":
         e.preventDefault();
         if (isOpen) setActiveIndex(0);
         break;
 
-      case "ArrowRight":
+      case "End":
         e.preventDefault();
         if (isOpen) setActiveIndex(rawData.length - 1);
         break;

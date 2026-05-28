@@ -114,7 +114,7 @@ function RecurringBillsBody() {
     );
 
     //Sorted
-    return filteredSearchResults?.sort((a, b) => {
+    return filteredSearchResults?.slice()?.sort((a, b) => {
       let compareValue = 0;
 
       if (value === "name")
