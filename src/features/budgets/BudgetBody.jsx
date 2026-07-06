@@ -129,7 +129,7 @@ function BudgetBody() {
                 ref={scrollRef}
                 className="divide-y divide-border-subtle overflow-y-auto no-scrollbar max-h-59 focus-visible::outline-none"
               >
-                {chartData.map((budget) => (
+                {chartData?.map((budget) => (
                   <SpendingSummaryItem
                     showShadow={showShadow}
                     key={budget.id}

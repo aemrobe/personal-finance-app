@@ -1,39 +1,68 @@
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../features/authentication/useCurrentUser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SpinnerContainer from "./SpinnerContainer";
+import supabase from "../services/supabase";
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
 
   const { isAuthenticated, isLoading } = useCurrentUser();
 
-  const supabaseKey = Object.keys(localStorage).find((key) =>
-    key.endsWith("-auth-token"),
-  );
+  const [isOnline, setIsOnline] = useState(window.navigator.onLine);
 
-  const localSession = JSON.parse(localStorage.getItem(supabaseKey));
-  const hasLocalSession = localSession?.user?.role === "authenticated";
+  const [hasLocalSession, setHasLocalSession] = useState(false);
 
-  useEffect(
-    function () {
-      const isOffline = !window.navigator.onLine;
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
-      if (!isOffline && !isAuthenticated && !isLoading) {
-        navigate("/login");
-      }
+  useEffect(() => {
+    async function checkSession() {
+      // getSession() resolves instantly from localStorage without a network call
+      const { data } = await supabase.auth.getSession();
 
-      if (isOffline && !hasLocalSession && !isLoading) {
-        navigate("/login");
-      }
-    },
-    [isAuthenticated, isLoading, navigate, hasLocalSession],
-  );
+      setHasLocalSession(data?.session?.user?.role === "authenticated");
+      setIsCheckingSession(false);
+    }
 
-  if (isAuthenticated || (!window.navigator.onLine && hasLocalSession))
-    return <>{children}</>;
+    checkSession();
+  }, [isOnline]);
 
-  if (isLoading) return <SpinnerContainer className="bg-surface-app" />;
+  useEffect(function () {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isLoading || isCheckingSession) return;
+
+    if (isOnline && !isAuthenticated) {
+      navigate("/login");
+    }
+
+    if (!isOnline && !hasLocalSession) {
+      navigate("/login");
+    }
+  }, [
+    hasLocalSession,
+    isAuthenticated,
+    isCheckingSession,
+    isLoading,
+    isOnline,
+    navigate,
+  ]);
+
+  if (isAuthenticated || (!isOnline && hasLocalSession)) return <>{children}</>;
+
+  if (isLoading || isCheckingSession)
+    return <SpinnerContainer className="bg-surface-app" />;
 
   return null;
 }
